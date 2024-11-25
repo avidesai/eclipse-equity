@@ -24,7 +24,6 @@ export const getStockData = (): Stock[] => {
     AMZN as Stock,
     ASML as Stock,
     CMG as Stock,
-    FICO as Stock,
     LLY as Stock,
     MELI as Stock,
     SPGI as Stock,

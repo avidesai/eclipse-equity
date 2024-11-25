@@ -57,7 +57,7 @@ export default function StockList({ onSelectStock, selectedStock }: StockListPro
               {stock.change >= 0 ? '↑' : '↓'} {Math.abs(stock.changePercent).toFixed(2)}%
             </div>
             <div className="text-xs text-zinc-600 dark:text-zinc-300 mt-2">
-              Mkt Cap: {formatNumber(stock.marketCap)}
+              Market Cap: {formatNumber(stock.marketCap)}
             </div>
           </div>
         </button>
