@@ -1,0 +1,68 @@
+{
+    "symbol": "MC.PA",
+    "name": "LVMH Moet Hennessy Louis Vuitton SE",
+    "price": 583.00,
+    "change": 1.41,
+    "changePercent": 1.41,
+    "logo": "👜",
+    "marketCap": 287532000000,
+    "enterpriseValue": 250888000000,
+    "roic": 16.9,
+    "revenue": {
+      "current": 86153000000,
+      "growth": 9,
+      "cagr": 5
+    },
+    "netIncome": {
+      "current": 15174000000,
+      "growth": 8,
+      "cagr": 8
+    },
+    "fcf": {
+      "current": 8586000000,
+      "growth": -13,
+      "cagr": 24
+    },
+    "grossMargin": 69,
+    "netMargin": 16,
+    "fcfMargin": 19,
+    "psRatio": 3,
+    "peRatio": 21,
+    "fcfYield": 5.5,
+    "cash": 11287000000,
+    "debt": 38996000000,
+    "netCash": -27709000000,
+    "terminalValue": 294735000000,
+    "intrinsicValue": 452,
+    "upside": -22,
+    "historicalMetrics": [
+      {
+        "year": 2020,
+        "revenue": 44651000000,
+        "netIncome": 4702000000,
+        "fcf": 7722000000,
+        "shares": 503
+      },
+      {
+        "year": 2021,
+        "revenue": 64215000000,
+        "netIncome": 12036000000,
+        "fcf": 11927000000,
+        "shares": 504
+      },
+      {
+        "year": 2022,
+        "revenue": 79184000000,
+        "netIncome": 14084000000,
+        "fcf": 9835000000,
+        "shares": 501
+      },
+      {
+        "year": 2023,
+        "revenue": 86153000000,
+        "netIncome": 15174000000,
+        "fcf": 8586000000,
+        "shares": 499
+      }
+    ]
+  }

@@ -1,0 +1,68 @@
+{
+    "symbol": "SPGI",
+    "name": "S&P Global Inc.",
+    "price": 514.46,
+    "change": 0.60,
+    "changePercent": 0.60,
+    "logo": "📊",
+    "marketCap": 159637000000,
+    "enterpriseValue": 79714000000,
+    "roic": 7.0,
+    "revenue": {
+      "current": 11181000000,
+      "growth": 12,
+      "cagr": 7
+    },
+    "netIncome": {
+      "current": 3248000000,
+      "growth": 7,
+      "cagr": 21
+    },
+    "fcf": {
+      "current": 3869000000,
+      "growth": 11,
+      "cagr": 5
+    },
+    "grossMargin": 67,
+    "netMargin": 33,
+    "fcfMargin": 38,
+    "psRatio": 12,
+    "peRatio": 35,
+    "fcfYield": 3.3,
+    "cash": 1316000000,
+    "debt": 12105000000,
+    "netCash": -10789000000,
+    "terminalValue": 91867000000,
+    "intrinsicValue": 222,
+    "upside": -57,
+    "historicalMetrics": [
+      {
+        "year": 2020,
+        "revenue": 7442000000,
+        "netIncome": 2339000000,
+        "fcf": 3602000000,
+        "shares": 317
+      },
+      {
+        "year": 2021,
+        "revenue": 8300000000,
+        "netIncome": 3024000000,
+        "fcf": 3479000000,
+        "shares": 317
+      },
+      {
+        "year": 2022,
+        "revenue": 11181000000,
+        "netIncome": 3248000000,
+        "fcf": 3869000000,
+        "shares": 317
+      },
+      {
+        "year": 2023,
+        "revenue": 12497000000,
+        "netIncome": 2628000000,
+        "fcf": 5425000000,
+        "shares": 317
+      }
+    ]
+  }

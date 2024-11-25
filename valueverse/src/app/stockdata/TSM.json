@@ -1,0 +1,68 @@
+{
+    "symbol": "TSM",
+    "name": "Taiwan Semiconductor Manufacturing Co., Ltd.",
+    "price": 190.02,
+    "change": -0.64,
+    "changePercent": -0.64,
+    "logo": "🔧",
+    "marketCap": 828776000000,
+    "enterpriseValue": 671433000000,
+    "roic": 19.7,
+    "revenue": {
+      "current": 70419000000,
+      "growth": -4,
+      "cagr": 18
+    },
+    "netIncome": {
+      "current": 27314000000,
+      "growth": -17,
+      "cagr": 20
+    },
+    "fcf": {
+      "current": 10768000000,
+      "growth": -41,
+      "cagr": 51
+    },
+    "grossMargin": 54,
+    "netMargin": 41,
+    "fcfMargin": 34,
+    "psRatio": 9,
+    "peRatio": 23,
+    "fcfYield": 3.7,
+    "cash": 54976000000,
+    "debt": 32132000000,
+    "netCash": 22844000000,
+    "terminalValue": 806333000000,
+    "intrinsicValue": 134,
+    "upside": -30,
+    "historicalMetrics": [
+      {
+        "year": 2020,
+        "revenue": 47631000000,
+        "netIncome": 18165000000,
+        "fcf": 12577000000,
+        "shares": 25930
+      },
+      {
+        "year": 2021,
+        "revenue": 57231000000,
+        "netIncome": 21507000000,
+        "fcf": 4396000000,
+        "shares": 25930
+      },
+      {
+        "year": 2022,
+        "revenue": 73644000000,
+        "netIncome": 33068000000,
+        "fcf": 18238000000,
+        "shares": 25930
+      },
+      {
+        "year": 2023,
+        "revenue": 70419000000,
+        "netIncome": 27314000000,
+        "fcf": 10768000000,
+        "shares": 25932
+      }
+    ]
+  }

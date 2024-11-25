@@ -1,0 +1,68 @@
+{
+    "symbol": "TSLA",
+    "name": "Tesla, Inc.",
+    "price": 352.56,
+    "change": 3.80,
+    "changePercent": 3.80,
+    "logo": "🚗",
+    "marketCap": 1131739000000,
+    "enterpriseValue": 234192000000,
+    "roic": 12.1,
+    "revenue": {
+      "current": 96773000000,
+      "growth": 19,
+      "cagr": 14
+    },
+    "netIncome": {
+      "current": 15000000000,
+      "growth": 19,
+      "cagr": 12
+    },
+    "fcf": {
+      "current": 2516000000,
+      "growth": -57,
+      "cagr": 58
+    },
+    "grossMargin": 18,
+    "netMargin": 9,
+    "fcfMargin": 4,
+    "psRatio": 11,
+    "peRatio": 131,
+    "fcfYield": 0.4,
+    "cash": 29094000000,
+    "debt": 9573000000,
+    "netCash": 19521000000,
+    "terminalValue": 300667000000,
+    "intrinsicValue": 72,
+    "upside": -80,
+    "historicalMetrics": [
+      {
+        "year": 2020,
+        "revenue": 31536000000,
+        "netIncome": 690000000,
+        "fcf": 2426000000,
+        "shares": 2844
+      },
+      {
+        "year": 2021,
+        "revenue": 53823000000,
+        "netIncome": 5524000000,
+        "fcf": 5800000000,
+        "shares": 3019
+      },
+      {
+        "year": 2022,
+        "revenue": 81462000000,
+        "netIncome": 12583000000,
+        "fcf": 5827000000,
+        "shares": 3158
+      },
+      {
+        "year": 2023,
+        "revenue": 96773000000,
+        "netIncome": 15000000000,
+        "fcf": 2516000000,
+        "shares": 3179
+      }
+    ]
+  }

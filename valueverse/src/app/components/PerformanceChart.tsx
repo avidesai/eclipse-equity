@@ -1,5 +1,3 @@
-// src/app/components/PerformanceChart.tsx
-'use client';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { HistoricalMetric } from '../types/stock';
 
@@ -9,20 +7,25 @@ interface PerformanceChartProps {
 
 export default function PerformanceChart({ data }: PerformanceChartProps) {
   const sortedData = [...data].sort((a, b) => a.year - b.year);
-  
-  const formatYAxis = (value: number) => {
-    if (value >= 1e12) return `${(value / 1e12).toFixed(1)}T`;
-    if (value >= 1e9) return `${(value / 1e9).toFixed(1)}B`;
-    if (value >= 1e6) return `${(value / 1e6).toFixed(1)}M`;
-    return value.toString();
+
+  const formatValue = (value: number) => {
+    const absValue = Math.abs(value);
+    let formattedValue;
+    
+    if (absValue >= 1e12) formattedValue = `${(absValue / 1e12).toFixed(1)}T`;
+    else if (absValue >= 1e9) formattedValue = `${(absValue / 1e9).toFixed(1)}B`;
+    else if (absValue >= 1e6) formattedValue = `${(absValue / 1e6).toFixed(1)}M`;
+    else formattedValue = absValue.toString();
+    
+    return value < 0 ? `-${formattedValue}` : formattedValue;
   };
 
   return (
     <div className="w-full">
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart 
-            data={sortedData} 
+          <BarChart
+            data={sortedData}
             margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
             barGap={0}
             barSize={20}
@@ -34,13 +37,13 @@ export default function PerformanceChart({ data }: PerformanceChartProps) {
               style={{ fontSize: '12px' }}
             />
             <YAxis
-              tickFormatter={formatYAxis}
+              tickFormatter={formatValue}
               tickLine={false}
               axisLine={false}
               style={{ fontSize: '12px' }}
             />
             <Tooltip
-              formatter={(value: number) => [`$${formatYAxis(value)}`]}
+              formatter={(value: number) => [`$${formatValue(value)}`]}
               contentStyle={{
                 backgroundColor: 'white',
                 border: '1px solid #e5e7eb',

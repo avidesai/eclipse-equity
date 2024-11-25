@@ -24,17 +24,24 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => (
 
 export default function StockDetail({ stock }: { stock: Stock }) {
   const formatNumber = (num: number) => {
-    if (num >= 1e12) return `$${(num / 1e12).toFixed(2)}T`;
-    if (num >= 1e9) return `$${(num / 1e9).toFixed(2)}B`;
-    if (num >= 1e6) return `$${(num / 1e6).toFixed(2)}M`;
-    return `$${num.toFixed(2)}`;
+    const absNum = Math.abs(num);
+    let formattedNum;
+    if (absNum >= 1e12) formattedNum = `${(absNum / 1e12).toFixed(2)}T`;
+    else if (absNum >= 1e9) formattedNum = `${(absNum / 1e9).toFixed(2)}B`;
+    else if (absNum >= 1e6) formattedNum = `${(absNum / 1e6).toFixed(2)}M`;
+    else formattedNum = absNum.toFixed(2);
+    
+    return num < 0 ? `-$${formattedNum}` : `$${formattedNum}`;
   };
 
   const formatPercentage = (num: number) => `${num.toFixed(1)}%`;
 
   const formatMetricValue = (value: number, isPercentage: boolean, prefix: string) => {
     if (prefix === 'x') return `${value.toFixed(1)}x`;
-    if (prefix === '$') return `$${value.toFixed(2)}`;
+    if (prefix === '$') {
+      const absValue = Math.abs(value);
+      return value < 0 ? `-$${absValue.toFixed(2)}` : `$${value.toFixed(2)}`;
+    }
     if (isPercentage) return formatPercentage(value);
     return formatNumber(value);
   };
@@ -47,7 +54,7 @@ export default function StockDetail({ stock }: { stock: Stock }) {
           ? value > 0 
             ? 'text-green-500' 
             : 'text-red-500'
-          : ''
+          : value < 0 ? 'text-red-500' : ''
       }`}>
         {formatMetricValue(value, isPercentage, prefix)}
       </p>
@@ -68,7 +75,6 @@ export default function StockDetail({ stock }: { stock: Stock }) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <span className="text-4xl">{stock.logo}</span>
           <div>
             <h2 className="text-2xl font-bold">{stock.name}</h2>
             <p className="text-zinc-500">{stock.symbol}</p>
@@ -85,7 +91,6 @@ export default function StockDetail({ stock }: { stock: Stock }) {
 
       {/* Performance Chart */}
       <div>
-        <SectionTitle>Financial Performance</SectionTitle>
         <PerformanceChart data={stock.historicalMetrics} />
       </div>
 
@@ -154,7 +159,9 @@ export default function StockDetail({ stock }: { stock: Stock }) {
                       <td className="py-2">{metric.year}</td>
                       <td className="text-right">
                         <div className="flex items-center justify-end gap-2">
-                          {formatNumber(metric.revenue)}
+                          <span className={metric.revenue < 0 ? 'text-red-500' : ''}>
+                            {formatNumber(metric.revenue)}
+                          </span>
                           {prevYear && (
                             <span className={`text-xs px-1.5 py-0.5 rounded-full ${
                               getGrowth(metric.revenue, prevYear.revenue)! >= 0 
@@ -168,7 +175,9 @@ export default function StockDetail({ stock }: { stock: Stock }) {
                       </td>
                       <td className="text-right">
                         <div className="flex items-center justify-end gap-2">
-                          {formatNumber(metric.netIncome)}
+                          <span className={metric.netIncome < 0 ? 'text-red-500' : ''}>
+                            {formatNumber(metric.netIncome)}
+                          </span>
                           {prevYear && (
                             <span className={`text-xs px-1.5 py-0.5 rounded-full ${
                               getGrowth(metric.netIncome, prevYear.netIncome)! >= 0 
@@ -182,7 +191,9 @@ export default function StockDetail({ stock }: { stock: Stock }) {
                       </td>
                       <td className="text-right">
                         <div className="flex items-center justify-end gap-2">
-                          {formatNumber(metric.fcf)}
+                          <span className={metric.fcf < 0 ? 'text-red-500' : ''}>
+                            {formatNumber(metric.fcf)}
+                          </span>
                           {prevYear && (
                             <span className={`text-xs px-1.5 py-0.5 rounded-full ${
                               getGrowth(metric.fcf, prevYear.fcf)! >= 0 

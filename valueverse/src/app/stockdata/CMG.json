@@ -1,0 +1,68 @@
+{
+    "symbol": "CMG",
+    "name": "Chipotle Mexican Grill, Inc.",
+    "price": 62.01,
+    "change": 3.38,
+    "changePercent": 3.38,
+    "logo": "🌯",
+    "marketCap": 84494000000,
+    "enterpriseValue": 26640000000,
+    "roic": 18.6,
+    "revenue": {
+      "current": 9872000000,
+      "growth": 14,
+      "cagr": 14
+    },
+    "netIncome": {
+      "current": 1229000000,
+      "growth": 37,
+      "cagr": 20
+    },
+    "fcf": {
+      "current": 1036000000,
+      "growth": 33,
+      "cagr": 18
+    },
+    "grossMargin": 41,
+    "netMargin": 14,
+    "fcfMargin": 11,
+    "psRatio": 7,
+    "peRatio": 55,
+    "fcfYield": 1.5,
+    "cash": 1295000000,
+    "debt": 4052000000,
+    "netCash": -2757000000,
+    "terminalValue": 32117000000,
+    "intrinsicValue": 18,
+    "upside": -71,
+    "historicalMetrics": [
+      {
+        "year": 2020,
+        "revenue": 5985000000,
+        "netIncome": 356000000,
+        "fcf": -41000000,
+        "shares": 1399
+      },
+      {
+        "year": 2021,
+        "revenue": 7547000000,
+        "netIncome": 653000000,
+        "fcf": 648000000,
+        "shares": 1407
+      },
+      {
+        "year": 2022,
+        "revenue": 8635000000,
+        "netIncome": 899000000,
+        "fcf": 777000000,
+        "shares": 1386
+      },
+      {
+        "year": 2023,
+        "revenue": 9872000000,
+        "netIncome": 1229000000,
+        "fcf": 1036000000,
+        "shares": 1372
+      }
+    ]
+  }
