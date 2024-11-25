@@ -17,7 +17,7 @@ interface MetricSectionProps {
 }
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <h3 className="text-base font-semibold text-zinc-700 mb-5 text-center">
+  <h3 className="text-base font-semibold text-zinc-700 dark:text-zinc-200 mb-5 text-center">
     {children}
   </h3>
 );
@@ -48,13 +48,15 @@ export default function StockDetail({ stock }: { stock: Stock }) {
 
   const Metric = ({ label, value, isPercentage = false, colorCode = false, prefix = '' }: MetricProps) => (
     <div className="text-center">
-      <p className="text-sm text-zinc-500">{label}</p>
+      <p className="text-sm text-zinc-600 dark:text-zinc-400">{label}</p>
       <p className={`font-medium ${
         colorCode && value !== 0 
           ? value > 0 
-            ? 'text-green-500' 
-            : 'text-red-500'
-          : value < 0 ? 'text-red-500' : ''
+            ? 'text-green-500 dark:text-green-400' 
+            : 'text-red-500 dark:text-red-400'
+          : value < 0 
+            ? 'text-red-500 dark:text-red-400' 
+            : 'text-zinc-900 dark:text-white'
       }`}>
         {formatMetricValue(value, isPercentage, prefix)}
       </p>
@@ -71,17 +73,22 @@ export default function StockDetail({ stock }: { stock: Stock }) {
   );
 
   return (
-    <div className="bg-white rounded-lg border border-zinc-200 p-6 space-y-8">
+    <div className="bg-white dark:bg-zinc-800/50 rounded-lg border-2 border-zinc-200 
+                    dark:border-zinc-700 p-6 space-y-8 shadow-sm">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div>
-            <h2 className="text-2xl font-bold">{stock.name}</h2>
-            <p className="text-zinc-500">{stock.symbol}</p>
+            <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">
+              {stock.name}
+            </h2>
+            <p className="text-zinc-600 dark:text-zinc-300">{stock.symbol}</p>
           </div>
         </div>
         <div className="text-right">
-          <p className="text-3xl font-bold">${stock.price.toFixed(2)}</p>
+          <p className="text-3xl font-bold text-zinc-900 dark:text-white">
+            ${stock.price.toFixed(2)}
+          </p>
           <div className={stock.change >= 0 ? 'text-green-500' : 'text-red-500'}>
             {stock.change >= 0 ? '↑' : '↓'} ${Math.abs(stock.change).toFixed(2)} (
             {Math.abs(stock.changePercent).toFixed(2)}%)
@@ -104,11 +111,11 @@ export default function StockDetail({ stock }: { stock: Stock }) {
       {/* Valuation */}
       <MetricSection title="Valuation">
         <Metric label="Intrinsic Value" value={stock.intrinsicValue} prefix="$" />
-        <Metric label="Upside" value={stock.upside} isPercentage colorCode />
+        <Metric label="Upside / Downside" value={stock.upside} isPercentage colorCode />
         <Metric label="FCF Yield" value={stock.fcfYield} isPercentage colorCode />
       </MetricSection>
 
-      {/* Future Growth (5Y CAGR) */}
+      {/* Future Growth */}
       <MetricSection title="Future Growth (5Y CAGR)">
         <Metric label="Revenue CAGR" value={stock.revenue.cagr} isPercentage colorCode />
         <Metric label="Net Income CAGR" value={stock.netIncome.cagr} isPercentage colorCode />
@@ -135,7 +142,7 @@ export default function StockDetail({ stock }: { stock: Stock }) {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-zinc-500">
+              <tr className="text-zinc-600 dark:text-zinc-300">
                 <th className="text-left pb-2">Year</th>
                 <th className="text-right pb-2">Revenue</th>
                 <th className="text-right pb-2">Net Income</th>
@@ -155,18 +162,20 @@ export default function StockDetail({ stock }: { stock: Stock }) {
                     previous ? ((current - previous) / previous) * 100 : null;
 
                   return (
-                    <tr key={metric.year} className="border-t border-zinc-100">
-                      <td className="py-2">{metric.year}</td>
+                    <tr key={metric.year} className="border-t border-zinc-200 dark:border-zinc-700">
+                      <td className="py-2 text-zinc-900 dark:text-white">{metric.year}</td>
                       <td className="text-right">
                         <div className="flex items-center justify-end gap-2">
-                          <span className={metric.revenue < 0 ? 'text-red-500' : ''}>
+                          <span className={`${metric.revenue < 0 
+                            ? 'text-red-500 dark:text-red-400' 
+                            : 'text-zinc-900 dark:text-white'}`}>
                             {formatNumber(metric.revenue)}
                           </span>
                           {prevYear && (
                             <span className={`text-xs px-1.5 py-0.5 rounded-full ${
                               getGrowth(metric.revenue, prevYear.revenue)! >= 0 
-                                ? 'bg-green-100 text-green-700' 
-                                : 'bg-red-100 text-red-700'
+                                ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' 
+                                : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
                             }`}>
                               {getGrowth(metric.revenue, prevYear.revenue)!.toFixed(1)}%
                             </span>
@@ -175,14 +184,16 @@ export default function StockDetail({ stock }: { stock: Stock }) {
                       </td>
                       <td className="text-right">
                         <div className="flex items-center justify-end gap-2">
-                          <span className={metric.netIncome < 0 ? 'text-red-500' : ''}>
+                          <span className={`${metric.netIncome < 0 
+                            ? 'text-red-500 dark:text-red-400' 
+                            : 'text-zinc-900 dark:text-white'}`}>
                             {formatNumber(metric.netIncome)}
                           </span>
                           {prevYear && (
                             <span className={`text-xs px-1.5 py-0.5 rounded-full ${
                               getGrowth(metric.netIncome, prevYear.netIncome)! >= 0 
-                                ? 'bg-green-100 text-green-700' 
-                                : 'bg-red-100 text-red-700'
+                                ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' 
+                                : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
                             }`}>
                               {getGrowth(metric.netIncome, prevYear.netIncome)!.toFixed(1)}%
                             </span>
@@ -191,14 +202,16 @@ export default function StockDetail({ stock }: { stock: Stock }) {
                       </td>
                       <td className="text-right">
                         <div className="flex items-center justify-end gap-2">
-                          <span className={metric.fcf < 0 ? 'text-red-500' : ''}>
+                          <span className={`${metric.fcf < 0 
+                            ? 'text-red-500 dark:text-red-400' 
+                            : 'text-zinc-900 dark:text-white'}`}>
                             {formatNumber(metric.fcf)}
                           </span>
                           {prevYear && (
                             <span className={`text-xs px-1.5 py-0.5 rounded-full ${
                               getGrowth(metric.fcf, prevYear.fcf)! >= 0 
-                                ? 'bg-green-100 text-green-700' 
-                                : 'bg-red-100 text-red-700'
+                                ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' 
+                                : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
                             }`}>
                               {getGrowth(metric.fcf, prevYear.fcf)!.toFixed(1)}%
                             </span>
@@ -213,8 +226,10 @@ export default function StockDetail({ stock }: { stock: Stock }) {
         </div>
       </div>
 
-      <button className="w-full py-3 px-4 bg-black text-white rounded-lg 
-                  hover:bg-zinc-800 transition-colors duration-200 font-bold">
+      <button className="w-full py-3 px-4 bg-black dark:bg-white text-white dark:text-black 
+                        rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-100 
+                        transition-all duration-200 font-bold
+                        hover:translate-y-[-2px] active:translate-y-0">
         Download DCF Valuation Model
       </button>
     </div>

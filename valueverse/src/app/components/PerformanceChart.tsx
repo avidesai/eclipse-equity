@@ -1,3 +1,5 @@
+// src/app/components/PerformanceChart.tsx
+'use client';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { HistoricalMetric } from '../types/stock';
 
@@ -7,7 +9,7 @@ interface PerformanceChartProps {
 
 export default function PerformanceChart({ data }: PerformanceChartProps) {
   const sortedData = [...data].sort((a, b) => a.year - b.year);
-
+  
   const formatValue = (value: number) => {
     const absValue = Math.abs(value);
     let formattedValue;
@@ -18,6 +20,32 @@ export default function PerformanceChart({ data }: PerformanceChartProps) {
     else formattedValue = absValue.toString();
     
     return value < 0 ? `-${formattedValue}` : formattedValue;
+  };
+
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 
+                      rounded-lg p-3 shadow-sm">
+          <p className="text-zinc-600 dark:text-zinc-300 font-medium mb-2">{label}</p>
+          {payload.map((entry: any, index: number) => (
+            <div key={index} className="flex items-center gap-2 text-sm">
+              <div className={`w-2 h-2 rounded-sm ${
+                entry.dataKey === 'revenue' ? 'bg-black dark:bg-zinc-300' :
+                entry.dataKey === 'netIncome' ? 'bg-green-500' : 'bg-blue-500'
+              }`} />
+              <span className="text-zinc-600 dark:text-zinc-400 capitalize">
+                {entry.dataKey === 'fcf' ? 'Free Cash Flow' : entry.dataKey}:
+              </span>
+              <span className="text-zinc-900 dark:text-white font-medium">
+                ${formatValue(entry.value)}
+              </span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+    return null;
   };
 
   return (
@@ -34,38 +62,53 @@ export default function PerformanceChart({ data }: PerformanceChartProps) {
               dataKey="year"
               tickLine={false}
               axisLine={false}
-              style={{ fontSize: '12px' }}
+              tick={{ fill: 'rgb(113 113 122)', className: 'dark:fill-zinc-500' }}  // Changed to zinc-500
+              style={{ fontSize: '13px', fontWeight: 500 }}
             />
             <YAxis
               tickFormatter={formatValue}
               tickLine={false}
               axisLine={false}
-              style={{ fontSize: '12px' }}
+              tick={{ fill: 'rgb(113 113 122)', className: 'dark:fill-zinc-500' }}  // Changed to zinc-500
+              style={{ fontSize: '13px', fontWeight: 500 }}
             />
             <Tooltip
-              formatter={(value: number) => [`$${formatValue(value)}`]}
-              contentStyle={{
-                backgroundColor: 'white',
-                border: '1px solid #e5e7eb',
-                borderRadius: '6px',
-                fontSize: '12px'
-              }}
+              content={<CustomTooltip />}
+              cursor={{ fill: 'rgb(244 244 245)', opacity: 0.5 }}
             />
-            <Bar dataKey="revenue" fill="#000000" radius={[2, 2, 0, 0]} />
-            <Bar dataKey="netIncome" fill="#22c55e" radius={[2, 2, 0, 0]} />
-            <Bar dataKey="fcf" fill="#3b82f6" radius={[2, 2, 0, 0]} />
+            <Bar 
+              dataKey="revenue" 
+              fill="currentColor"
+              className="text-black dark:text-zinc-300" 
+              radius={[2, 2, 0, 0]} 
+            />
+            <Bar 
+              dataKey="netIncome" 
+              fill="currentColor"
+              className="text-green-500" 
+              radius={[2, 2, 0, 0]} 
+            />
+            <Bar 
+              dataKey="fcf" 
+              fill="currentColor"
+              className="text-blue-500" 
+              radius={[2, 2, 0, 0]} 
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <div className="flex justify-center gap-6 mt-6 mb-14 text-sm text-zinc-600">
+      <div className="flex justify-center gap-6 mt-6 mb-14 text-sm text-zinc-600 dark:text-zinc-400">
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-black rounded-sm"/> Revenue
+          <div className="w-3 h-3 bg-black dark:bg-zinc-300 rounded-sm"/> 
+          Revenue
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-green-500 rounded-sm"/> Net Income
+          <div className="w-3 h-3 bg-green-500 rounded-sm"/> 
+          Net Income
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-blue-500 rounded-sm"/> Free Cash Flow
+          <div className="w-3 h-3 bg-blue-500 rounded-sm"/> 
+          Free Cash Flow
         </div>
       </div>
     </div>
