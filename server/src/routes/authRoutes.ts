@@ -4,6 +4,7 @@ import express, { Request, Response } from 'express';
 import sgMail from '@sendgrid/mail';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
 import { body, validationResult } from 'express-validator';
 import User, { IUser } from '../models/user';
 import { Document } from 'mongoose';
@@ -19,6 +20,12 @@ interface SignupRequest {
 interface VerifyEmailRequest extends Request {
   query: {
     token?: string;
+  };
+}
+
+interface VerifyLoginRequest extends Request {
+  body: {
+    token: string;
   };
 }
 
@@ -136,9 +143,127 @@ router.get(
 
       res.json({ 
         message: 'Email verified successfully.',
-        userId: user._id // Optional: if you need the userId for frontend redirects
+        userId: user._id
       });
     } catch (error) {
+      res.status(500).json({ 
+        message: 'Server error',
+        error: process.env.NODE_ENV === 'development' ? error : undefined
+      });
+    }
+  }
+);
+
+// New endpoint for getting JWT after email verification
+router.post(
+  '/verify-login',
+  async (req: VerifyLoginRequest, res: Response): Promise<void> => {
+    const { token } = req.body;
+    
+    if (!token) {
+      res.status(400).json({ message: 'Token is required.' });
+      return;
+    }
+
+    try {
+      // Find user by verification token first
+      const user = await User.findOne({ verificationToken: token });
+      
+      if (!user) {
+        // If not found by verification token, try to find verified user
+        const verifiedUser = await User.findOne({ 
+          isVerified: true,
+          $or: [
+            { verificationToken: null },
+            { verificationToken: undefined }
+          ]
+        });
+        
+        if (!verifiedUser) {
+          res.status(400).json({ message: 'Invalid token.' });
+          return;
+        }
+
+        // Generate JWT token for verified user
+        const jwtToken = jwt.sign(
+          { 
+            id: verifiedUser._id,
+            email: verifiedUser.email,
+            firstName: verifiedUser.firstName,
+            lastName: verifiedUser.lastName,
+            isVerified: true
+          },
+          process.env.JWT_SECRET!,
+          { expiresIn: '24h' }
+        );
+
+        res.json({ token: jwtToken });
+        return;
+      }
+
+      // Generate JWT token for newly verified user
+      const jwtToken = jwt.sign(
+        { 
+          id: user._id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          isVerified: true
+        },
+        process.env.JWT_SECRET!,
+        { expiresIn: '24h' }
+      );
+
+      res.json({ token: jwtToken });
+    } catch (error) {
+      res.status(500).json({ 
+        message: 'Server error',
+        error: process.env.NODE_ENV === 'development' ? error : undefined
+      });
+    }
+  }
+);
+
+// Add this route before the export statement
+router.get(
+  '/me',
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const token = req.headers.authorization?.split(' ')[1];
+      if (!token) {
+        res.status(401).json({ message: 'No token provided' });
+        return;
+      }
+
+      interface JWTPayload {
+        id: string;
+        email: string;
+        firstName: string;
+        lastName: string;
+        isVerified: boolean;
+      }
+
+      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload;
+
+      const user = await User.findById(decoded.id).select('-password');
+      if (!user) {
+        res.status(404).json({ message: 'User not found' });
+        return;
+      }
+
+      res.json({
+        id: user._id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        isVerified: user.isVerified,
+        isPremium: user.isPremium
+      });
+    } catch (error) {
+      if (error instanceof jwt.JsonWebTokenError) {
+        res.status(401).json({ message: 'Invalid token' });
+        return;
+      }
       res.status(500).json({ 
         message: 'Server error',
         error: process.env.NODE_ENV === 'development' ? error : undefined

@@ -46,9 +46,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     checkAuth();
   }, []);
 
-  const login = (token: string) => {
+  const login = async (token: string) => {
     localStorage.setItem('token', token);
-    setIsAuthenticated(true);
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    try {
+      const response = await api.get('/auth/me');
+      setUser(response.data);
+      setIsAuthenticated(true);
+    } catch (error) {
+      localStorage.removeItem('token');
+      setIsAuthenticated(false);
+      setUser(null);
+      throw error;
+    }
   };
 
   const logout = () => {
