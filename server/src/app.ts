@@ -1,6 +1,6 @@
 // /src/app.ts
 
-import express from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import stockRoutes from './routes/stockRoutes';
@@ -20,7 +20,7 @@ const allowedOrigins = [
 
 // Configure CORS
 app.use(cors({
-  origin: function(origin, callback) {
+  origin: function(origin: string | undefined, callback: (error: Error | null, allow?: boolean) => void) {
     // Allow requests with no origin (mobile apps, Postman, etc)
     if (!origin) return callback(null, true);
     
