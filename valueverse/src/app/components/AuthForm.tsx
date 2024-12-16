@@ -1,8 +1,10 @@
+// /src/app/components/AuthForm.tsx
+
 'use client';
 import { useState } from 'react';
-import Link from 'next/link';
-import api from '../utils/api'; // Import the API utility
 import { useRouter } from 'next/navigation';
+import { useAuth } from '../contexts/AuthContext';
+import api from '../utils/api';
 
 export default function AuthForm() {
   const [isLogin, setIsLogin] = useState(true);
@@ -15,6 +17,7 @@ export default function AuthForm() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { login } = useAuth();
 
   const toggleForm = () => {
     setError(null);
@@ -33,15 +36,13 @@ export default function AuthForm() {
 
     try {
       if (isLogin) {
-        // Login Request
         const res = await api.post('/auth/signin', {
           email: formData.email,
           password: formData.password,
         });
-        localStorage.setItem('token', res.data.token); // Save JWT token
-        router.push('/models'); // Redirect after successful login
+        login(res.data.token);
+        router.push('/models');
       } else {
-        // Signup Request
         await api.post('/auth/signup', {
           firstName: formData.firstName,
           lastName: formData.lastName,
@@ -49,7 +50,7 @@ export default function AuthForm() {
           password: formData.password,
         });
         alert('Account created! Check your email to verify your account.');
-        setIsLogin(true); // Switch to login after signup
+        setIsLogin(true);
       }
     } catch (err: any) {
       setError(err.response?.data?.message || 'An error occurred');
@@ -119,9 +120,7 @@ export default function AuthForm() {
 
         <div className="text-center mt-4">
           <p className="text-zinc-600 dark:text-zinc-400">
-            {isLogin
-              ? "Don't have an account? "
-              : 'Already have an account? '}
+            {isLogin ? "Don't have an account? " : 'Already have an account? '}
             <button
               onClick={toggleForm}
               className="text-zinc-900 dark:text-zinc-100 underline hover:text-zinc-700 dark:hover:text-zinc-300 transition"

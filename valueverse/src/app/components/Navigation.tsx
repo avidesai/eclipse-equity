@@ -6,12 +6,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
+  const { isAuthenticated, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -71,15 +73,26 @@ export default function Navigation() {
               }
             </button>
 
-            {/* Sign In Button */}
-            <Link
-              href="/auth"
-              className="px-4 py-1.5 bg-white text-black rounded-lg
-                             hover:bg-zinc-100 transition-all duration-200
-                             hover:scale-105 active:scale-95"
-            >
-              Sign In
-            </Link>
+            {/* Authentication Button */}
+            {isAuthenticated ? (
+              <button
+                onClick={logout}
+                className="px-4 py-1.5 bg-white text-black rounded-lg
+                          hover:bg-zinc-100 transition-all duration-200
+                          hover:scale-105 active:scale-95"
+              >
+                Sign Out
+              </button>
+            ) : (
+              <Link
+                href="/auth"
+                className="px-4 py-1.5 bg-white text-black rounded-lg
+                          hover:bg-zinc-100 transition-all duration-200
+                          hover:scale-105 active:scale-95"
+              >
+                Sign In
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -125,15 +138,28 @@ export default function Navigation() {
             </Link>
           ))}
 
-          {/* Mobile Sign In Button */}
-          <Link
-            href="/auth"
-            className="block w-full text-center px-4 py-2 bg-white text-black rounded-lg
-                           hover:bg-zinc-100 transition-all duration-200"
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            Sign In
-          </Link>
+          {/* Mobile Authentication Button */}
+          {isAuthenticated ? (
+            <button
+              onClick={() => {
+                logout();
+                setIsMobileMenuOpen(false);
+              }}
+              className="block w-full text-center px-4 py-2 bg-white text-black rounded-lg
+                        hover:bg-zinc-100 transition-all duration-200"
+            >
+              Sign Out
+            </button>
+          ) : (
+            <Link
+              href="/auth"
+              className="block w-full text-center px-4 py-2 bg-white text-black rounded-lg
+                        hover:bg-zinc-100 transition-all duration-200"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Sign In
+            </Link>
+          )}
         </div>
       </div>
     </nav>

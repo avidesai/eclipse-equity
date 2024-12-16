@@ -1,6 +1,8 @@
-// Update your src/app/layout.tsx
+// src/app/layout.tsx
+
 import type { Metadata } from "next";
 import { Providers } from './providers';
+import { AuthProvider } from './contexts/AuthContext';
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -48,7 +50,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head />
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </Providers>
       </body>
     </html>
   );
+}

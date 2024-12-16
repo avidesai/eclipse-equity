@@ -1,3 +1,5 @@
+// /src/app/page.tsx
+
 'use client';
 import { ArrowRight } from 'lucide-react';
 import Navigation from './components/Navigation';
