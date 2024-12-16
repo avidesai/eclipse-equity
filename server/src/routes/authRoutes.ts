@@ -5,7 +5,7 @@ import sgMail from '@sendgrid/mail';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import { body, validationResult } from 'express-validator';
-import User, { IUser } from '../models/user';  // Make sure to export IUser interface from your user model
+import User, { IUser } from '../models/user';
 import { Document } from 'mongoose';
 
 // Type for request body
@@ -24,6 +24,15 @@ interface VerifyEmailRequest extends Request {
 
 const router = express.Router();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
+
+// Function to get and validate client URL
+const getClientUrl = (): string => {
+  const clientUrl = process.env.CLIENT_URL || process.env.PRODUCTION_URL;
+  if (!clientUrl) {
+    throw new Error('CLIENT_URL or PRODUCTION_URL environment variable is not set');
+  }
+  return clientUrl;
+};
 
 // Register a new user with email verification
 router.post(
@@ -52,7 +61,7 @@ router.post(
 
       const hashedPassword = await bcrypt.hash(password, 10);
       const verificationToken = crypto.randomBytes(20).toString('hex');
-
+      
       user = new User({
         firstName,
         lastName,
@@ -62,24 +71,42 @@ router.post(
         isPremium: false,
         verificationToken,
       });
-
+      
       await user.save();
 
       // Send email verification
-      const verificationLink = `${process.env.CLIENT_URL}/verify-email?token=${verificationToken}`;
-      const msg = {
-        to: email,
-        from: process.env.EMAIL_USER!,
-        subject: 'Verify your email - ValueVerse',
-        text: `Verify your email by clicking the link: ${verificationLink}`,
-        html: `<p>Verify your email by clicking the link below:</p>
-          <a href="${verificationLink}">Verify Email</a>`,
-      };
-
-      await sgMail.send(msg);
-      res.status(201).json({ message: 'User registered successfully. Verification email sent.' });
+      try {
+        const clientUrl = getClientUrl();
+        const verificationLink = `${clientUrl}/verify-email?token=${verificationToken}`;
+        
+        const msg = {
+          to: email,
+          from: process.env.EMAIL_USER!,
+          subject: 'Verify your email - ValueVerse',
+          text: `Verify your email by clicking the link: ${verificationLink}`,
+          html: `<p>Verify your email by clicking the link below:</p>
+                 <a href="${verificationLink}">Verify Email</a>`,
+        };
+        
+        await sgMail.send(msg);
+        res.status(201).json({ 
+          message: 'User registered successfully. Verification email sent.',
+          verificationLink // Optional: remove in production if you don't want to expose the link
+        });
+      } catch (error) {
+        // If email sending fails, delete the user and return an error
+        await User.deleteOne({ _id: user._id });
+        res.status(500).json({ 
+          message: 'Failed to send verification email. Please try again.',
+          error: process.env.NODE_ENV === 'development' ? error : undefined
+        });
+        return;
+      }
     } catch (error) {
-      res.status(500).json({ message: 'Server error' });
+      res.status(500).json({ 
+        message: 'Server error',
+        error: process.env.NODE_ENV === 'development' ? error : undefined
+      });
     }
   }
 );
@@ -89,7 +116,7 @@ router.get(
   '/verify-email',
   async (req: VerifyEmailRequest, res: Response): Promise<void> => {
     const { token } = req.query;
-
+    
     if (!token) {
       res.status(400).json({ message: 'Token is required.' });
       return;
@@ -97,6 +124,7 @@ router.get(
 
     try {
       const user = await User.findOne({ verificationToken: token });
+      
       if (!user) {
         res.status(400).json({ message: 'Invalid or expired token.' });
         return;
@@ -106,9 +134,15 @@ router.get(
       user.set('verificationToken', undefined);
       await user.save();
 
-      res.json({ message: 'Email verified successfully.' });
+      res.json({ 
+        message: 'Email verified successfully.',
+        userId: user._id // Optional: if you need the userId for frontend redirects
+      });
     } catch (error) {
-      res.status(500).json({ message: 'Server error' });
+      res.status(500).json({ 
+        message: 'Server error',
+        error: process.env.NODE_ENV === 'development' ? error : undefined
+      });
     }
   }
 );
