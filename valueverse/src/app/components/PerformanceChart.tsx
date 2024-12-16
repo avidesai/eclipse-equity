@@ -1,10 +1,26 @@
 // src/app/components/PerformanceChart.tsx
+
 'use client';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, TooltipProps } from 'recharts';
 import { HistoricalMetric } from '../types/stock';
 
 interface PerformanceChartProps {
   data: HistoricalMetric[];
+}
+
+// Define the type for tooltip payload
+interface CustomTooltipPayload {
+  value: number;
+  dataKey: 'revenue' | 'netIncome' | 'fcf';
+  fill: string;
+  payload: HistoricalMetric;
+}
+
+// Define props type for custom tooltip
+interface CustomTooltipProps extends TooltipProps<number, string> {
+  active?: boolean;
+  payload?: CustomTooltipPayload[];
+  label?: string;
 }
 
 export default function PerformanceChart({ data }: PerformanceChartProps) {
@@ -22,13 +38,13 @@ export default function PerformanceChart({ data }: PerformanceChartProps) {
     return value < 0 ? `-${formattedValue}` : formattedValue;
   };
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 
                       rounded-lg p-3 shadow-sm">
           <p className="text-zinc-600 dark:text-zinc-300 font-medium mb-2">{label}</p>
-          {payload.map((entry: any, index: number) => (
+          {payload.map((entry, index) => (
             <div key={index} className="flex items-center gap-2 text-sm">
               <div className={`w-2 h-2 rounded-sm ${
                 entry.dataKey === 'revenue' ? 'bg-black dark:bg-zinc-300' :
@@ -62,14 +78,14 @@ export default function PerformanceChart({ data }: PerformanceChartProps) {
               dataKey="year"
               tickLine={false}
               axisLine={false}
-              tick={{ fill: 'rgb(113 113 122)', className: 'dark:fill-zinc-500' }}  // Changed to zinc-500
+              tick={{ fill: 'rgb(113 113 122)', className: 'dark:fill-zinc-500' }}
               style={{ fontSize: '13px', fontWeight: 500 }}
             />
             <YAxis
               tickFormatter={formatValue}
               tickLine={false}
               axisLine={false}
-              tick={{ fill: 'rgb(113 113 122)', className: 'dark:fill-zinc-500' }}  // Changed to zinc-500
+              tick={{ fill: 'rgb(113 113 122)', className: 'dark:fill-zinc-500' }}
               style={{ fontSize: '13px', fontWeight: 500 }}
             />
             <Tooltip
