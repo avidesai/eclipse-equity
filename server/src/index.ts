@@ -2,17 +2,14 @@
 
 import app from './app';
 import connectDB from './config/db';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-const PORT = process.env.PORT || 5000;
+import environment from './config/environment';
 
 // Connect to MongoDB
 connectDB()
   .then(() => {
-    app.listen(PORT, () => {
-      console.log(`✅ Server is running on port ${PORT}`);
+    app.listen(environment.PORT, () => {
+      console.log(`✅ Server is running on port ${environment.PORT}`);
+      console.log(`🌍 Environment: ${environment.NODE_ENV}`);
     });
   })
   .catch((err) => {
