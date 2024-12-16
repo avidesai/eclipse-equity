@@ -1,16 +1,19 @@
+// /src/models/user.ts
+
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IUser extends Document {
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
+  password?: string;
   googleId?: string;
   isVerified: boolean;
   isPremium: boolean;
+  verificationToken?: string;
 }
 
-const UserSchema: Schema = new Schema({
+const userSchema: Schema = new Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
@@ -18,6 +21,7 @@ const UserSchema: Schema = new Schema({
   googleId: { type: String },
   isVerified: { type: Boolean, default: false },
   isPremium: { type: Boolean, default: false },
+  verificationToken: { type: String },
 });
 
-export default mongoose.model<IUser>('User', UserSchema);
+export default mongoose.model<IUser>('User', userSchema);

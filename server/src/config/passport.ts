@@ -1,6 +1,17 @@
+// /src/config/passport.ts
+
+import dotenv from 'dotenv';
+dotenv.config();
 import passport from 'passport';
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import User from '../models/user';
+import { Strategy as GoogleStrategy, Profile, VerifyCallback } from 'passport-google-oauth20';
+import User, { IUser } from '../models/user';  // Note the lowercase 'user'
+
+// Extend the Express User type
+declare global {
+  namespace Express {
+    interface User extends IUser {}
+  }
+}
 
 passport.use(
   new GoogleStrategy(
@@ -9,33 +20,41 @@ passport.use(
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       callbackURL: '/api/auth/google/callback',
     },
-    async (accessToken, refreshToken, profile, done) => {
+    async (
+      accessToken: string,
+      refreshToken: string,
+      profile: Profile,
+      done: VerifyCallback
+    ): Promise<void> => {
       try {
         let user = await User.findOne({ googleId: profile.id });
-
+        
         if (!user) {
           user = new User({
             googleId: profile.id,
-            firstName: profile.name?.givenName,
-            lastName: profile.name?.familyName,
-            email: profile.emails?.[0].value,
+            firstName: profile.name?.givenName || '',
+            lastName: profile.name?.familyName || '',
+            email: profile.emails?.[0]?.value || '',
             isVerified: true,
           });
           await user.save();
         }
-
+        
         done(null, user);
       } catch (err) {
-        done(err, null);
+        console.error(err);
+        done(err as Error, false);
       }
     }
   )
 );
 
-passport.serializeUser((user, done) => {
+passport.serializeUser((user: Express.User, done) => {
   done(null, user);
 });
 
-passport.deserializeUser((user: any, done) => {
+passport.deserializeUser((user: Express.User, done) => {
   done(null, user);
 });
+
+export default passport;

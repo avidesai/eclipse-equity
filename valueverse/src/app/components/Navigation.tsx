@@ -1,4 +1,5 @@
 // src/app/components/Navigation.tsx
+
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -70,11 +71,15 @@ export default function Navigation() {
               }
             </button>
 
-            <button className="px-4 py-1.5 bg-white text-black rounded-lg
+            {/* Sign In Button */}
+            <Link
+              href="/auth"
+              className="px-4 py-1.5 bg-white text-black rounded-lg
                              hover:bg-zinc-100 transition-all duration-200
-                             hover:scale-105 active:scale-95">
+                             hover:scale-105 active:scale-95"
+            >
               Sign In
-            </button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -119,10 +124,16 @@ export default function Navigation() {
               {link.label}
             </Link>
           ))}
-          <button className="w-full px-4 py-2 bg-white text-black rounded-lg
-                           hover:bg-zinc-100 transition-all duration-200">
+
+          {/* Mobile Sign In Button */}
+          <Link
+            href="/auth"
+            className="block w-full text-center px-4 py-2 bg-white text-black rounded-lg
+                           hover:bg-zinc-100 transition-all duration-200"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
             Sign In
-          </button>
+          </Link>
         </div>
       </div>
     </nav>

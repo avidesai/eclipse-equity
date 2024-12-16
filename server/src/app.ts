@@ -1,11 +1,11 @@
-// app.ts
+// /src/app.ts
 
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import stockRoutes from './routes/stockRoutes';
 import paymentRoutes from './routes/paymentRoutes';
-import authRoutes from './routes/authRoutes';
+import { authRoutes } from './routes/authRoutes'; // Named import
 import passport from 'passport';
 import './config/passport';
 

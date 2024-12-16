@@ -1,15 +1,31 @@
-import express from 'express';
+// /src/routes/authRoutes.ts
+
+import express, { Request, Response } from 'express';
+import sgMail from '@sendgrid/mail';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 import { body, validationResult } from 'express-validator';
-import User from '../models/user';
-import passport from 'passport';
+import User, { IUser } from '../models/user';  // Make sure to export IUser interface from your user model
+import { Document } from 'mongoose';
+
+// Type for request body
+interface SignupRequest {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
+
+interface VerifyEmailRequest extends Request {
+  query: {
+    token?: string;
+  };
+}
 
 const router = express.Router();
+sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 
-router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-
-// Register a new user
+// Register a new user with email verification
 router.post(
   '/signup',
   [
@@ -18,17 +34,24 @@ router.post(
     body('email').isEmail().withMessage('Valid email is required'),
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
   ],
-  async (req, res) => {
+  async (req: Request<{}, {}, SignupRequest>, res: Response): Promise<void> => {
     const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+      return;
+    }
 
     const { firstName, lastName, email, password } = req.body;
 
     try {
       let user = await User.findOne({ email });
-      if (user) return res.status(400).json({ message: 'User already exists' });
+      if (user) {
+        res.status(400).json({ message: 'User already exists' });
+        return;
+      }
 
       const hashedPassword = await bcrypt.hash(password, 10);
+      const verificationToken = crypto.randomBytes(20).toString('hex');
 
       user = new User({
         firstName,
@@ -37,51 +60,57 @@ router.post(
         password: hashedPassword,
         isVerified: false,
         isPremium: false,
+        verificationToken,
       });
 
       await user.save();
 
-      res.status(201).json({ message: 'User registered successfully' });
+      // Send email verification
+      const verificationLink = `${process.env.CLIENT_URL}/verify-email?token=${verificationToken}`;
+      const msg = {
+        to: email,
+        from: process.env.EMAIL_USER!,
+        subject: 'Verify your email - ValueVerse',
+        text: `Verify your email by clicking the link: ${verificationLink}`,
+        html: `<p>Verify your email by clicking the link below:</p>
+          <a href="${verificationLink}">Verify Email</a>`,
+      };
+
+      await sgMail.send(msg);
+      res.status(201).json({ message: 'User registered successfully. Verification email sent.' });
     } catch (error) {
       res.status(500).json({ message: 'Server error' });
     }
   }
 );
 
-// Sign in a user
-router.post(
-  '/signin',
-  [
-    body('email').isEmail(),
-    body('password').notEmpty().withMessage('Password is required'),
-  ],
-  async (req, res) => {
-    const { email, password } = req.body;
+// Verify Email Endpoint
+router.get(
+  '/verify-email',
+  async (req: VerifyEmailRequest, res: Response): Promise<void> => {
+    const { token } = req.query;
+
+    if (!token) {
+      res.status(400).json({ message: 'Token is required.' });
+      return;
+    }
 
     try {
-      const user = await User.findOne({ email });
-      if (!user) return res.status(400).json({ message: 'Invalid credentials' });
+      const user = await User.findOne({ verificationToken: token });
+      if (!user) {
+        res.status(400).json({ message: 'Invalid or expired token.' });
+        return;
+      }
 
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
+      user.set('isVerified', true);
+      user.set('verificationToken', undefined);
+      await user.save();
 
-      const payload = { id: user._id, isPremium: user.isPremium };
-
-      const token = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '1h' });
-
-      res.json({ token });
+      res.json({ message: 'Email verified successfully.' });
     } catch (error) {
       res.status(500).json({ message: 'Server error' });
     }
   }
 );
 
-router.get(
-    '/google/callback',
-    passport.authenticate('google', { failureRedirect: '/login' }),
-    (req, res) => {
-      res.redirect('/dashboard');
-    }
-  );
-
-export default router;
+export { router as authRoutes };
