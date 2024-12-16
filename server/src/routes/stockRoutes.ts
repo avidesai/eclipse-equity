@@ -1,7 +1,7 @@
 // /routes/stockRoutes.ts
 
 import express from 'express';
-import Stock from '../models/Stock';
+import Stock from '../models/stock';
 
 const router = express.Router();
 
