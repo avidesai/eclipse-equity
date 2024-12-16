@@ -52,8 +52,12 @@ export default function AuthForm() {
         alert('Account created! Check your email to verify your account.');
         setIsLogin(true);
       }
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'An error occurred');
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An error occurred');
+      }
     } finally {
       setLoading(false);
     }

@@ -7,7 +7,6 @@ import MA from '../stockdata/MA.json';
 import AMZN from '../stockdata/AMZN.json';
 import ASML from '../stockdata/ASML.json';
 import CMG from '../stockdata/CMG.json';
-import FICO from '../stockdata/FICO.json';
 import LLY from '../stockdata/LLY.json';
 import MELI from '../stockdata/MELI.json';
 import SPGI from '../stockdata/SPGI.json';
