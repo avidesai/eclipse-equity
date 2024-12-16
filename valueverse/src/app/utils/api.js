@@ -3,7 +3,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:11000/api',
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'https://valueverse-bwrk.onrender.com/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -12,6 +12,7 @@ const api = axios.create({
 // Add request interceptor
 api.interceptors.request.use(
   (config) => {
+    // Get token from localStorage if it exists
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
