@@ -19,6 +19,13 @@ interface ApiErrorResponse {
   errors?: Array<{ msg: string }>;
 }
 
+interface SubmissionData {
+  firstName?: string;
+  lastName?: string;
+  email: string;
+  password: string;
+}
+
 export default function AuthForm() {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState<FormData>({
@@ -76,17 +83,20 @@ export default function AuthForm() {
 
     try {
       const endpoint = isLogin ? '/auth/signin' : '/auth/signup';
-      const submissionData = {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
+      const submissionData: SubmissionData = {
         email: formData.email,
         password: formData.password,
       };
+
+      if (!isLogin) {
+        submissionData.firstName = formData.firstName;
+        submissionData.lastName = formData.lastName;
+      }
       
       const res = await api.post(endpoint, submissionData);
       await login(res.data.token);
       
-      const redirectTo = searchParams.get('from') || '/';
+      const redirectTo = searchParams?.get('from') || '/';
       router.push(redirectTo);
       router.refresh();
     } catch (err) {
