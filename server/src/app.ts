@@ -1,6 +1,6 @@
 // /src/app.ts
 
-import express, { Request, Response } from 'express';
+import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import stockRoutes from './routes/stockRoutes';
@@ -19,28 +19,31 @@ const allowedOrigins = [
 ];
 
 // Configure CORS
-app.use(cors({
-  origin: function(origin: string | undefined, callback: (error: Error | null, allow?: boolean) => void) {
-    // Allow requests with no origin (mobile apps, Postman, etc)
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(
+  cors({
+    origin: function (origin: string | undefined, callback: (error: Error | null, allow?: boolean) => void) {
+      // Allow requests with no origin (e.g., mobile apps, Postman, etc.)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
 
 // For Stripe webhook
 app.use('/api/payments/webhook', express.raw({ type: 'application/json' }));
 
-// For all other routes
+// General middleware
 app.use(bodyParser.json());
 
+// Routes
 app.use('/api/stocks', stockRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use(passport.initialize());
