@@ -1,14 +1,15 @@
-// /src/routes/authRoutes.ts
-
+// src/routes/authRoutes.ts
 import express, { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { body, validationResult } from 'express-validator';
 import User, { IUser } from '../models/user';
+import authMiddleware, { UserPayload } from '../middleware/auth';
+import environment from '../config/environment';
+import { RequestHandler } from 'express';
 
 const router = express.Router();
 
-// Interface for request body types
 interface SignupRequest {
   firstName: string;
   lastName: string;
@@ -21,6 +22,14 @@ interface SigninRequest {
   password: string;
 }
 
+// Helper function to create user payload
+const createUserPayload = (user: IUser): UserPayload => ({
+  id: user._id.toString(),
+  email: user.email,
+  firstName: user.firstName,
+  lastName: user.lastName
+});
+
 // Register a new user
 router.post(
   '/signup',
@@ -28,7 +37,9 @@ router.post(
     body('firstName').notEmpty().withMessage('First name is required'),
     body('lastName').notEmpty().withMessage('Last name is required'),
     body('email').isEmail().withMessage('Valid email is required'),
-    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+    body('password')
+      .isLength({ min: 6 })
+      .withMessage('Password must be at least 6 characters'),
   ],
   async (req: Request<{}, {}, SignupRequest>, res: Response): Promise<void> => {
     const errors = validationResult(req);
@@ -47,7 +58,6 @@ router.post(
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
-
       const user = new User({
         firstName,
         lastName,
@@ -57,11 +67,16 @@ router.post(
 
       await user.save();
 
-      const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET!, {
-        expiresIn: '24h',
-      });
+      const payload = createUserPayload(user);
+      const token = jwt.sign(payload, environment.JWT_SECRET!, { expiresIn: '24h' });
 
-      res.status(201).json({ message: 'User registered successfully', token });
+      res.status(201).json({
+        token,
+        user: {
+          ...payload,
+          isPremium: user.isPremium
+        }
+      });
     } catch (error) {
       res.status(500).json({ message: 'Server error' });
     }
@@ -91,21 +106,48 @@ router.post(
         return;
       }
 
-      const isMatch = await bcrypt.compare(password, user.password!);
+      const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
         res.status(400).json({ message: 'Invalid credentials' });
         return;
       }
 
-      const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET!, {
-        expiresIn: '24h',
-      });
+      const payload = createUserPayload(user);
+      const token = jwt.sign(payload, environment.JWT_SECRET!, { expiresIn: '24h' });
 
-      res.json({ message: 'Login successful', token });
+      res.json({
+        token,
+        user: {
+          ...payload,
+          isPremium: user.isPremium
+        }
+      });
     } catch (error) {
       res.status(500).json({ message: 'Server error' });
     }
   }
 );
+
+// Get current user
+const getCurrentUser: RequestHandler = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const user = await User.findById(req.user?.id).select('-password');
+    
+    if (!user) {
+      res.status(404).json({ message: 'User not found' });
+      return;
+    }
+
+    const userData = createUserPayload(user);
+    res.json({
+      ...userData,
+      isPremium: user.isPremium
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+router.get('/me', authMiddleware, getCurrentUser);
 
 export { router as authRoutes };
