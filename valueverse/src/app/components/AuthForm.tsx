@@ -1,4 +1,4 @@
-// /src/app/components/AuthForm.tsx
+// src/app/components/AuthForm.tsx
 'use client';
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -140,8 +140,8 @@ export default function AuthForm() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-zinc-50 dark:bg-zinc-900 px-4">
-      <div className="w-full max-w-md p-8 bg-white dark:bg-zinc-800 rounded-lg shadow-lg animate-fadeIn">
+    <div className="w-full min-h-[calc(100vh-64px)] bg-zinc-50 dark:bg-zinc-900 px-4 py-12">
+      <div className="w-full max-w-md mx-auto p-8 bg-white dark:bg-zinc-800 rounded-lg shadow-lg animate-fadeIn">
         <h2 className="text-2xl font-bold text-center mb-6 dark:text-white">
           {isLogin ? 'Sign In' : 'Create Account'}
         </h2>
