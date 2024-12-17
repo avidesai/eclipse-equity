@@ -4,14 +4,29 @@ import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../utils/api';
+import { AxiosError } from 'axios';
+
+interface FormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+interface ApiErrorResponse {
+  message?: string;
+  errors?: Array<{ msg: string }>;
+}
 
 export default function AuthForm() {
   const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     firstName: '',
     lastName: '',
     email: '',
     password: '',
+    confirmPassword: '',
   });
   const [errors, setErrors] = useState<{[key: string]: string}>({});
   const [loading, setLoading] = useState(false);
@@ -41,6 +56,11 @@ export default function AuthForm() {
       if (!formData.lastName) {
         newErrors.lastName = 'Last name is required';
       }
+      if (!formData.confirmPassword) {
+        newErrors.confirmPassword = 'Please confirm your password';
+      } else if (formData.password !== formData.confirmPassword) {
+        newErrors.confirmPassword = 'Passwords do not match';
+      }
     }
 
     setErrors(newErrors);
@@ -56,18 +76,25 @@ export default function AuthForm() {
 
     try {
       const endpoint = isLogin ? '/auth/signin' : '/auth/signup';
-      const res = await api.post(endpoint, formData);
+      const submissionData = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password: formData.password,
+      };
       
+      const res = await api.post(endpoint, submissionData);
       await login(res.data.token);
       
-      // Get the redirect URL from the search params, or default to '/'
       const redirectTo = searchParams.get('from') || '/';
       router.push(redirectTo);
       router.refresh();
-    } catch (err: any) {
-      const errorMessage = err.response?.data?.message || 
-                          err.response?.data?.errors?.[0]?.msg ||
-                          'An error occurred. Please try again.';
+    } catch (err) {
+      const error = err as AxiosError<ApiErrorResponse>;
+      const errorMessage = 
+        error.response?.data?.message ||
+        error.response?.data?.errors?.[0]?.msg ||
+        'An error occurred. Please try again.';
       
       setErrors({ submit: errorMessage });
     } finally {
@@ -78,11 +105,13 @@ export default function AuthForm() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear error for this field when user starts typing
     if (errors[name]) {
       setErrors(prev => {
         const newErrors = { ...prev };
         delete newErrors[name];
+        if (name === 'password' && prev.confirmPassword) {
+          delete newErrors.confirmPassword;
+        }
         return newErrors;
       });
     }
@@ -96,6 +125,7 @@ export default function AuthForm() {
       lastName: '',
       email: '',
       password: '',
+      confirmPassword: '',
     });
   };
 
@@ -180,6 +210,24 @@ export default function AuthForm() {
               <p className="mt-1 text-sm text-red-500">{errors.password}</p>
             )}
           </div>
+
+          {!isLogin && (
+            <div>
+              <input
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className={`w-full px-4 py-2 border rounded-lg bg-zinc-100 dark:bg-zinc-700 
+                  text-zinc-900 dark:text-white focus:outline-none focus:ring-2 
+                  focus:ring-zinc-500 ${errors.confirmPassword ? 'border-red-500' : 'border-zinc-300'}`}
+              />
+              {errors.confirmPassword && (
+                <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>
+              )}
+            </div>
+          )}
 
           <button
             type="submit"

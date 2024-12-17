@@ -1,6 +1,11 @@
 // src/app/utils/api.ts
+import axios, { AxiosError } from 'axios';
+import Cookies from 'js-cookie';
 
-import axios from 'axios';
+export interface ApiError {
+  message?: string;
+  errors?: Array<{ msg: string }>;
+}
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'https://valueverse-bwrk.onrender.com/api',
@@ -9,11 +14,9 @@ const api = axios.create({
   },
 });
 
-// Add request interceptor
 api.interceptors.request.use(
   (config) => {
-    // Get token from localStorage if it exists
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -24,12 +27,11 @@ api.interceptors.request.use(
   }
 );
 
-// Add response interceptor
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
+  (error: AxiosError<ApiError>) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
+      Cookies.remove('token');
       window.location.href = '/auth';
     }
     return Promise.reject(error);
