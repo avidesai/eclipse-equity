@@ -2,6 +2,7 @@
 'use client';
 import { Suspense } from 'react';
 import AuthForm from '../components/AuthForm';
+import Navigation from '../components/Navigation';
 
 function LoadingState() {
   return (
@@ -14,9 +15,12 @@ function LoadingState() {
 export default function AuthPage() {
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900">
-      <Suspense fallback={<LoadingState />}>
-        <AuthForm />
-      </Suspense>
+      <Navigation /> {/* Added Navigation Bar */}
+      <div className="mt-16"> {/* Added margin to prevent overlap */}
+        <Suspense fallback={<LoadingState />}>
+          <AuthForm />
+        </Suspense>
+      </div>
     </div>
   );
 }
