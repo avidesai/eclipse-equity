@@ -1,8 +1,7 @@
 // /src/app/components/AuthForm.tsx
-
 'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../utils/api';
 
@@ -17,6 +16,7 @@ export default function AuthForm() {
   const [errors, setErrors] = useState<{[key: string]: string}>({});
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { login } = useAuth();
 
   const validateForm = () => {
@@ -59,8 +59,11 @@ export default function AuthForm() {
       const res = await api.post(endpoint, formData);
       
       await login(res.data.token);
-      router.push('/models');
-      router.refresh(); // Refresh the page to update navigation state
+      
+      // Get the redirect URL from the search params, or default to '/'
+      const redirectTo = searchParams.get('from') || '/';
+      router.push(redirectTo);
+      router.refresh();
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || 
                           err.response?.data?.errors?.[0]?.msg ||
@@ -83,6 +86,17 @@ export default function AuthForm() {
         return newErrors;
       });
     }
+  };
+
+  const toggleForm = () => {
+    setIsLogin(!isLogin);
+    setErrors({});
+    setFormData({
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+    });
   };
 
   return (
@@ -190,16 +204,7 @@ export default function AuthForm() {
 
         <div className="text-center mt-6">
           <button
-            onClick={() => {
-              setIsLogin(!isLogin);
-              setErrors({});
-              setFormData({
-                firstName: '',
-                lastName: '',
-                email: '',
-                password: '',
-              });
-            }}
+            onClick={toggleForm}
             className="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 
               dark:hover:text-zinc-100 transition-colors"
           >

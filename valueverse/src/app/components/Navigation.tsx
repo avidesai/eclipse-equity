@@ -26,6 +26,7 @@ export default function Navigation() {
   const isActiveLink = (path: string) => pathname === path;
   const links = [
     { href: '/models', label: 'Models' },
+    { href: '/account', label: 'Account' },
   ];
 
   return (
