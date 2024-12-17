@@ -43,21 +43,17 @@ export default function AuthForm() {
         login(res.data.token);
         router.push('/models');
       } else {
-        await api.post('/auth/signup', {
+        const res = await api.post('/auth/signup', {
           firstName: formData.firstName,
           lastName: formData.lastName,
           email: formData.email,
           password: formData.password,
         });
-        alert('Account created! Check your email to verify your account.');
-        setIsLogin(true);
+        login(res.data.token); // Immediately log in user after sign-up
+        router.push('/models');
       }
     } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('An error occurred');
-      }
+      setError('Invalid credentials or an error occurred');
     } finally {
       setLoading(false);
     }
