@@ -44,9 +44,9 @@ export default function HomePage() {
               <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-white">
                 Financial Models for Investors
               </h1>
-              <p className="text-lg md:text-xl text-zinc-200 mb-8 leading-relaxed max-w-2xl">
-                Supercharge your investment research using our collection of discounted cash flow models.
-              </p>
+                <p className="text-lg md:text-xl text-zinc-200 mb-8 leading-relaxed max-w-3xl">
+                Supercharge your investment research with our discounted cash flow models.
+                </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/auth"
