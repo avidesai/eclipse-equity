@@ -40,7 +40,7 @@ export default function StockList({
   return (
     <div className="space-y-3">
       <AnimatePresence mode="popLayout" initial={false}>
-        {filteredStocks.map((stock, index) => (
+        {filteredStocks.map((stock) => (
           <motion.div
             key={stock.symbol}
             layout
@@ -112,7 +112,7 @@ export default function StockList({
             exit={{ opacity: 0, y: -20 }}
             className="text-center py-8 text-zinc-500 dark:text-zinc-400"
           >
-            No stocks found matching "{searchQuery}"
+            No stocks found matching &ldquo;{searchQuery}&rdquo;
           </motion.div>
         )}
       </AnimatePresence>
