@@ -1,11 +1,13 @@
 // src/app/components/PremiumButton.tsx
 
 'use client';
+import { useState } from 'react';
 import { createCheckoutSession } from '../utils/stripe';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function PremiumButton() {
   const { user } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   if (user?.isPremium) {
     return (
@@ -19,20 +21,26 @@ export default function PremiumButton() {
   }
 
   const handleUpgrade = async () => {
+    setIsLoading(true);
     try {
       await createCheckoutSession();
     } catch (error) {
       console.error('Error upgrading to premium:', error);
       alert('Failed to initiate premium upgrade.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <button
       onClick={handleUpgrade}
-      className="px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-lg font-medium hover:scale-105 active:scale-95 transition-all duration-200"
+      disabled={isLoading}
+      className={`px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-lg font-medium 
+        hover:scale-105 active:scale-95 transition-all duration-200
+        ${isLoading ? 'opacity-50 cursor-wait' : ''}`}
     >
-      Upgrade to Premium
+      {isLoading ? 'Processing...' : 'Upgrade to Premium'}
     </button>
   );
 }
