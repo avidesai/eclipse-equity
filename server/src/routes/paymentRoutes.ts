@@ -22,8 +22,9 @@ router.post('/create-checkout-session', async (req: Request, res: Response) => {
       success_url: `${process.env.CLIENT_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.CLIENT_URL}/cancel`,
     });
-    res.json({ id: session.id });
+    res.status(200).json({ id: session.id });
   } catch (error) {
+    console.error('Error creating checkout session:', error);
     const message = error instanceof Error ? error.message : 'An unknown error occurred';
     res.status(500).json({ message });
   }
@@ -37,6 +38,7 @@ router.post(
     const sig = req.headers['stripe-signature'];
 
     if (!sig) {
+      console.error('Webhook Error: Missing Stripe signature');
       res.status(400).send('Webhook Error: Missing Stripe signature');
       return;
     }
@@ -46,6 +48,7 @@ router.post(
       event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Webhook Error';
+      console.error(`Webhook Error: ${message}`);
       res.status(400).send(`Webhook Error: ${message}`);
       return;
     }
@@ -53,7 +56,7 @@ router.post(
     // Handle Stripe event
     switch (event.type) {
       case 'checkout.session.completed': {
-        const session: any = event.data.object;
+        const session = event.data.object as any;
 
         // Retrieve customer email and update premium status
         try {
@@ -65,7 +68,7 @@ router.post(
             await user.save();
             console.log(`✅ User ${customerEmail} upgraded to premium.`);
           } else {
-            console.log(`⚠️ User with email ${customerEmail} not found.`);
+            console.warn(`⚠️ User with email ${customerEmail} not found.`);
           }
         } catch (err) {
           console.error('Error updating user premium status:', err);
@@ -76,7 +79,8 @@ router.post(
         console.log(`Unhandled event type ${event.type}`);
     }
 
-    res.json({ received: true });
+    // Acknowledge receipt of the event
+    res.status(200).json({ received: true });
   }
 );
 
@@ -90,8 +94,9 @@ router.get('/is-premium', authMiddleware, async (req: Request, res: Response) =>
       return;
     }
 
-    res.json({ isPremium: user.isPremium });
+    res.status(200).json({ isPremium: user.isPremium });
   } catch (error) {
+    console.error('Error fetching premium status:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });

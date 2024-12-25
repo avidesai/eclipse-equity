@@ -11,34 +11,40 @@ import './config/passport';
 
 const app = express();
 
+// Allowed origins for CORS
 const allowedOrigins = [
   'https://valueverse.pro',
   'https://www.valueverse.pro',
   'https://valueverse-git-main-avidesais-projects.vercel.app',
-  'http://localhost:3000'
+  'http://localhost:3000',
 ];
 
-// Configure CORS
+// CORS configuration
+const corsOptions = {
+  origin: (origin: string | undefined, callback: (error: Error | null, allow?: boolean) => void) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.error(`CORS blocked for origin: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+// Apply CORS to all routes except the webhook
+app.use(cors(corsOptions));
+
+// For Stripe webhook (Stripe doesn't send an Origin header)
 app.use(
-  cors({
-    origin: function (origin: string | undefined, callback: (error: Error | null, allow?: boolean) => void) {
-      // Allow requests with no origin (e.g., mobile apps, Postman, etc.)
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.indexOf(origin) === -1) {
-        const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-        return callback(new Error(msg), false);
-      }
-      return callback(null, true);
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  })
+  '/api/payments/webhook',
+  express.raw({ type: 'application/json' }), // Stripe raw body for signature verification
+  (req, res, next) => {
+    next(); // Skip CORS for this route
+  }
 );
-
-// For Stripe webhook
-app.use('/api/payments/webhook', express.raw({ type: 'application/json' }));
 
 // General middleware
 app.use(bodyParser.json());
@@ -48,5 +54,11 @@ app.use('/api/stocks', stockRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use(passport.initialize());
 app.use('/api/auth', authRoutes);
+
+// Global error handler
+app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.error('❌ Global Error Handler:', err.stack);
+  res.status(500).json({ message: 'Internal Server Error' });
+});
 
 export default app;
