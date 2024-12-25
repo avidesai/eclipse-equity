@@ -28,15 +28,19 @@ router.post('/create-checkout-session', authMiddleware, async (req: Request, res
       metadata: {
         userId: req.user.id
       },
-      success_url: `${process.env.CLIENT_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+      // Don't include {CHECKOUT_SESSION_ID} in the URLs
+      success_url: `${process.env.CLIENT_URL}/success`,
       cancel_url: `${process.env.CLIENT_URL}/cancel`,
+      billing_address_collection: 'required',
+      allow_promotion_codes: true,
+      ui_mode: 'hosted'
     });
 
-    if (!session.id) {
-      throw new Error('Session creation failed, no session ID returned.');
+    if (!session.url) {
+      throw new Error('Session URL not returned.');
     }
 
-    res.status(200).json({ id: session.id });
+    res.status(200).json({ id: session.id, url: session.url });
   } catch (error) {
     console.error('Error creating checkout session:', error);
     res.status(500).json({ message: 'Failed to create checkout session.' });

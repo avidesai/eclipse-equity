@@ -4,14 +4,14 @@ import api from './api';
 export async function createCheckoutSession() {
   try {
     const response = await api.post('/payments/create-checkout-session');
-    const { id } = response.data;
+    const { url } = response.data;
     
-    if (!id) {
-      throw new Error('Checkout session ID not returned.');
+    if (!url) {
+      throw new Error('Checkout URL not returned.');
     }
     
-    // Redirect to Stripe Checkout
-    window.location.href = `https://checkout.stripe.com/checkout/session/${id}`;
+    // Use the URL provided directly by Stripe
+    window.location.href = url;
   } catch (error) {
     console.error('Error creating checkout session:', error);
     alert('Failed to create checkout session.');
