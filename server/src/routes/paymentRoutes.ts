@@ -15,20 +15,25 @@ router.post('/create-checkout-session', async (req: Request, res: Response) => {
       mode: 'subscription',
       line_items: [
         {
-          price: 'price_1QTLYwLcvMEEt83aNKacRDL5', // Replace with your Stripe Price ID
+          price: 'price_1QTLYwLcvMEEt83aNKacRDL5',
           quantity: 1,
         },
       ],
       success_url: `${process.env.CLIENT_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.CLIENT_URL}/cancel`,
     });
+
+    if (!session.id) {
+      throw new Error('Session creation failed, no session ID returned.');
+    }
+
     res.status(200).json({ id: session.id });
   } catch (error) {
     console.error('Error creating checkout session:', error);
-    const message = error instanceof Error ? error.message : 'An unknown error occurred';
-    res.status(500).json({ message });
+    res.status(500).json({ message: 'Failed to create checkout session.' });
   }
 });
+
 
 // Stripe Webhook Endpoint
 router.post(
