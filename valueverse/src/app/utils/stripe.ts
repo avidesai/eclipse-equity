@@ -1,10 +1,10 @@
 // src/app/utils/stripe.ts
 
-import axios from 'axios';
+import axios from './api';
 
 export async function createCheckoutSession() {
   try {
-    const response = await axios.post('/api/payments/create-checkout-session');
+    const response = await axios.post('/payments/create-checkout-session');
     const { id } = response.data;
 
     // Redirect to Stripe Checkout

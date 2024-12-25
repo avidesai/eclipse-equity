@@ -8,7 +8,7 @@ export interface ApiError {
 }
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'https://valueverse-bwrk.onrender.com/api',
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:11000/api', // Ensure this matches your backend
   headers: {
     'Content-Type': 'application/json',
   },
