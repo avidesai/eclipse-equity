@@ -1,9 +1,12 @@
 // src/app/account/page.tsx
+
 'use client';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../contexts/AuthContext';
 import Navigation from '../components/Navigation';
+import PremiumButton from '../components/PremiumButton';
+import { UserCircle, CreditCard, Shield, Trash2 } from 'lucide-react';
 
 export default function AccountPage() {
   const { user, loading, isAuthenticated } = useAuth();
@@ -26,102 +29,89 @@ export default function AccountPage() {
     );
   }
 
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
+
+  const AccountSection = ({ icon: Icon, title, children }) => (
+    <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-sm p-6">
+      <div className="pb-4">
+        <div className="flex items-center gap-3">
+          <Icon className="w-5 h-5 text-zinc-500 dark:text-zinc-400" />
+          <h2 className="text-lg font-semibold dark:text-white">{title}</h2>
+        </div>
+      </div>
+      <div>{children}</div>
+    </div>
+  );
+
+  const InfoField = ({ label, value }) => (
+    <div className="space-y-1">
+      <label className="text-sm text-zinc-500 dark:text-zinc-400">{label}</label>
+      <p className="font-medium dark:text-white">{value}</p>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900">
       <Navigation />
-      <div className="pt-16 px-6">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8 mt-8 dark:text-white">Account Settings</h1>
-          <div className="bg-white dark:bg-zinc-800 rounded-lg shadow p-6">
-            <div className="space-y-8">
-              <div>
-                <h2 className="text-lg font-semibold mb-4 dark:text-white">Profile Information</h2>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm text-zinc-500 dark:text-zinc-400">First Name</label>
-                    <p className="mt-1 text-black dark:text-white">{user.firstName}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm text-zinc-500 dark:text-zinc-400">Last Name</label>
-                    <p className="mt-1 text-black dark:text-white">{user.lastName}</p>
-                  </div>
-                  <div className="col-span-2">
-                    <label className="block text-sm text-zinc-500 dark:text-zinc-400">Email</label>
-                    <p className="mt-1 text-black dark:text-white">{user.email}</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div>
-                <h2 className="text-lg font-semibold mb-4 dark:text-white">Subscription Status</h2>
-                <div className="flex flex-col gap-4">
-                  <div className="flex items-center space-x-2">
-                    <span
-                      className={`inline-block px-3 py-1 rounded-full text-sm ${
-                        user.isPremium
-                          ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                          : 'bg-zinc-100 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-200'
-                      }`}
-                    >
-                      {user.isPremium ? 'Premium' : 'Free'}
-                    </span>
-                  </div>
-                  
-                  {!user.isPremium && (
-                    <div className="flex flex-col sm:flex-row gap-4">
-                      <button
-                        className="inline-flex items-center justify-center px-6 py-2 
-                                 bg-black dark:bg-white text-white dark:text-black rounded-lg
-                                 hover:bg-zinc-800 dark:hover:bg-zinc-100 
-                                 transition-all duration-200 hover:scale-105 active:scale-95"
-                      >
-                        Upgrade to Premium
-                      </button>
-                      <button
-                        className="inline-flex items-center justify-center px-6 py-2
-                                 border-2 border-black dark:border-white
-                                 text-black dark:text-white rounded-lg
-                                 hover:bg-black hover:text-white 
-                                 dark:hover:bg-white dark:hover:text-black
-                                 transition-all duration-200 hover:scale-105 active:scale-95"
-                      >
-                        View Plans
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
+      <main className="container max-w-4xl mx-auto px-4 pt-24 pb-12">
+        <div className="space-y-8">
+          <div>
+            <h1 className="text-3xl font-bold dark:text-white">Account Settings</h1>
+          </div>
 
-              <div>
-                <h2 className="text-lg font-semibold mb-4 dark:text-white">Account Security</h2>
-                <button
-                  className="px-4 py-2 text-sm border border-zinc-300 dark:border-zinc-600
-                           text-zinc-700 dark:text-zinc-300 rounded-lg
-                           hover:border-zinc-400 dark:hover:border-zinc-500
-                           hover:bg-zinc-50 dark:hover:bg-zinc-700/50
-                           transition-all duration-200"
-                >
+          <div className="grid gap-6">
+            <AccountSection icon={UserCircle} title="Profile Information">
+              <div className="grid sm:grid-cols-2 gap-6">
+                <InfoField label="First Name" value={user.firstName} />
+                <InfoField label="Last Name" value={user.lastName} />
+                <InfoField label="Email" value={user.email} />
+              </div>
+            </AccountSection>
+
+            <AccountSection icon={CreditCard} title="Subscription">
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <span
+                    className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                      user.isPremium
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200'
+                        : 'bg-zinc-100 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-200'
+                    }`}
+                  >
+                    {user.isPremium ? 'Premium' : 'Free Plan'}
+                  </span>
+                </div>
+
+                {!user.isPremium && (
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <PremiumButton />
+                    <button className="px-4 py-2 border-2 border-black dark:border-white text-black dark:text-white rounded-lg font-medium hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all duration-200">
+                      Compare Plans
+                    </button>
+                  </div>
+                )}
+              </div>
+            </AccountSection>
+
+            <AccountSection icon={Shield} title="Security">
+              <div className="space-y-4">
+                <button className="px-4 py-2 text-sm border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-lg hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 transition-all duration-200">
                   Change Password
                 </button>
               </div>
+            </AccountSection>
 
-              <div className="pt-4 border-t border-zinc-200 dark:border-zinc-700">
-                <button
-                  className="px-4 py-2 text-sm text-red-600 dark:text-red-400
-                           hover:text-red-700 dark:hover:text-red-300
-                           transition-colors duration-200"
-                >
-                  Delete Account
-                </button>
-              </div>
+            <div className="h-px bg-zinc-200 dark:bg-zinc-700 my-2" />
+
+            <div className="flex justify-end">
+              <button className="group flex items-center gap-2 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors duration-200">
+                <Trash2 className="w-4 h-4" />
+                <span>Delete Account</span>
+              </button>
             </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

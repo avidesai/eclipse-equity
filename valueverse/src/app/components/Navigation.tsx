@@ -1,4 +1,5 @@
 // src/app/components/Navigation.tsx
+
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -6,13 +7,14 @@ import { usePathname } from 'next/navigation';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
 import { useAuth } from '../contexts/AuthContext';
+import PremiumButton from './PremiumButton';
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -92,6 +94,9 @@ export default function Navigation() {
                 <Moon className="w-5 h-5" />
               }
             </button>
+
+            {/* Premium Button */}
+            {isAuthenticated && !user?.isPremium && <PremiumButton />}
 
             {/* Authentication Button */}
             {isAuthenticated ? (
@@ -179,6 +184,13 @@ export default function Navigation() {
             </Link>
           ))}
 
+          {/* Mobile Premium Button */}
+          {isAuthenticated && !user?.isPremium && (
+            <div className="block">
+              <PremiumButton />
+            </div>
+          )}
+
           {/* Mobile Authentication Button */}
           {isAuthenticated ? (
             <button
@@ -206,7 +218,7 @@ export default function Navigation() {
               }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Sign In
+                Sign In
             </Link>
           )}
         </div>
