@@ -8,6 +8,17 @@ import Navigation from '../components/Navigation';
 import PremiumButton from '../components/PremiumButton';
 import { UserCircle, CreditCard, Shield, Trash2 } from 'lucide-react';
 
+interface AccountSectionProps {
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  title: string;
+  children: React.ReactNode;
+}
+
+interface InfoFieldProps {
+  label: string;
+  value: string;
+}
+
 export default function AccountPage() {
   const { user, loading, isAuthenticated } = useAuth();
   const router = useRouter();
@@ -31,7 +42,7 @@ export default function AccountPage() {
 
   if (!user) return null;
 
-  const AccountSection = ({ icon: Icon, title, children }) => (
+  const AccountSection = ({ icon: Icon, title, children }: AccountSectionProps) => (
     <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-sm p-6">
       <div className="pb-4">
         <div className="flex items-center gap-3">
@@ -43,7 +54,7 @@ export default function AccountPage() {
     </div>
   );
 
-  const InfoField = ({ label, value }) => (
+  const InfoField = ({ label, value }: InfoFieldProps) => (
     <div className="space-y-1">
       <label className="text-sm text-zinc-500 dark:text-zinc-400">{label}</label>
       <p className="font-medium dark:text-white">{value}</p>
