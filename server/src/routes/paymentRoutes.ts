@@ -55,18 +55,20 @@ router.post('/create-checkout-session', authMiddleware, async (req: Request, res
       ui_mode: 'hosted'
     });
 
-    console.log('Stripe session created:', {
-      id: session.id,
-      url: session.url,
-      status: session.status
-    });
+    console.log('Full Stripe session response:', JSON.stringify(session, null, 2));
+
+    if (!session.url) {
+      console.error('Session created but URL is missing:', session);
+      res.status(500).json({ message: 'Checkout URL not generated' });
+      return;
+    }
 
     res.status(200).json({
       id: session.id,
       url: session.url
     });
   } catch (error) {
-    console.error('Stripe session creation error:', error);
+    console.error('Detailed Stripe session creation error:', error);
     res.status(500).json({ message: 'Failed to create checkout session.' });
   }
 });
