@@ -1,5 +1,4 @@
 "use strict";
-// /src/models/user.ts
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -34,15 +33,15 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+// src/models/user.ts
 const mongoose_1 = __importStar(require("mongoose"));
 const userSchema = new mongoose_1.Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String },
+    password: { type: String, required: true },
     googleId: { type: String },
-    isVerified: { type: Boolean, default: false },
     isPremium: { type: Boolean, default: false },
-    verificationToken: { type: String },
 });
 exports.default = mongoose_1.default.model('User', userSchema);
+//# sourceMappingURL=user.js.map

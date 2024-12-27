@@ -42,3 +42,4 @@ const StockSchema = new mongoose_1.Schema({
     dcfModelUrl: { type: String },
 });
 exports.default = mongoose_1.default.model('Stock', StockSchema);
+//# sourceMappingURL=stock.js.map

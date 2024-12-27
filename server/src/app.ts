@@ -40,9 +40,9 @@ app.use(cors(corsOptions));
 // For Stripe webhook (Stripe doesn't send an Origin header)
 app.use(
   '/api/payments/webhook',
-  express.raw({ type: 'application/json' }), // Stripe raw body for signature verification
-  (req, res, next) => {
-    next(); // Skip CORS for this route
+  express.raw({ type: 'application/json' }),
+  (_req, _res, next) => {
+    next();
   }
 );
 
@@ -56,7 +56,7 @@ app.use(passport.initialize());
 app.use('/api/auth', authRoutes);
 
 // Global error handler
-app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error('❌ Global Error Handler:', err.stack);
   res.status(500).json({ message: 'Internal Server Error' });
 });

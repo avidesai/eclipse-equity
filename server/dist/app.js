@@ -13,34 +13,46 @@ const authRoutes_1 = require("./routes/authRoutes");
 const passport_1 = __importDefault(require("passport"));
 require("./config/passport");
 const app = (0, express_1.default)();
+// Allowed origins for CORS
 const allowedOrigins = [
     'https://valueverse.pro',
     'https://www.valueverse.pro',
     'https://valueverse-git-main-avidesais-projects.vercel.app',
-    'http://localhost:3000'
+    'http://localhost:3000',
 ];
-// Configure CORS
-app.use((0, cors_1.default)({
-    origin: function (origin, callback) {
-        // Allow requests with no origin (mobile apps, Postman, etc)
-        if (!origin)
-            return callback(null, true);
-        if (allowedOrigins.indexOf(origin) === -1) {
-            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-            return callback(new Error(msg), false);
+// CORS configuration
+const corsOptions = {
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
         }
-        return callback(null, true);
+        else {
+            console.error(`CORS blocked for origin: ${origin}`);
+            callback(new Error('Not allowed by CORS'));
+        }
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
-// For Stripe webhook
-app.use('/api/payments/webhook', express_1.default.raw({ type: 'application/json' }));
-// For all other routes
+    allowedHeaders: ['Content-Type', 'Authorization'],
+};
+// Apply CORS to all routes except the webhook
+app.use((0, cors_1.default)(corsOptions));
+// For Stripe webhook (Stripe doesn't send an Origin header)
+app.use('/api/payments/webhook', express_1.default.raw({ type: 'application/json' }), // Stripe raw body for signature verification
+(req, res, next) => {
+    next(); // Skip CORS for this route
+});
+// General middleware
 app.use(body_parser_1.default.json());
+// Routes
 app.use('/api/stocks', stockRoutes_1.default);
 app.use('/api/payments', paymentRoutes_1.default);
 app.use(passport_1.default.initialize());
 app.use('/api/auth', authRoutes_1.authRoutes);
+// Global error handler
+app.use((err, req, res, next) => {
+    console.error('❌ Global Error Handler:', err.stack);
+    res.status(500).json({ message: 'Internal Server Error' });
+});
 exports.default = app;
+//# sourceMappingURL=app.js.map

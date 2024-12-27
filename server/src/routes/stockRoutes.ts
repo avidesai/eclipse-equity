@@ -2,7 +2,6 @@
 
 import express, { Request, Response } from 'express';
 import Stock from '../models/stock';
-
 const router = express.Router();
 
 interface StockRequest {
@@ -13,7 +12,7 @@ interface StockRequest {
 }
 
 // Get all stocks
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', async (_req: Request, res: Response) => {  // Added underscore to req
   try {
     const stocks = await Stock.find();
     res.json(stocks);

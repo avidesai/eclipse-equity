@@ -19,3 +19,4 @@ const environment_1 = __importDefault(require("./config/environment"));
     console.error('❌ MongoDB connection failed:', err);
     process.exit(1);
 });
+//# sourceMappingURL=index.js.map

@@ -4,9 +4,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 import passport from 'passport';
 import { Strategy as GoogleStrategy, Profile, VerifyCallback } from 'passport-google-oauth20';
-import User, { IUser } from '../models/user';  // Note the lowercase 'user'
+import User, { IUser } from '../models/user';
 
-// Extend the Express User type
 declare global {
   namespace Express {
     interface User extends IUser {}
@@ -21,14 +20,13 @@ passport.use(
       callbackURL: '/api/auth/google/callback',
     },
     async (
-      accessToken: string,
-      refreshToken: string,
+      _accessToken: string,    // Added underscore
+      _refreshToken: string,   // Added underscore
       profile: Profile,
       done: VerifyCallback
     ): Promise<void> => {
       try {
         let user = await User.findOne({ googleId: profile.id });
-        
         if (!user) {
           user = new User({
             googleId: profile.id,
@@ -39,7 +37,6 @@ passport.use(
           });
           await user.save();
         }
-        
         done(null, user);
       } catch (err) {
         console.error(err);
