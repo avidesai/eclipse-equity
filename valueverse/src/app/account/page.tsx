@@ -1,8 +1,8 @@
 // src/app/account/page.tsx
 
 'use client';
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../contexts/AuthContext';
 import Navigation from '../components/Navigation';
 import PremiumButton from '../components/PremiumButton';
@@ -22,12 +22,41 @@ interface InfoFieldProps {
 export default function AccountPage() {
   const { user, loading, isAuthenticated } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const [statusMessage, setStatusMessage] = useState<{
+    type: 'success' | 'error' | null;
+    message: string;
+  } | null>(null);
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
       router.push('/auth');
     }
   }, [loading, isAuthenticated, router]);
+
+  useEffect(() => {
+    const status = searchParams.get('status');
+    if (status === 'success') {
+      setStatusMessage({
+        type: 'success',
+        message: 'Successfully upgraded to premium! Welcome to ValueVerse Premium.'
+      });
+    } else if (status === 'cancelled') {
+      setStatusMessage({
+        type: 'error',
+        message: 'Premium upgrade was cancelled. You can try again whenever you\'re ready.'
+      });
+    }
+
+    // Clear the status parameter from URL after a delay
+    if (status) {
+      const timer = setTimeout(() => {
+        router.replace('/account');
+        setStatusMessage(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams, router]);
 
   if (loading) {
     return (
@@ -68,6 +97,17 @@ export default function AccountPage() {
         <div className="space-y-8">
           <div>
             <h1 className="text-3xl font-bold dark:text-white">Account Settings</h1>
+            {statusMessage && (
+              <div 
+                className={`mt-4 p-4 rounded-lg ${
+                  statusMessage.type === 'success' 
+                    ? 'bg-green-50 dark:bg-green-900/50 text-green-800 dark:text-green-200'
+                    : 'bg-yellow-50 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-200'
+                }`}
+              >
+                {statusMessage.message}
+              </div>
+            )}
           </div>
 
           <div className="grid gap-6">

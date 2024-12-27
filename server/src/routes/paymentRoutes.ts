@@ -48,8 +48,8 @@ router.post('/create-checkout-session', authMiddleware, async (req: Request, res
       metadata: {
         userId: req.user.id
       },
-      success_url: `${process.env.CLIENT_URL}/success`,
-      cancel_url: `${process.env.CLIENT_URL}/cancel`,
+      success_url: `${process.env.CLIENT_URL}/account?status=success`,
+      cancel_url: `${process.env.CLIENT_URL}/account?status=cancelled`,
       billing_address_collection: 'required',
       allow_promotion_codes: true,
       ui_mode: 'hosted'
