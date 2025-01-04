@@ -2,8 +2,9 @@
 'use client';
 import { Stock } from '../types/stock';
 import PerformanceChart from './PerformanceChart';
-import PremiumButton from './PremiumButton';
 import { useAuth } from '../contexts/AuthContext';
+import PremiumButton from './PremiumButton';
+import DownloadDCFButton from './DownloadDCFButton';
 
 interface MetricProps {
   label: string;
@@ -11,13 +12,12 @@ interface MetricProps {
   isPercentage?: boolean;
   colorCode?: boolean;
   prefix?: string;
-  isBlurred?: boolean;
 }
 
 interface MetricSectionProps {
   title: string;
   children: React.ReactNode;
-  isBlurred?: boolean;
+  isPremiumContent?: boolean;
 }
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
@@ -27,8 +27,8 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => (
 );
 
 export default function StockDetail({ stock }: { stock: Stock }) {
-  const { user } = useAuth();
-  const isPremium = user?.isPremium;
+  const { isAuthenticated, user } = useAuth();
+  const hasPremiumAccess = isAuthenticated && user?.isPremium;
 
   const formatNumber = (num: number) => {
     const absNum = Math.abs(num);
@@ -43,13 +43,18 @@ export default function StockDetail({ stock }: { stock: Stock }) {
 
   const formatPercentage = (num: number) => `${num.toFixed(1)}%`;
 
-  const Metric = ({ label, value, isPercentage = false, colorCode = false, prefix = '', isBlurred = false }: MetricProps) => (
-    <div className="text-center relative">
-      {isBlurred && (
-        <div className="absolute inset-0 bg-white/70 dark:bg-black/70 backdrop-blur-sm flex justify-center items-center z-10">
-          <PremiumButton />
-        </div>
-      )}
+  const formatMetricValue = (value: number, isPercentage: boolean, prefix: string) => {
+    if (prefix === 'x') return `${value.toFixed(1)}x`;
+    if (prefix === '$') {
+      const absValue = Math.abs(value);
+      return value < 0 ? `-$${absValue.toFixed(2)}` : `$${value.toFixed(2)}`;
+    }
+    if (isPercentage) return formatPercentage(value);
+    return formatNumber(value);
+  };
+
+  const Metric = ({ label, value, isPercentage = false, colorCode = false, prefix = '' }: MetricProps) => (
+    <div className="text-center">
       <p className="text-sm text-zinc-600 dark:text-zinc-400">{label}</p>
       <p className={`font-medium ${
         colorCode && value !== 0 
@@ -59,25 +64,31 @@ export default function StockDetail({ stock }: { stock: Stock }) {
           : value < 0 
             ? 'text-red-500 dark:text-red-400' 
             : 'text-zinc-900 dark:text-white'
-      } ${isBlurred ? 'blur-sm' : ''}`}>
-        {isPercentage ? formatPercentage(value) : formatNumber(value)}
+      }`}>
+        {formatMetricValue(value, isPercentage, prefix)}
       </p>
     </div>
   );
 
-  const MetricSection = ({ title, children, isBlurred = false }: MetricSectionProps) => (
-    <div className="mb-8 relative">
-      {isBlurred && (
-        <div className="absolute inset-0 bg-white/70 dark:bg-black/70 backdrop-blur-sm flex justify-center items-center z-10">
-          <PremiumButton />
+  const MetricSection = ({ title, children, isPremiumContent = false }: MetricSectionProps) => {
+    const shouldBlur = isPremiumContent && !hasPremiumAccess;
+
+    return (
+      <div className="mb-8">
+        <SectionTitle>{title}</SectionTitle>
+        <div className="relative">
+          <div className={`grid grid-cols-3 gap-4 ${shouldBlur ? 'filter blur-sm select-none' : ''}`}>
+            {children}
+          </div>
+          {shouldBlur && (
+            <div className="absolute inset-0 flex items-center justify-center bg-white/10 dark:bg-zinc-800/10 backdrop-blur-sm rounded-lg">
+              <PremiumButton />
+            </div>
+          )}
         </div>
-      )}
-      <SectionTitle>{title}</SectionTitle>
-      <div className="grid grid-cols-3 gap-4">
-        {children}
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="bg-white dark:bg-zinc-800/50 rounded-lg border-2 border-zinc-200 
@@ -108,25 +119,30 @@ export default function StockDetail({ stock }: { stock: Stock }) {
         <PerformanceChart data={stock.historicalMetrics} />
       </div>
 
+      {/* Download DCF Button */}
+      <div className="pt-2">
+        <DownloadDCFButton />
+      </div>
+
       {/* Key Metrics */}
       <MetricSection title="Key Metrics">
         <Metric label="Market Cap" value={stock.marketCap} />
         <Metric label="P/E" value={stock.peRatio} prefix="x" />
+        <Metric label="FCF Yield" value={stock.fcfYield} isPercentage colorCode />
+      </MetricSection>
+
+      {/* Valuation - Premium Section */}
+      <MetricSection title="Intrinsic Value" isPremiumContent>
+        <Metric label="Intrinsic Value" value={stock.intrinsicValue} prefix="$" />
+        <Metric label="Upside / Downside" value={stock.upside} isPercentage colorCode />
         <Metric label="ROIC" value={stock.roic} isPercentage colorCode />
       </MetricSection>
 
-      {/* Valuation */}
-      <MetricSection title="Valuation" isBlurred={!isPremium}>
-        <Metric label="Intrinsic Value" value={stock.intrinsicValue} prefix="$" isBlurred={!isPremium} />
-        <Metric label="Upside / Downside" value={stock.upside} isPercentage colorCode isBlurred={!isPremium} />
-        <Metric label="FCF Yield" value={stock.fcfYield} isPercentage colorCode isBlurred={!isPremium} />
-      </MetricSection>
-
-      {/* Future Growth */}
-      <MetricSection title="Future Growth (5Y CAGR)" isBlurred={!isPremium}>
-        <Metric label="Revenue CAGR" value={stock.revenue.cagr} isPercentage colorCode isBlurred={!isPremium} />
-        <Metric label="Net Income CAGR" value={stock.netIncome.cagr} isPercentage colorCode isBlurred={!isPremium} />
-        <Metric label="FCF CAGR" value={stock.fcf.cagr} isPercentage colorCode isBlurred={!isPremium} />
+      {/* Future Growth - Premium Section */}
+      <MetricSection title="Future Growth (5Y CAGR)" isPremiumContent>
+        <Metric label="Revenue CAGR" value={stock.revenue.cagr} isPercentage colorCode />
+        <Metric label="Net Income CAGR" value={stock.netIncome.cagr} isPercentage colorCode />
+        <Metric label="FCF CAGR" value={stock.fcf.cagr} isPercentage colorCode />
       </MetricSection>
 
       {/* Margins */}
@@ -232,13 +248,6 @@ export default function StockDetail({ stock }: { stock: Stock }) {
           </table>
         </div>
       </div>
-
-      <button className="w-full py-3 px-4 bg-black dark:bg-white text-white dark:text-black 
-                        rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-100 
-                        transition-all duration-200 font-bold
-                        hover:translate-y-[-2px] active:translate-y-0">
-        Download DCF Valuation Model
-      </button>
     </div>
   );
 }
