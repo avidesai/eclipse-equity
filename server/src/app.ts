@@ -8,16 +8,11 @@ import paymentRoutes from './routes/paymentRoutes';
 import { authRoutes } from './routes/authRoutes';
 import passport from 'passport';
 import './config/passport';
-
+import environment from './config/environment';
 const app = express();
 
 // Allowed origins for CORS
-const allowedOrigins = [
-  'https://valueverse.pro',
-  'https://www.valueverse.pro',
-  'https://valueverse-git-main-avidesais-projects.vercel.app',
-  'http://localhost:3000',
-];
+const allowedOrigins = environment.CLIENT_URLS;
 
 // CORS configuration
 const corsOptions = {

@@ -1,9 +1,9 @@
 // /src/routes/paymentRoutes.ts
-
 import express, { Request, Response } from 'express';
 import stripe from '../config/stripe';
 import User from '../models/user';
 import authMiddleware from '../middleware/auth';
+import environment from '../config/environment';
 import rateLimit from 'express-rate-limit';
 
 // Create a limiter for payment routes
@@ -21,7 +21,8 @@ router.use(paymentLimiter);
 router.get('/test', authMiddleware, (req: Request, res: Response) => {
   res.status(200).json({ 
     message: 'Payment API is working',
-    user: req.user 
+    user: req.user,
+    environment: environment.NODE_ENV
   });
 });
 
@@ -34,6 +35,8 @@ router.post('/create-checkout-session', authMiddleware, async (req: Request, res
     }
 
     console.log('Creating checkout session for user:', req.user.email);
+    console.log('Environment:', environment.NODE_ENV);
+    console.log('Using price ID:', environment.stripe.priceId);
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -41,15 +44,15 @@ router.post('/create-checkout-session', authMiddleware, async (req: Request, res
       customer_email: req.user.email,
       line_items: [
         {
-          price: 'price_1QTLYwLcvMEEt83aNKacRDL5',
+          price: environment.stripe.priceId,
           quantity: 1,
         },
       ],
       metadata: {
         userId: req.user.id
       },
-      success_url: `${process.env.CLIENT_URL}/account?status=success`,
-      cancel_url: `${process.env.CLIENT_URL}/account?status=cancelled`,
+      success_url: `${environment.CLIENT_URL}/account?status=success`,
+      cancel_url: `${environment.CLIENT_URL}/account?status=cancelled`,
       billing_address_collection: 'required',
       allow_promotion_codes: true,
       ui_mode: 'hosted'
@@ -69,7 +72,10 @@ router.post('/create-checkout-session', authMiddleware, async (req: Request, res
     });
   } catch (error) {
     console.error('Detailed Stripe session creation error:', error);
-    res.status(500).json({ message: 'Failed to create checkout session.' });
+    res.status(500).json({ 
+      message: 'Failed to create checkout session',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
   }
 });
 
@@ -92,7 +98,7 @@ router.post(
       event = stripe.webhooks.constructEvent(
         req.body,
         sig,
-        process.env.STRIPE_WEBHOOK_SECRET!
+        environment.stripe.webhookSecret!
       );
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Webhook Error';
@@ -117,7 +123,7 @@ router.post(
           if (user) {
             user.isPremium = true;
             await user.save();
-            console.log(`✅ User ${user.email} upgraded to premium.`);
+            console.log(`✅ User ${user.email} upgraded to premium. Environment: ${environment.NODE_ENV}`);
           } else {
             console.warn(`⚠️ User with ID ${userId} not found.`);
           }
@@ -135,14 +141,14 @@ router.post(
               // Update premium status based on subscription status
               user.isPremium = subscription.status === 'active';
               await user.save();
-              console.log(`✅ Updated premium status for user ${user.email}: ${user.isPremium}`);
+              console.log(`✅ Updated premium status for user ${user.email}: ${user.isPremium}. Environment: ${environment.NODE_ENV}`);
             }
           }
           break;
         }
 
         default:
-          console.log(`Unhandled event type ${event.type}`);
+          console.log(`Unhandled event type ${event.type}. Environment: ${environment.NODE_ENV}`);
       }
 
       res.status(200).json({ received: true });
