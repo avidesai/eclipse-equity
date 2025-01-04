@@ -1,7 +1,7 @@
 // src/app/account/page.tsx
 
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../contexts/AuthContext';
 import Navigation from '../components/Navigation';
@@ -19,7 +19,7 @@ interface InfoFieldProps {
   value: string;
 }
 
-export default function AccountPage() {
+function AccountContent() {
   const { user, loading, isAuthenticated } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -164,5 +164,22 @@ export default function AccountPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function AccountPage() {
+  return (
+    <Suspense 
+      fallback={
+        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900">
+          <Navigation />
+          <div className="w-full h-[calc(100vh-64px)] flex items-center justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-black dark:border-white"></div>
+          </div>
+        </div>
+      }
+    >
+      <AccountContent />
+    </Suspense>
   );
 }
