@@ -2,6 +2,8 @@
 'use client';
 import { Stock } from '../types/stock';
 import PerformanceChart from './PerformanceChart';
+import PremiumButton from './PremiumButton';
+import { useAuth } from '../contexts/AuthContext';
 
 interface MetricProps {
   label: string;
@@ -9,11 +11,13 @@ interface MetricProps {
   isPercentage?: boolean;
   colorCode?: boolean;
   prefix?: string;
+  isBlurred?: boolean;
 }
 
 interface MetricSectionProps {
   title: string;
   children: React.ReactNode;
+  isBlurred?: boolean;
 }
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
@@ -23,6 +27,9 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => (
 );
 
 export default function StockDetail({ stock }: { stock: Stock }) {
+  const { user } = useAuth();
+  const isPremium = user?.isPremium;
+
   const formatNumber = (num: number) => {
     const absNum = Math.abs(num);
     let formattedNum;
@@ -36,18 +43,13 @@ export default function StockDetail({ stock }: { stock: Stock }) {
 
   const formatPercentage = (num: number) => `${num.toFixed(1)}%`;
 
-  const formatMetricValue = (value: number, isPercentage: boolean, prefix: string) => {
-    if (prefix === 'x') return `${value.toFixed(1)}x`;
-    if (prefix === '$') {
-      const absValue = Math.abs(value);
-      return value < 0 ? `-$${absValue.toFixed(2)}` : `$${value.toFixed(2)}`;
-    }
-    if (isPercentage) return formatPercentage(value);
-    return formatNumber(value);
-  };
-
-  const Metric = ({ label, value, isPercentage = false, colorCode = false, prefix = '' }: MetricProps) => (
-    <div className="text-center">
+  const Metric = ({ label, value, isPercentage = false, colorCode = false, prefix = '', isBlurred = false }: MetricProps) => (
+    <div className="text-center relative">
+      {isBlurred && (
+        <div className="absolute inset-0 bg-white/70 dark:bg-black/70 backdrop-blur-sm flex justify-center items-center z-10">
+          <PremiumButton />
+        </div>
+      )}
       <p className="text-sm text-zinc-600 dark:text-zinc-400">{label}</p>
       <p className={`font-medium ${
         colorCode && value !== 0 
@@ -57,14 +59,19 @@ export default function StockDetail({ stock }: { stock: Stock }) {
           : value < 0 
             ? 'text-red-500 dark:text-red-400' 
             : 'text-zinc-900 dark:text-white'
-      }`}>
-        {formatMetricValue(value, isPercentage, prefix)}
+      } ${isBlurred ? 'blur-sm' : ''}`}>
+        {isPercentage ? formatPercentage(value) : formatNumber(value)}
       </p>
     </div>
   );
 
-  const MetricSection = ({ title, children }: MetricSectionProps) => (
-    <div className="mb-8">
+  const MetricSection = ({ title, children, isBlurred = false }: MetricSectionProps) => (
+    <div className="mb-8 relative">
+      {isBlurred && (
+        <div className="absolute inset-0 bg-white/70 dark:bg-black/70 backdrop-blur-sm flex justify-center items-center z-10">
+          <PremiumButton />
+        </div>
+      )}
       <SectionTitle>{title}</SectionTitle>
       <div className="grid grid-cols-3 gap-4">
         {children}
@@ -109,17 +116,17 @@ export default function StockDetail({ stock }: { stock: Stock }) {
       </MetricSection>
 
       {/* Valuation */}
-      <MetricSection title="Valuation">
-        <Metric label="Intrinsic Value" value={stock.intrinsicValue} prefix="$" />
-        <Metric label="Upside / Downside" value={stock.upside} isPercentage colorCode />
-        <Metric label="FCF Yield" value={stock.fcfYield} isPercentage colorCode />
+      <MetricSection title="Valuation" isBlurred={!isPremium}>
+        <Metric label="Intrinsic Value" value={stock.intrinsicValue} prefix="$" isBlurred={!isPremium} />
+        <Metric label="Upside / Downside" value={stock.upside} isPercentage colorCode isBlurred={!isPremium} />
+        <Metric label="FCF Yield" value={stock.fcfYield} isPercentage colorCode isBlurred={!isPremium} />
       </MetricSection>
 
       {/* Future Growth */}
-      <MetricSection title="Future Growth (5Y CAGR)">
-        <Metric label="Revenue CAGR" value={stock.revenue.cagr} isPercentage colorCode />
-        <Metric label="Net Income CAGR" value={stock.netIncome.cagr} isPercentage colorCode />
-        <Metric label="FCF CAGR" value={stock.fcf.cagr} isPercentage colorCode />
+      <MetricSection title="Future Growth (5Y CAGR)" isBlurred={!isPremium}>
+        <Metric label="Revenue CAGR" value={stock.revenue.cagr} isPercentage colorCode isBlurred={!isPremium} />
+        <Metric label="Net Income CAGR" value={stock.netIncome.cagr} isPercentage colorCode isBlurred={!isPremium} />
+        <Metric label="FCF CAGR" value={stock.fcf.cagr} isPercentage colorCode isBlurred={!isPremium} />
       </MetricSection>
 
       {/* Margins */}
