@@ -1,3 +1,5 @@
+// src/app/components/DownloadDCFButton.tsx
+
 'use client';
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
@@ -16,9 +18,9 @@ export default function DownloadDCFButton() {
       try {
         console.log('Starting upgrade process...');
         await createCheckoutSession();
-      } catch (error: any) {
+      } catch (error) {
         console.error('Premium upgrade error:', error);
-        setError(error?.message || 'Failed to initiate premium upgrade.');
+        setError(error instanceof Error ? error.message : 'Failed to initiate premium upgrade.');
       } finally {
         setIsLoading(false);
       }
@@ -33,11 +35,11 @@ export default function DownloadDCFButton() {
       <button
         onClick={handleDownloadClick}
         disabled={isLoading}
-        className="w-full py-3 px-4 bg-black dark:bg-white text-white dark:text-black 
-                rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-100 
-                transition-all duration-200 font-bold
-                hover:translate-y-[-2px] active:translate-y-0
-                disabled:opacity-50 disabled:cursor-wait"
+        className="w-full py-3 px-4 bg-black dark:bg-white text-white dark:text-black
+                  rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-100
+                  transition-all duration-200 font-bold
+                  hover:translate-y-[-2px] active:translate-y-0
+                  disabled:opacity-50 disabled:cursor-wait"
       >
         {isLoading ? 'Processing...' : 'Download DCF Valuation Model'}
       </button>

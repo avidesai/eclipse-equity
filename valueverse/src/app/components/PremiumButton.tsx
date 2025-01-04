@@ -24,20 +24,19 @@ export default function PremiumButton() {
   const handleUpgrade = async () => {
     setIsLoading(true);
     setError(null);
-    
     try {
       console.log('Starting upgrade process...');
       await createCheckoutSession();
-    } catch (error: any) {
+    } catch (error) {
       console.error('Premium upgrade error:', error);
-      setError(error?.message || 'Failed to initiate premium upgrade.');
+      setError(error instanceof Error ? error.message : 'Failed to initiate premium upgrade.');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2" data-premium-button>
       <button
         onClick={handleUpgrade}
         disabled={isLoading}
