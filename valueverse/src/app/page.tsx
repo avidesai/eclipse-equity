@@ -45,7 +45,7 @@ export default function HomePage() {
                 Financial Models for Investors
               </h1>
                 <p className="text-lg md:text-xl text-zinc-200 mb-8 leading-relaxed max-w-3xl">
-                Supercharge your investment research with our discounted cash flow models.
+                Supercharge your investment research with our stock valuation models.
                 </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
