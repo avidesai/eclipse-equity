@@ -51,7 +51,8 @@ export default function PerformanceChart({ data }: PerformanceChartProps) {
                 entry.dataKey === 'netIncome' ? 'bg-green-500' : 'bg-blue-500'
               }`} />
               <span className="text-zinc-600 dark:text-zinc-400 capitalize">
-                {entry.dataKey === 'fcf' ? 'Free Cash Flow' : entry.dataKey}:
+                {entry.dataKey === 'fcf' ? 'Free Cash Flow' : 
+                 entry.dataKey === 'netIncome' ? 'Net Income' : 'Revenue'}:
               </span>
               <span className="text-zinc-900 dark:text-white font-medium">
                 ${formatValue(entry.value)}
