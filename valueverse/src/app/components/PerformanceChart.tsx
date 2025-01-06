@@ -35,7 +35,7 @@ export default function PerformanceChart({ data }: PerformanceChartProps) {
     else if (absValue >= 1e6) formattedValue = `${(absValue / 1e6).toFixed(0)}M`;
     else formattedValue = absValue.toString();
     
-    return value < 0 ? `-${formattedValue}` : formattedValue;
+    return value < 0 ? `-$${formattedValue}` : `$${formattedValue}`;
   };
 
   const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
@@ -55,7 +55,7 @@ export default function PerformanceChart({ data }: PerformanceChartProps) {
                  entry.dataKey === 'netIncome' ? 'Net Income' : 'Revenue'}:
               </span>
               <span className="text-zinc-900 dark:text-white font-medium">
-                ${formatValue(entry.value)}
+                {formatValue(entry.value)}
               </span>
             </div>
           ))}
