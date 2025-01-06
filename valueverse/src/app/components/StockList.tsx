@@ -96,7 +96,7 @@ export default function StockList({
                   ${stock.price.toFixed(2)}
                 </div>
                 <div className={`text-sm font-medium ${stock.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                  {stock.change >= 0 ? '↑' : '↓'} {Math.abs(stock.changePercent).toFixed(2)}%
+                  {stock.change >= 0 ? '↑' : '↓'} {Math.abs(stock.changePercent * 100).toFixed(2)}%
                 </div>
                 <div className="text-xs text-zinc-600 dark:text-zinc-300 mt-2">
                   Market Cap: {formatNumber(stock.marketCap)}

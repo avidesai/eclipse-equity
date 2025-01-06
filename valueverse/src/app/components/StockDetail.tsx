@@ -109,7 +109,7 @@ export default function StockDetail({ stock }: { stock: Stock }) {
           </p>
           <div className={stock.change >= 0 ? 'text-green-500' : 'text-red-500'}>
             {stock.change >= 0 ? '↑' : '↓'} ${Math.abs(stock.change).toFixed(2)} (
-            {Math.abs(stock.changePercent).toFixed(2)}%)
+            {Math.abs(stock.changePercent * 100).toFixed(2)}%)
           </div>
         </div>
       </div>
