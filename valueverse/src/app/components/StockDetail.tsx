@@ -154,7 +154,7 @@ export default function StockDetail({ stock }: { stock: Stock }) {
 
       {/* Balance Sheet */}
       <MetricSection title="Balance Sheet">
-        <Metric label="Cash and Securities" value={stock.cash} />
+        <Metric label="Cash & Securities" value={stock.cash} />
         <Metric label="Total Debt" value={stock.debt} />
         <Metric label="Net Cash" value={stock.netCash} colorCode />
       </MetricSection>

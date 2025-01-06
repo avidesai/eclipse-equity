@@ -41,7 +41,7 @@ export default function DownloadDCFButton() {
                   hover:translate-y-[-2px] active:translate-y-0
                   disabled:opacity-50 disabled:cursor-wait"
       >
-        {isLoading ? 'Processing...' : 'Download DCF Valuation Model'}
+        {isLoading ? 'Processing...' : 'Download Valuation Model'}
       </button>
       {error && (
         <p className="text-sm text-red-500 mt-2">{error}</p>
