@@ -32,7 +32,7 @@ export default function PerformanceChart({ data }: PerformanceChartProps) {
     
     if (absValue >= 1e12) formattedValue = `${(absValue / 1e12).toFixed(1)}T`;
     else if (absValue >= 1e9) formattedValue = `${(absValue / 1e9).toFixed(1)}B`;
-    else if (absValue >= 1e6) formattedValue = `${(absValue / 1e6).toFixed(1)}M`;
+    else if (absValue >= 1e6) formattedValue = `${(absValue / 1e6).toFixed(0)}M`;
     else formattedValue = absValue.toString();
     
     return value < 0 ? `-${formattedValue}` : formattedValue;
