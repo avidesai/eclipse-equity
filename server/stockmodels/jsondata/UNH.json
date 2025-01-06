@@ -1,0 +1,68 @@
+{
+  "symbol": "UNH",
+  "name": "UnitedHealth Group Incorporated",
+  "logo": "\u2695\ufe0f",
+  "price": 513,
+  "change": 0.016828,
+  "changePercent": 0.016828,
+  "marketCap": 472105900000,
+  "enterpriseValue": 538376729731.5753,
+  "roic": 0.165,
+  "revenue": {
+    "current": 371600000000.0,
+    "growth": 0.14620604565083273,
+    "cagr": 0.08732216805982915
+  },
+  "netIncome": {
+    "current": 22381000000.0,
+    "growth": 0.11237574552683904,
+    "cagr": 0.10511451413585808
+  },
+  "fcf": {
+    "current": 24581000000.0,
+    "growth": -0.1764607343875637,
+    "cagr": 0.13854560176010328
+  },
+  "grossMargin": 0.24477933261571583,
+  "netMargin": 0.06396358194063358,
+  "fcfMargin": 0.07595410326764779,
+  "psRatio": 1.1776151159890247,
+  "peRatio": 18.410712475139416,
+  "fcfYield": 0.06449824075488148,
+  "cash": 29628000000.0,
+  "debt": 67435000000.0,
+  "netCash": -37807000000.0,
+  "terminalValue": 639599999999.9998,
+  "intrinsicValue": 567.9750561825921,
+  "upside": 0.1071638522077818,
+  "historicalMetrics": [
+    {
+      "year": 2020,
+      "revenue": 257100000000,
+      "netIncome": 15403000000,
+      "fcf": 22881000000,
+      "shares": 948800000
+    },
+    {
+      "year": 2021,
+      "revenue": 287600000000.0,
+      "netIncome": 17285000000.0,
+      "fcf": 22215000000.0,
+      "shares": 941900000.0
+    },
+    {
+      "year": 2022,
+      "revenue": 324200000000,
+      "netIncome": 20120000000,
+      "fcf": 29848000000,
+      "shares": 934600000
+    },
+    {
+      "year": 2023,
+      "revenue": 371600000000.0,
+      "netIncome": 22381000000.0,
+      "fcf": 24581000000.0,
+      "shares": 924900000.0
+    }
+  ]
+}

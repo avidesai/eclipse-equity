@@ -1,0 +1,68 @@
+{
+  "symbol": "ODFL",
+  "name": "Old Dominion Freight Line, Inc.",
+  "logo": "\ud83c\udf09",
+  "price": 180.91,
+  "change": 0.029477000000000003,
+  "changePercent": 0.029477000000000003,
+  "marketCap": 38623840000,
+  "enterpriseValue": 14560595815.404222,
+  "roic": 0.296,
+  "revenue": {
+    "current": 5866000000.0,
+    "growth": -0.06293929712460067,
+    "cagr": 0.0675174447403218
+  },
+  "netIncome": {
+    "current": 1240000000.0,
+    "growth": -0.09949164851125636,
+    "cagr": 0.1710071448858224
+  },
+  "fcf": {
+    "current": 803000000.0,
+    "growth": -0.09977578475336324,
+    "cagr": 0.10113142140133649
+  },
+  "grossMargin": 0.40112512785543813,
+  "netMargin": 0.17847949201990732,
+  "fcfMargin": 0.1295692466106058,
+  "psRatio": 6.628426291402094,
+  "peRatio": 37.13830769230769,
+  "fcfYield": 0.01954751262432736,
+  "cash": 434000000.0,
+  "debt": 200300000.0,
+  "netCash": 233700000.0,
+  "terminalValue": 17315666666.666664,
+  "intrinsicValue": 78.71825804231592,
+  "upside": -0.5648761370719367,
+  "historicalMetrics": [
+    {
+      "year": 2020,
+      "revenue": 4015000000,
+      "netIncome": 673000000,
+      "fcf": 672000000,
+      "shares": 234700000
+    },
+    {
+      "year": 2021,
+      "revenue": 5256000000.0,
+      "netIncome": 1034000000.0,
+      "fcf": 689000000.0,
+      "shares": 230000000.0
+    },
+    {
+      "year": 2022,
+      "revenue": 6260000000,
+      "netIncome": 1377000000,
+      "fcf": 892000000,
+      "shares": 221000000
+    },
+    {
+      "year": 2023,
+      "revenue": 5866000000.0,
+      "netIncome": 1240000000.0,
+      "fcf": 803000000.0,
+      "shares": 218200000.0
+    }
+  ]
+}

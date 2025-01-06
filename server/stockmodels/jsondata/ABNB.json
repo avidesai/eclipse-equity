@@ -1,10 +1,10 @@
 {
   "symbol": "ABNB",
   "name": "Airbnb, Inc.",
+  "logo": "\ud83c\udfe0",
   "price": 135.71,
   "change": 0.032172,
   "changePercent": 0.032172,
-  "logo": "\ud83c\udfe0",
   "marketCap": 84787767407,
   "enterpriseValue": 73372310634.51945,
   "roic": 0.142,

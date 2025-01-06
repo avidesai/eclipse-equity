@@ -1,0 +1,68 @@
+{
+  "symbol": "WM",
+  "name": "Waste Management, Inc.",
+  "logo": "\ud83d\uddd1\ufe0f",
+  "price": 201.6,
+  "change": 0.005286,
+  "changePercent": 0.005286,
+  "marketCap": 80935360000,
+  "enterpriseValue": 54991501035.9037,
+  "roic": 0.13,
+  "revenue": {
+    "current": 20426000000.0,
+    "growth": 0.03695806680881297,
+    "cagr": 0.06283154952449647
+  },
+  "netIncome": {
+    "current": 2304000000.0,
+    "growth": 0.029490616621983934,
+    "cagr": 0.12374939635850346
+  },
+  "fcf": {
+    "current": 1922000000.0,
+    "growth": -0.22562449637389204,
+    "cagr": 0.20654134462898854
+  },
+  "grossMargin": 0.38284539312640753,
+  "netMargin": 0.13630073800738007,
+  "fcfMargin": 0.11023985239852399,
+  "psRatio": 3.733180811808118,
+  "peRatio": 27.389292724196277,
+  "fcfYield": 0.02952973829979875,
+  "cash": 458000000.0,
+  "debt": 16747000000.0,
+  "netCash": -16289000000.0,
+  "terminalValue": 66283333333.33332,
+  "intrinsicValue": 104.73227859990317,
+  "upside": -0.4804946498020676,
+  "historicalMetrics": [
+    {
+      "year": 2020,
+      "revenue": 15218000000,
+      "netIncome": 1496000000,
+      "fcf": 1725000000,
+      "shares": 422600000
+    },
+    {
+      "year": 2021,
+      "revenue": 17931000000.0,
+      "netIncome": 1816000000.0,
+      "fcf": 2808000000.0,
+      "shares": 418300000.0
+    },
+    {
+      "year": 2022,
+      "revenue": 19698000000,
+      "netIncome": 2238000000,
+      "fcf": 2482000000,
+      "shares": 410500000
+    },
+    {
+      "year": 2023,
+      "revenue": 20426000000.0,
+      "netIncome": 2304000000.0,
+      "fcf": 1922000000.0,
+      "shares": 402800000.0
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "symbol": "MA",
+  "name": "Mastercard Incorporated",
+  "logo": "\ud83d\udcb3",
+  "price": 521.36,
+  "change": -0.001991,
+  "changePercent": -0.001991,
+  "marketCap": 478520400000,
+  "enterpriseValue": 254565671743.73315,
+  "roic": 0.541,
+  "revenue": {
+    "current": 25098000000.0,
+    "growth": 0.1286594414714215,
+    "cagr": 0.11687997244862566
+  },
+  "netIncome": {
+    "current": 11195000000.0,
+    "growth": 0.12739174219536764,
+    "cagr": 0.13495904833895409
+  },
+  "fcf": {
+    "current": 12946000000.0,
+    "growth": 0.06490088015135309,
+    "cagr": 0.11120104381125562
+  },
+  "grossMargin": 1.0,
+  "netMargin": 0.47833054378405326,
+  "fcfMargin": 0.5199245041131014,
+  "psRatio": 17.040717923150886,
+  "peRatio": 35.62540202501489,
+  "fcfYield": 0.030510715948578158,
+  "cash": 9180000000.0,
+  "debt": 16456000000.0,
+  "netCash": -7276000000.0,
+  "terminalValue": 299299999999.9999,
+  "intrinsicValue": 299.677180495232,
+  "upside": -0.42520105014724574,
+  "historicalMetrics": [
+    {
+      "year": 2020,
+      "revenue": 15304000000,
+      "netIncome": 6411000000,
+      "fcf": 7000000000,
+      "shares": 997000000
+    },
+    {
+      "year": 2021,
+      "revenue": 18884000000.0,
+      "netIncome": 8687000000.0,
+      "fcf": 9473000000.0,
+      "shares": 983000000.0
+    },
+    {
+      "year": 2022,
+      "revenue": 22237000000,
+      "netIncome": 9930000000,
+      "fcf": 12157000000,
+      "shares": 961500000
+    },
+    {
+      "year": 2023,
+      "revenue": 25098000000.0,
+      "netIncome": 11195000000.0,
+      "fcf": 12946000000.0,
+      "shares": 937800000.0
+    }
+  ]
+}

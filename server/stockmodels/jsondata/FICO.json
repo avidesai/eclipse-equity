@@ -1,0 +1,68 @@
+{
+  "symbol": "FICO",
+  "name": "Fair Isaac Corporation",
+  "logo": "\ud83d\uddcc",
+  "price": 2104.99,
+  "change": 0.011805000000000001,
+  "changePercent": 0.011805000000000001,
+  "marketCap": 51252090000,
+  "enterpriseValue": 21034747854.19938,
+  "roic": 0.498,
+  "revenue": {
+    "current": 1718000000.0,
+    "growth": 0.13474240422721273,
+    "cagr": 0.14792720713453864
+  },
+  "netIncome": {
+    "current": 513000000.0,
+    "growth": 0.19580419580419584,
+    "cagr": 0.2597066857651785
+  },
+  "fcf": {
+    "current": 609000000.0,
+    "growth": 0.2661122661122661,
+    "cagr": 0.2630962104653317
+  },
+  "grossMargin": 0.7968568102444703,
+  "netMargin": 0.367,
+  "fcfMargin": 0.4255,
+  "psRatio": 25.626045,
+  "peRatio": 69.82573569482288,
+  "fcfYield": 0.016604200921367305,
+  "cash": 151000000.0,
+  "debt": 2253000000.0,
+  "netCash": -2102000000.0,
+  "terminalValue": 26130666666.66666,
+  "intrinsicValue": 1013.2412064767765,
+  "upside": -0.5186479714978329,
+  "historicalMetrics": [
+    {
+      "year": 2021,
+      "revenue": 1317000000,
+      "netIncome": 392000000,
+      "fcf": 370000000,
+      "shares": 28387000
+    },
+    {
+      "year": 2022,
+      "revenue": 1377000000.0,
+      "netIncome": 374000000.0,
+      "fcf": 458000000.0,
+      "shares": 25253000.0
+    },
+    {
+      "year": 2023,
+      "revenue": 1514000000,
+      "netIncome": 429000000,
+      "fcf": 481000000,
+      "shares": 24587000
+    },
+    {
+      "year": 2024,
+      "revenue": 1718000000.0,
+      "netIncome": 513000000.0,
+      "fcf": 609000000.0,
+      "shares": 24519000.0
+    }
+  ]
+}

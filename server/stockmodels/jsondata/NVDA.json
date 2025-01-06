@@ -1,0 +1,68 @@
+{
+  "symbol": "NVDA",
+  "name": "NVIDIA Corporation",
+  "logo": "\ud83d\udcfd\ufe0f",
+  "price": 144.47,
+  "change": 0.044538,
+  "changePercent": 0.044538,
+  "marketCap": 3538070000000,
+  "enterpriseValue": 1736449780525.0088,
+  "roic": 0.643,
+  "revenue": {
+    "current": 60922000000.0,
+    "growth": 1.2585452658115224,
+    "cagr": 0.3967448146006595
+  },
+  "netIncome": {
+    "current": 29760000000.0,
+    "growth": 5.813186813186813,
+    "cagr": 0.4629394776386896
+  },
+  "fcf": {
+    "current": 24227000000.0,
+    "growth": 6.348195329087049,
+    "cagr": 0.5462069954739267
+  },
+  "grossMargin": 0.7271757329043695,
+  "netMargin": 0.4884934834706674,
+  "fcfMargin": 0.3976724336036243,
+  "psRatio": 27.46948757763975,
+  "peRatio": 48.46671232876712,
+  "fcfYield": 0.01900103728869129,
+  "cash": 25984000000.0,
+  "debt": 11056000000.0,
+  "netCash": 14928000000.0,
+  "terminalValue": 2097833333333.333,
+  "intrinsicValue": 71.78317128948424,
+  "upside": -0.5031274915935194,
+  "historicalMetrics": [
+    {
+      "year": 2021,
+      "revenue": 16674000000,
+      "netIncome": 4332000000,
+      "fcf": 3562000000,
+      "shares": 24760000000
+    },
+    {
+      "year": 2022,
+      "revenue": 26914000000.0,
+      "netIncome": 9752000000.0,
+      "fcf": 6971000000.0,
+      "shares": 25000000000.0
+    },
+    {
+      "year": 2023,
+      "revenue": 26974000000,
+      "netIncome": 4368000000,
+      "fcf": 3297000000,
+      "shares": 24610000000
+    },
+    {
+      "year": 2024,
+      "revenue": 60922000000.0,
+      "netIncome": 29760000000.0,
+      "fcf": 24227000000.0,
+      "shares": 24700000000.0
+    }
+  ]
+}

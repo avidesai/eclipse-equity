@@ -1,0 +1,68 @@
+{
+  "symbol": "MC.PA",
+  "name": "LVMH Mo\u00ebt Hennessy Louis Vuitton",
+  "logo": "\ud83c\udf1f",
+  "price": 611.3,
+  "change": -0.037929,
+  "changePercent": -0.037929,
+  "marketCap": 305858900000,
+  "enterpriseValue": 250888176126.40283,
+  "roic": 0.169,
+  "revenue": {
+    "current": 86153000000.0,
+    "growth": 0.08801020408163263,
+    "cagr": 0.04715386487009134
+  },
+  "netIncome": {
+    "current": 15174000000.0,
+    "growth": 0.07739278614030098,
+    "cagr": 0.07848795754716058
+  },
+  "fcf": {
+    "current": 8586000000.0,
+    "growth": -0.12699542450432133,
+    "cagr": 0.23536545818556953
+  },
+  "grossMargin": 0.6880433647116178,
+  "netMargin": 0.1643690476190476,
+  "fcfMargin": 0.18907142857142858,
+  "psRatio": 3.641177380952381,
+  "peRatio": 22.15245165495763,
+  "fcfYield": 0.051925904395785115,
+  "cash": 11287000000.0,
+  "debt": 38996000000.0,
+  "netCash": -27709000000.0,
+  "terminalValue": 294735333333.33325,
+  "intrinsicValue": 452.0485946939224,
+  "upside": -0.26051268657954785,
+  "historicalMetrics": [
+    {
+      "year": 2020,
+      "revenue": 44651000000,
+      "netIncome": 4702000000,
+      "fcf": 7722000000,
+      "shares": 503400000
+    },
+    {
+      "year": 2021,
+      "revenue": 64215000000.0,
+      "netIncome": 12036000000.0,
+      "fcf": 11927000000.0,
+      "shares": 503800000.0
+    },
+    {
+      "year": 2022,
+      "revenue": 79184000000,
+      "netIncome": 14084000000,
+      "fcf": 9835000000,
+      "shares": 501100000
+    },
+    {
+      "year": 2023,
+      "revenue": 86153000000.0,
+      "netIncome": 15174000000.0,
+      "fcf": 8586000000.0,
+      "shares": 499400000.0
+    }
+  ]
+}

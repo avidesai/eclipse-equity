@@ -2,7 +2,6 @@
 
 import express from 'express';
 import cors from 'cors';
-import bodyParser from 'body-parser';
 import stockRoutes from './routes/stockRoutes';
 import paymentRoutes from './routes/paymentRoutes';
 import { authRoutes } from './routes/authRoutes';
@@ -42,7 +41,7 @@ app.use(
 );
 
 // General middleware
-app.use(bodyParser.json());
+app.use(express.json());
 
 // Routes
 app.use('/api/stocks', stockRoutes);

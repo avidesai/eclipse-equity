@@ -1,0 +1,68 @@
+{
+  "symbol": "LMT",
+  "name": "Lockheed Martin Corporation",
+  "logo": "\ud83d\udd2c",
+  "price": 481.82,
+  "change": -0.0008917,
+  "changePercent": -0.0008917,
+  "marketCap": 114208300000,
+  "enterpriseValue": 96705597295.26666,
+  "roic": 0.306,
+  "revenue": {
+    "current": 65571000000.0,
+    "growth": -0.0062590931134820504,
+    "cagr": 0.03772949890681767
+  },
+  "netIncome": {
+    "current": 6920000000.0,
+    "growth": 0.20725750174459168,
+    "cagr": -0.0006070317073976428
+  },
+  "fcf": {
+    "current": 7225000000.0,
+    "growth": 0.34568821009498985,
+    "cagr": 0.02511775811296111
+  },
+  "grossMargin": 0.13071327263576887,
+  "netMargin": 0.08854276292710307,
+  "fcfMargin": 0.09352417035010173,
+  "psRatio": 1.6025861222198836,
+  "peRatio": 18.09957210776545,
+  "fcfYield": 0.05835828044021319,
+  "cash": 1442000000.0,
+  "debt": 18636000000.0,
+  "netCash": -17194000000.0,
+  "terminalValue": 111027999999.99997,
+  "intrinsicValue": 417.02998437127235,
+  "upside": -0.13446933632627878,
+  "historicalMetrics": [
+    {
+      "year": 2020,
+      "revenue": 65398000000,
+      "netIncome": 6888000000,
+      "fcf": 6977000000,
+      "shares": 279800000
+    },
+    {
+      "year": 2021,
+      "revenue": 67044000000.0,
+      "netIncome": 6315000000.0,
+      "fcf": 6886000000.0,
+      "shares": 275800000.0
+    },
+    {
+      "year": 2022,
+      "revenue": 65984000000,
+      "netIncome": 5732000000,
+      "fcf": 5369000000,
+      "shares": 262100000
+    },
+    {
+      "year": 2023,
+      "revenue": 65571000000.0,
+      "netIncome": 6920000000.0,
+      "fcf": 7225000000.0,
+      "shares": 248100000.0
+    }
+  ]
+}

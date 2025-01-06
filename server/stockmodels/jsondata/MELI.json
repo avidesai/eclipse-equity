@@ -1,0 +1,68 @@
+{
+  "symbol": "MELI",
+  "name": "MercadoLibre, Inc.",
+  "logo": "\ud83c\uddf2\ud83c\uddfd",
+  "price": 1834.17,
+  "change": 0.03919,
+  "changePercent": 0.03919,
+  "marketCap": 92987600000,
+  "enterpriseValue": 42389143273.455795,
+  "roic": 0.175,
+  "revenue": {
+    "current": 14473000000.0,
+    "growth": 0.3735408560311284,
+    "cagr": 0.24703627018359367
+  },
+  "netIncome": {
+    "current": 987000000.0,
+    "growth": 1.0477178423236513,
+    "cagr": 0.3868594459538192
+  },
+  "fcf": {
+    "current": 1313000000.0,
+    "growth": -10.87218045112782,
+    "cagr": 0.24449916708543168
+  },
+  "grossMargin": 0.5813583914875976,
+  "netMargin": 0.08493964174454828,
+  "fcfMargin": 0.07486370716510904,
+  "psRatio": 4.526265576323987,
+  "peRatio": 53.2880229226361,
+  "fcfYield": 0.016539839720564893,
+  "cash": 3747000000.0,
+  "debt": 5350000000.0,
+  "netCash": -1603000000.0,
+  "terminalValue": 52343333333.33332,
+  "intrinsicValue": 778.4834230231758,
+  "upside": -0.575566374423758,
+  "historicalMetrics": [
+    {
+      "year": 2020,
+      "revenue": 3974000000,
+      "netIncome": -4585000000,
+      "fcf": -128000000,
+      "shares": 49777000
+    },
+    {
+      "year": 2021,
+      "revenue": 7069000000.0,
+      "netIncome": 83000000.0,
+      "fcf": -1154000000.0,
+      "shares": 53459000.0
+    },
+    {
+      "year": 2022,
+      "revenue": 10537000000,
+      "netIncome": 482000000,
+      "fcf": -133000000,
+      "shares": 50295000
+    },
+    {
+      "year": 2023,
+      "revenue": 14473000000.0,
+      "netIncome": 987000000.0,
+      "fcf": 1313000000.0,
+      "shares": 50560000.0
+    }
+  ]
+}

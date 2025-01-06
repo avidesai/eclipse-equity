@@ -1,4 +1,4 @@
-// index.ts
+// /src/index.ts
 import app from './app';
 import connectDB from './config/db';
 import environment from './config/environment';
