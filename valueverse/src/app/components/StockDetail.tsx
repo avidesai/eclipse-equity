@@ -35,7 +35,7 @@ export default function StockDetail({ stock }: { stock: Stock }) {
     let formattedNum;
     if (absNum >= 1e12) formattedNum = `${(absNum / 1e12).toFixed(2)}T`;
     else if (absNum >= 1e9) formattedNum = `${(absNum / 1e9).toFixed(2)}B`;
-    else if (absNum >= 1e6) formattedNum = `${(absNum / 1e6).toFixed(2)}M`;
+    else if (absNum >= 1e6) formattedNum = `${(absNum / 1e6).toFixed(0)}M`;
     else formattedNum = absNum.toFixed(2);
     
     return num < 0 ? `-$${formattedNum}` : `$${formattedNum}`;
@@ -128,28 +128,28 @@ export default function StockDetail({ stock }: { stock: Stock }) {
       <MetricSection title="Key Metrics">
         <Metric label="Market Cap" value={stock.marketCap} />
         <Metric label="P/E" value={stock.peRatio} prefix="x" />
-        <Metric label="FCF Yield" value={stock.fcfYield} isPercentage colorCode />
+        <Metric label="FCF Yield" value={stock.fcfYield * 100} isPercentage colorCode />
       </MetricSection>
 
       {/* Valuation - Premium Section */}
       <MetricSection title="Intrinsic Value" isPremiumContent>
         <Metric label="Intrinsic Value" value={stock.intrinsicValue} prefix="$" />
-        <Metric label="Upside / Downside" value={stock.upside} isPercentage colorCode />
-        <Metric label="ROIC" value={stock.roic} isPercentage colorCode />
+        <Metric label="Upside / Downside" value={stock.upside * 100} isPercentage colorCode />
+        <Metric label="ROIC" value={stock.roic * 100} isPercentage colorCode />
       </MetricSection>
 
       {/* Future Growth - Premium Section */}
       <MetricSection title="Future Growth (5Y CAGR)" isPremiumContent>
-        <Metric label="Revenue CAGR" value={stock.revenue.cagr} isPercentage colorCode />
-        <Metric label="Net Income CAGR" value={stock.netIncome.cagr} isPercentage colorCode />
-        <Metric label="FCF CAGR" value={stock.fcf.cagr} isPercentage colorCode />
+        <Metric label="Revenue CAGR" value={stock.revenue.cagr * 100} isPercentage colorCode />
+        <Metric label="Net Income CAGR" value={stock.netIncome.cagr * 100} isPercentage colorCode />
+        <Metric label="FCF CAGR" value={stock.fcf.cagr * 100} isPercentage colorCode />
       </MetricSection>
 
       {/* Margins */}
       <MetricSection title="Margins">
-        <Metric label="Gross Margin" value={stock.grossMargin} isPercentage />
-        <Metric label="Net Income Margin" value={stock.netMargin} isPercentage />
-        <Metric label="FCF Margin" value={stock.fcfMargin} isPercentage />
+        <Metric label="Gross Margin" value={stock.grossMargin * 100} isPercentage />
+        <Metric label="Net Income Margin" value={stock.netMargin * 100} isPercentage />
+        <Metric label="FCF Margin" value={stock.fcfMargin * 100} isPercentage />
       </MetricSection>
 
       {/* Balance Sheet */}

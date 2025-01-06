@@ -85,9 +85,9 @@ export default function StockList({
                   <div className="text-xs text-zinc-600 dark:text-zinc-300 mt-2 space-x-3">
                     <span>P/E: {stock.peRatio.toFixed(1)}x</span>
                     <span className="text-zinc-400 dark:text-zinc-500">•</span>
-                    <span>FCF Yield: {stock.fcfYield.toFixed(1)}%</span>
+                    <span>FCF Yield: {(stock.fcfYield * 100).toFixed(1)}%</span>
                     <span className="text-zinc-400 dark:text-zinc-500">•</span>
-                    <span>ROIC: {stock.roic.toFixed(1)}%</span>
+                    <span>ROIC: {(stock.roic * 100).toFixed(1)}%</span>
                   </div>
                 </div>
               </div>
