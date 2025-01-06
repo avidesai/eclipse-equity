@@ -18,12 +18,12 @@ export default function ModelsPage() {
 
   useEffect(() => {
     const fetchStocks = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
         const data = await getStockData();
         setStocks(data);
         setSelectedStock(data[0] || null); // Set the first stock as selected by default
-      } catch (err) {
+      } catch {
         setError('Failed to load stock data');
       } finally {
         setLoading(false);
