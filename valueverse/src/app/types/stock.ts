@@ -17,10 +17,10 @@ export interface Stock {
   // Basic Info
   symbol: string;
   name: string;
+  logo: string;
   price: number;
   change: number;
   changePercent: number;
-  logo: string;
   
   // Key Metrics
   marketCap: number;

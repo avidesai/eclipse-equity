@@ -5,6 +5,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 interface IStock extends Document {
   symbol: string;
   name: string;
+  logo: string;
   price: number;
   change?: number;
   changePercent?: number;
@@ -51,6 +52,7 @@ interface IStock extends Document {
 const StockSchema: Schema = new Schema({
   symbol: { type: String, required: true },
   name: { type: String, required: true },
+  logo: { type: String, required: true },
   price: { type: Number, required: true },
   change: { type: Number },
   changePercent: { type: Number },
