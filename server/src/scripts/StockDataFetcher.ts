@@ -62,12 +62,20 @@ class StockDataFetcher {
 
   async fetchQuote(symbol: string): Promise<AlphaVantageQuote | null> {
     try {
-      // Added entitlement=delayed parameter for 15-minute delayed data
-      const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&entitlement=delayed&apikey=${ALPHA_VANTAGE_API_KEY}`;
+      const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${ALPHA_VANTAGE_API_KEY}`;
       const data = await this.fetchWithTimeout<any>(url);
+      
+      // Debug log to see the actual API response
+      console.log(`Raw API response for ${symbol}:`, JSON.stringify(data, null, 2));
 
       const quote = data['Global Quote'];
       if (!quote || Object.keys(quote).length === 0) {
+        // Check if we got a different response structure or an error message
+        if (data.Note) {
+          console.warn(`API limit message: ${data.Note}`);
+        } else if (data.Information) {
+          console.warn(`API information: ${data.Information}`);
+        }
         console.warn(`No quote data found for ${symbol}`);
         return null;
       }
@@ -91,7 +99,7 @@ class StockDataFetcher {
     // Basic metrics from quote
     metrics.price = quote.price;
     metrics.change = quote.change;
-    metrics.changePercent = quote.changePercent; // Store as percentage (e.g., 5.25 for 5.25%)
+    metrics.changePercent = quote.changePercent * 0.01; // Store as percentage (e.g., 5.25 for 5.25%)
 
     // Calculate market cap if we have price
     if (quote.price && stock.historicalMetrics?.[0]?.shares) {
@@ -110,15 +118,14 @@ class StockDataFetcher {
 
     // Calculate FCF Yield as percentage
     if (metrics.marketCap && stock.fcf?.current) {
-      metrics.fcfYield = (stock.fcf.current / metrics.marketCap) * 100; // Store as percentage
+      metrics.fcfYield = (stock.fcf.current / metrics.marketCap); // Store as percentage
     }
 
     // Calculate Upside as percentage
     if (stock.intrinsicValue && quote.price) {
-      metrics.upside = ((stock.intrinsicValue - quote.price) / quote.price) * 100; // Store as percentage
+      metrics.upside = ((stock.intrinsicValue - quote.price) / quote.price); // Store as percentage
     }
 
-    // Log the calculated metrics for debugging
     console.log(`Calculated metrics for ${stock.symbol}:`, {
       price: metrics.price,
       change: metrics.change,
@@ -135,6 +142,10 @@ class StockDataFetcher {
 
   async updateStockData(stock: any): Promise<void> {
     try {
+      // Log the API key being used (but mask most of it)
+      const maskedKey = ALPHA_VANTAGE_API_KEY.substring(0, 4) + '...' + ALPHA_VANTAGE_API_KEY.substring(ALPHA_VANTAGE_API_KEY.length - 4);
+      console.log(`Using API key: ${maskedKey}`);
+
       const quote = await this.fetchQuote(stock.symbol);
 
       if (!quote) {
