@@ -62,7 +62,8 @@ class StockDataFetcher {
 
   async fetchQuote(symbol: string): Promise<AlphaVantageQuote | null> {
     try {
-      const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${ALPHA_VANTAGE_API_KEY}`;
+      // Added entitlement=delayed parameter for 15-minute delayed data
+      const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&entitlement=delayed&apikey=${ALPHA_VANTAGE_API_KEY}`;
       const data = await this.fetchWithTimeout<any>(url);
 
       const quote = data['Global Quote'];
@@ -90,7 +91,7 @@ class StockDataFetcher {
     // Basic metrics from quote
     metrics.price = quote.price;
     metrics.change = quote.change;
-    metrics.changePercent = quote.changePercent * 0.01; // Convert percentage to decimal
+    metrics.changePercent = quote.changePercent; // Store as percentage (e.g., 5.25 for 5.25%)
 
     // Calculate market cap if we have price
     if (quote.price && stock.historicalMetrics?.[0]?.shares) {
@@ -107,15 +108,27 @@ class StockDataFetcher {
       metrics.peRatio = metrics.marketCap / stock.netIncome.current;
     }
 
-    // Calculate FCF Yield
+    // Calculate FCF Yield as percentage
     if (metrics.marketCap && stock.fcf?.current) {
-      metrics.fcfYield = (stock.fcf.current / metrics.marketCap) * 0.01; // Convert percentage to decimal
+      metrics.fcfYield = (stock.fcf.current / metrics.marketCap) * 100; // Store as percentage
     }
 
-    // Calculate Upside
+    // Calculate Upside as percentage
     if (stock.intrinsicValue && quote.price) {
-      metrics.upside = ((stock.intrinsicValue - quote.price) / quote.price) * 0.01; // Convert percentage to decimal
+      metrics.upside = ((stock.intrinsicValue - quote.price) / quote.price) * 100; // Store as percentage
     }
+
+    // Log the calculated metrics for debugging
+    console.log(`Calculated metrics for ${stock.symbol}:`, {
+      price: metrics.price,
+      change: metrics.change,
+      changePercent: `${metrics.changePercent}%`,
+      marketCap: metrics.marketCap ? `$${(metrics.marketCap / 1e9).toFixed(2)}B` : 'N/A',
+      psRatio: metrics.psRatio?.toFixed(2) || 'N/A',
+      peRatio: metrics.peRatio?.toFixed(2) || 'N/A',
+      fcfYield: metrics.fcfYield ? `${metrics.fcfYield.toFixed(2)}%` : 'N/A',
+      upside: metrics.upside ? `${metrics.upside.toFixed(2)}%` : 'N/A'
+    });
 
     return metrics;
   }
