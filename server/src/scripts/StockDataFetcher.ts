@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const ALPHA_VANTAGE_API_KEY = process.env.ALPHA_VANTAGE_API_KEY!;
-const TIMEOUT_MS = 10000; // 10 second timeout for API calls
+const TIMEOUT_MS = 10000; // 10-second timeout for API calls
 
 interface AlphaVantageQuote {
   symbol: string;
@@ -64,7 +64,7 @@ class StockDataFetcher {
     try {
       const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${ALPHA_VANTAGE_API_KEY}`;
       const data = await this.fetchWithTimeout<any>(url);
-      
+
       const quote = data['Global Quote'];
       if (!quote || Object.keys(quote).length === 0) {
         console.warn(`No quote data found for ${symbol}`);
@@ -75,8 +75,8 @@ class StockDataFetcher {
         symbol: quote['01. symbol'],
         price: parseFloat(quote['05. price']),
         change: parseFloat(quote['09. change']),
-        changePercent: parseFloat(quote['10. change percent'].replace('%', '')),
-        volume: parseInt(quote['06. volume'], 10)
+        changePercent: parseFloat(quote['10. change percent']?.replace('%', '') || '0'),
+        volume: parseInt(quote['06. volume'], 10),
       };
     } catch (error) {
       console.error(`Error fetching quote for ${symbol}:`, error);
@@ -90,7 +90,7 @@ class StockDataFetcher {
     // Basic metrics from quote
     metrics.price = quote.price;
     metrics.change = quote.change;
-    metrics.changePercent = quote.changePercent;
+    metrics.changePercent = quote.changePercent * 0.01; // Convert percentage to decimal
 
     // Calculate market cap if we have price
     if (quote.price && stock.historicalMetrics?.[0]?.shares) {
@@ -109,12 +109,12 @@ class StockDataFetcher {
 
     // Calculate FCF Yield
     if (metrics.marketCap && stock.fcf?.current) {
-      metrics.fcfYield = (stock.fcf.current / metrics.marketCap) * 100;
+      metrics.fcfYield = (stock.fcf.current / metrics.marketCap) * 0.01; // Convert percentage to decimal
     }
 
     // Calculate Upside
     if (stock.intrinsicValue && quote.price) {
-      metrics.upside = ((stock.intrinsicValue - quote.price) / quote.price) * 100;
+      metrics.upside = ((stock.intrinsicValue - quote.price) / quote.price) * 0.01; // Convert percentage to decimal
     }
 
     return metrics;
