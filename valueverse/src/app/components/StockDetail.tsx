@@ -121,7 +121,7 @@ export default function StockDetail({ stock }: { stock: Stock }) {
 
       {/* Download DCF Button */}
       <div className="pt-2">
-        <DownloadDCFButton />
+        <DownloadDCFButton symbol={stock.symbol} />
       </div>
 
       {/* Key Metrics */}
