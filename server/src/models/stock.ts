@@ -11,9 +11,21 @@ interface IStock extends Document {
   marketCap?: number;
   enterpriseValue?: number;
   roic?: number;
-  revenue?: object;
-  netIncome?: object;
-  fcf?: object;
+  revenue?: {
+    current: number;
+    growth: number;
+    cagr: number;
+  };
+  netIncome?: {
+    current: number;
+    growth: number;
+    cagr: number;
+  };
+  fcf?: {
+    current: number;
+    growth: number;
+    cagr: number;
+  };
   grossMargin?: number;
   netMargin?: number;
   fcfMargin?: number;
@@ -26,7 +38,13 @@ interface IStock extends Document {
   terminalValue?: number;
   intrinsicValue?: number;
   upside?: number;
-  historicalMetrics?: Array<object>;
+  historicalMetrics?: Array<{
+    year: number;
+    revenue: number;
+    netIncome: number;
+    fcf: number;
+    shares: number;
+  }>;
   dcfModelUrl?: string; // URL to the DCF model file
 }
 
@@ -39,9 +57,27 @@ const StockSchema: Schema = new Schema({
   marketCap: { type: Number },
   enterpriseValue: { type: Number },
   roic: { type: Number },
-  revenue: { type: Object },
-  netIncome: { type: Object },
-  fcf: { type: Object },
+  revenue: {
+    type: {
+      current: { type: Number },
+      growth: { type: Number },
+      cagr: { type: Number },
+    },
+  },
+  netIncome: {
+    type: {
+      current: { type: Number },
+      growth: { type: Number },
+      cagr: { type: Number },
+    },
+  },
+  fcf: {
+    type: {
+      current: { type: Number },
+      growth: { type: Number },
+      cagr: { type: Number },
+    },
+  },
   grossMargin: { type: Number },
   netMargin: { type: Number },
   fcfMargin: { type: Number },
@@ -54,8 +90,18 @@ const StockSchema: Schema = new Schema({
   terminalValue: { type: Number },
   intrinsicValue: { type: Number },
   upside: { type: Number },
-  historicalMetrics: { type: Array },
-  dcfModelUrl: { type: String },
+  historicalMetrics: {
+    type: [
+      {
+        year: { type: Number },
+        revenue: { type: Number },
+        netIncome: { type: Number },
+        fcf: { type: Number },
+        shares: { type: Number },
+      },
+    ],
+  },
+  dcfModelUrl: { type: String }, // S3 URL
 });
 
 export default mongoose.model<IStock>('Stock', StockSchema);
