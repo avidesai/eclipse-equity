@@ -14,13 +14,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
+const environment_1 = __importDefault(require("./environment"));
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield mongoose_1.default.connect(process.env.MONGO_URI);
-        console.log("MongoDB connected!");
+        yield mongoose_1.default.connect(environment_1.default.MONGO_URI);
+        console.log(`✅ MongoDB Connected (${environment_1.default.NODE_ENV} environment)`);
     }
-    catch (error) {
-        console.error("MongoDB connection failed:", error);
+    catch (err) {
+        console.error('❌ MongoDB connection error:', err);
         process.exit(1);
     }
 });

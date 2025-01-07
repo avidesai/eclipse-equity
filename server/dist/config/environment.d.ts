@@ -1,11 +1,14 @@
 declare const environment: {
     NODE_ENV: string;
     PORT: string | number;
-    MONGODB_URI: string | undefined;
+    MONGO_URI: string | undefined;
     JWT_SECRET: string | undefined;
     CLIENT_URLS: string[];
-    STRIPE_SECRET_KEY: string | undefined;
-    STRIPE_WEBHOOK_SECRET: string | undefined;
+    stripe: {
+        secretKey: string | undefined;
+        webhookSecret: string | undefined;
+        priceId: string | undefined;
+    };
     GOOGLE_CLIENT_ID: string | undefined;
     GOOGLE_CLIENT_SECRET: string | undefined;
     SENDGRID_API_KEY: string | undefined;

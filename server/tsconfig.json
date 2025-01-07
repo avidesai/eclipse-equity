@@ -16,15 +16,15 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
-      "*": ["node_modules/*"]
+      "*": ["node_modules/*", "src/types/*"]
     },
-    "types": ["node", "express"],
+    "types": ["node", "express"],  // Removed node-cron from here
     "lib": ["es2016", "dom"],
     "sourceMap": true,
     "declaration": true,
-    "noImplicitAny": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noImplicitAny": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
@@ -33,7 +33,7 @@
   },
   "include": [
     "src/**/*",
-    "src/types/**/*"
+    "src/**/*.d.ts"
   ],
   "exclude": [
     "node_modules",

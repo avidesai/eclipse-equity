@@ -38,8 +38,58 @@ const mongoose_1 = __importStar(require("mongoose"));
 const StockSchema = new mongoose_1.Schema({
     symbol: { type: String, required: true },
     name: { type: String, required: true },
+    logo: { type: String, required: true },
     price: { type: Number, required: true },
-    dcfModelUrl: { type: String },
+    change: { type: Number },
+    changePercent: { type: Number },
+    marketCap: { type: Number },
+    enterpriseValue: { type: Number },
+    roic: { type: Number },
+    revenue: {
+        type: {
+            current: { type: Number },
+            growth: { type: Number },
+            cagr: { type: Number },
+        },
+    },
+    netIncome: {
+        type: {
+            current: { type: Number },
+            growth: { type: Number },
+            cagr: { type: Number },
+        },
+    },
+    fcf: {
+        type: {
+            current: { type: Number },
+            growth: { type: Number },
+            cagr: { type: Number },
+        },
+    },
+    grossMargin: { type: Number },
+    netMargin: { type: Number },
+    fcfMargin: { type: Number },
+    psRatio: { type: Number },
+    peRatio: { type: Number },
+    fcfYield: { type: Number },
+    cash: { type: Number },
+    debt: { type: Number },
+    netCash: { type: Number },
+    terminalValue: { type: Number },
+    intrinsicValue: { type: Number },
+    upside: { type: Number },
+    historicalMetrics: {
+        type: [
+            {
+                year: { type: Number },
+                revenue: { type: Number },
+                netIncome: { type: Number },
+                fcf: { type: Number },
+                shares: { type: Number },
+            },
+        ],
+    },
+    dcfModelUrl: { type: String }, // S3 URL
 });
 exports.default = mongoose_1.default.model('Stock', StockSchema);
 //# sourceMappingURL=stock.js.map

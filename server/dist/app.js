@@ -6,20 +6,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const body_parser_1 = __importDefault(require("body-parser"));
 const stockRoutes_1 = __importDefault(require("./routes/stockRoutes"));
 const paymentRoutes_1 = __importDefault(require("./routes/paymentRoutes"));
 const authRoutes_1 = require("./routes/authRoutes");
 const passport_1 = __importDefault(require("passport"));
 require("./config/passport");
+const environment_1 = __importDefault(require("./config/environment"));
 const app = (0, express_1.default)();
 // Allowed origins for CORS
-const allowedOrigins = [
-    'https://valueverse.pro',
-    'https://www.valueverse.pro',
-    'https://valueverse-git-main-avidesais-projects.vercel.app',
-    'http://localhost:3000',
-];
+const allowedOrigins = environment_1.default.CLIENT_URLS;
 // CORS configuration
 const corsOptions = {
     origin: (origin, callback) => {
@@ -38,19 +33,18 @@ const corsOptions = {
 // Apply CORS to all routes except the webhook
 app.use((0, cors_1.default)(corsOptions));
 // For Stripe webhook (Stripe doesn't send an Origin header)
-app.use('/api/payments/webhook', express_1.default.raw({ type: 'application/json' }), // Stripe raw body for signature verification
-(req, res, next) => {
-    next(); // Skip CORS for this route
+app.use('/api/payments/webhook', express_1.default.raw({ type: 'application/json' }), (_req, _res, next) => {
+    next();
 });
 // General middleware
-app.use(body_parser_1.default.json());
+app.use(express_1.default.json());
 // Routes
 app.use('/api/stocks', stockRoutes_1.default);
 app.use('/api/payments', paymentRoutes_1.default);
 app.use(passport_1.default.initialize());
 app.use('/api/auth', authRoutes_1.authRoutes);
 // Global error handler
-app.use((err, req, res, next) => {
+app.use((err, _req, res, _next) => {
     console.error('❌ Global Error Handler:', err.stack);
     res.status(500).json({ message: 'Internal Server Error' });
 });

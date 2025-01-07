@@ -17,12 +17,14 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const passport_1 = __importDefault(require("passport"));
 const passport_google_oauth20_1 = require("passport-google-oauth20");
-const user_1 = __importDefault(require("../models/user")); // Note the lowercase 'user'
+const user_1 = __importDefault(require("../models/user"));
 passport_1.default.use(new passport_google_oauth20_1.Strategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: '/api/auth/google/callback',
-}, (accessToken, refreshToken, profile, done) => __awaiter(void 0, void 0, void 0, function* () {
+}, (_accessToken, // Added underscore
+_refreshToken, // Added underscore
+profile, done) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d;
     try {
         let user = yield user_1.default.findOne({ googleId: profile.id });
