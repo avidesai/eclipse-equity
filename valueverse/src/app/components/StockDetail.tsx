@@ -175,6 +175,7 @@ export default function StockDetail({ stock }: { stock: Stock }) {
             <tbody>
               {[...stock.historicalMetrics]
                 .sort((a, b) => a.year - b.year)
+                .slice(1)
                 .map((metric) => {
                   const allData = [...stock.historicalMetrics].sort((a, b) => a.year - b.year);
                   const currentYearIndex = allData.findIndex(m => m.year === metric.year);
