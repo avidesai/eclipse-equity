@@ -1,9 +1,13 @@
 // src/app/types/stock.ts
-export interface HistoricalMetric {
+
+export interface MetricData {
   year: number;
   revenue: number;
   netIncome: number;
   fcf: number;
+}
+
+export interface HistoricalMetric extends MetricData {
   shares: number;
 }
 
@@ -54,4 +58,7 @@ export interface Stock {
   
   // Historical Data
   historicalMetrics: HistoricalMetric[];
+
+  // Future Data
+  futureMetrics: MetricData[];
 }
