@@ -32,10 +32,8 @@ export default function ModelsPage() {
     fetchStocks();
   }, []);
 
-  // Function to handle stock selection and scroll behavior
   const handleStockSelect = (stock: Stock) => {
     setSelectedStock(stock);
-    // On mobile, scroll to the details section when a stock is selected
     if (window.innerWidth < 1024) {
       const detailSection = document.getElementById('stock-detail-section');
       if (detailSection) {
@@ -56,7 +54,7 @@ export default function ModelsPage() {
           <>
             <SearchBar onSearch={setSearchQuery} />
             <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
-              <div className="lg:col-span-5 lg:h-[calc(100vh-12rem)] lg:overflow-y-auto lg:pr-2 py-4 scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent">
+              <div className="h-[400px] lg:h-[calc(100vh-12rem)] lg:col-span-5 overflow-y-auto lg:pr-2 py-4 scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent">
                 <StockList
                   onSelectStock={handleStockSelect}
                   selectedStock={selectedStock}

@@ -1,4 +1,5 @@
 // src/app/components/StockList.tsx
+
 'use client';
 import { Stock } from '../types/stock';
 import { useMemo, useRef, useEffect } from 'react';
@@ -66,7 +67,7 @@ export default function StockList({
             >
               <div className="flex items-center gap-4">
                 <motion.span
-                  className="text-3xl"
+                  className="text-3xl hidden lg:inline-block"
                   initial={false}
                   animate={{
                     scale: selectedStock?.symbol === stock.symbol ? 1.1 : 1,
@@ -82,11 +83,11 @@ export default function StockList({
                   <div className="text-sm text-zinc-600 dark:text-zinc-300">
                     <HighlightText text={stock.name} highlight={searchQuery} />
                   </div>
-                  <div className="text-xs text-zinc-600 dark:text-zinc-300 mt-2 space-x-3">
+                  <div className="text-xs text-zinc-600 dark:text-zinc-300 mt-2 flex flex-wrap gap-2 lg:gap-0 lg:space-x-3">
                     <span>P/E: {stock.peRatio.toFixed(1)}x</span>
-                    <span className="text-zinc-400 dark:text-zinc-500">•</span>
+                    <span className="hidden lg:inline text-zinc-400 dark:text-zinc-500">•</span>
                     <span>FCF Yield: {(stock.fcfYield * 100).toFixed(1)}%</span>
-                    <span className="text-zinc-400 dark:text-zinc-500">•</span>
+                    <span className="hidden lg:inline text-zinc-400 dark:text-zinc-500">•</span>
                     <span>ROIC: {(stock.roic * 100).toFixed(1)}%</span>
                   </div>
                 </div>
