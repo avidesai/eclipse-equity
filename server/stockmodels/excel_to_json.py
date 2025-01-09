@@ -1,7 +1,6 @@
 import os
 import pandas as pd
 import json
-
 # Get the directory of the script and build paths
 script_dir = os.path.dirname(__file__)
 models_dir = os.path.join(script_dir, "models")
@@ -20,10 +19,10 @@ for filename in os.listdir(models_dir):
     if filename.endswith(".xlsx"):
         excel_file_path = os.path.join(models_dir, filename)
         output_json_file_path = os.path.join(output_dir, f"{os.path.splitext(filename)[0]}.json")
-
+        
         # Read the Excel file (specifically the "DCF Model" sheet)
         df = pd.read_excel(excel_file_path, sheet_name="DCF Model", header=None)
-
+        
         # Extract values from the Excel sheet based on positions
         json_data = {
             "symbol": company_info.get(filename, {}).get("symbol", "N/A"),  # Fallback to "N/A"
@@ -92,10 +91,42 @@ for filename in os.listdir(models_dir):
                     "shares": df.iloc[20, 4],
                 },
             ],
+            # Adding future metrics
+            "futureMetrics": [
+                {
+                    "year": int(df.iloc[8, 5]),
+                    "revenue": df.iloc[9, 5],
+                    "netIncome": df.iloc[14, 5],
+                    "fcf": df.iloc[17, 5],
+                },
+                {
+                    "year": int(df.iloc[8, 6]),
+                    "revenue": df.iloc[9, 6],
+                    "netIncome": df.iloc[14, 6],
+                    "fcf": df.iloc[17, 6],
+                },
+                {
+                    "year": int(df.iloc[8, 7]),
+                    "revenue": df.iloc[9, 7],
+                    "netIncome": df.iloc[14, 7],
+                    "fcf": df.iloc[17, 7],
+                },
+                {
+                    "year": int(df.iloc[8, 8]),
+                    "revenue": df.iloc[9, 8],
+                    "netIncome": df.iloc[14, 8],
+                    "fcf": df.iloc[17, 8],
+                },
+                {
+                    "year": int(df.iloc[8, 9]),
+                    "revenue": df.iloc[9, 9],
+                    "netIncome": df.iloc[14, 9],
+                    "fcf": df.iloc[17, 9],
+                },
+            ],
         }
-
+        
         # Write the JSON object to a file
         with open(output_json_file_path, 'w') as json_file:
             json.dump(json_data, json_file, indent=2)
-
         print(f"JSON data has been successfully extracted and saved to {output_json_file_path}")

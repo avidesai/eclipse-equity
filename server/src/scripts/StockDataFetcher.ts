@@ -18,6 +18,17 @@ interface AlphaVantageQuote {
   volume: number;
 }
 
+interface MetricData {
+  year: number;
+  revenue: number;
+  netIncome: number;
+  fcf: number;
+}
+
+interface HistoricalMetricData extends MetricData {
+  shares: number;
+}
+
 class StockDataFetcher {
   private static instance: StockDataFetcher;
   private lastRequestTime: number = 0;
@@ -62,30 +73,39 @@ class StockDataFetcher {
 
   async fetchQuote(symbol: string): Promise<AlphaVantageQuote | null> {
     try {
-      const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${ALPHA_VANTAGE_API_KEY}`;
+      // Use TIME_SERIES_INTRADAY for real-time quotes
+      const url = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${symbol}&interval=5min&apikey=${ALPHA_VANTAGE_API_KEY}`;
       const data = await this.fetchWithTimeout<any>(url);
       
-      // Debug log to see the actual API response
       console.log(`Raw API response for ${symbol}:`, JSON.stringify(data, null, 2));
-
-      const quote = data['Global Quote'];
-      if (!quote || Object.keys(quote).length === 0) {
-        // Check if we got a different response structure or an error message
-        if (data.Note) {
-          console.warn(`API limit message: ${data.Note}`);
-        } else if (data.Information) {
-          console.warn(`API information: ${data.Information}`);
-        }
-        console.warn(`No quote data found for ${symbol}`);
+  
+      if (data['Note'] || data['Information']) {
+        console.warn(`API message: ${data['Note'] || data['Information']}`);
         return null;
       }
-
+  
+      const timeSeries = data['Time Series (5min)'];
+      if (!timeSeries || Object.keys(timeSeries).length === 0) {
+        console.warn(`No intraday data found for ${symbol}`);
+        return null;
+      }
+  
+      // Get the most recent quote
+      const latestTimestamp = Object.keys(timeSeries)[0];
+      const latestQuote = timeSeries[latestTimestamp];
+  
+      // Get previous close for change calculation
+      const previousClose = parseFloat(latestQuote['4. close']); // Using previous interval's close
+      const currentPrice = parseFloat(latestQuote['1. open']); // Using current interval's open
+      const change = currentPrice - previousClose;
+      const changePercent = (change / previousClose) * 100;
+  
       return {
-        symbol: quote['01. symbol'],
-        price: parseFloat(quote['05. price']),
-        change: parseFloat(quote['09. change']),
-        changePercent: parseFloat(quote['10. change percent']?.replace('%', '') || '0'),
-        volume: parseInt(quote['06. volume'], 10),
+        symbol,
+        price: currentPrice,
+        change,
+        changePercent,
+        volume: parseInt(latestQuote['5. volume'], 10),
       };
     } catch (error) {
       console.error(`Error fetching quote for ${symbol}:`, error);
@@ -93,7 +113,15 @@ class StockDataFetcher {
     }
   }
 
-  private calculateMetrics(stock: any, quote: AlphaVantageQuote): Record<string, number> {
+  private calculateMetrics(stock: {
+    symbol: string;
+    historicalMetrics?: HistoricalMetricData[];
+    futureMetrics?: MetricData[];
+    revenue?: { current: number };
+    netIncome?: { current: number };
+    fcf?: { current: number };
+    intrinsicValue?: number;
+  }, quote: AlphaVantageQuote): Record<string, number> {
     const metrics: Record<string, number> = {};
 
     // Basic metrics from quote
@@ -101,29 +129,40 @@ class StockDataFetcher {
     metrics.change = quote.change;
     metrics.changePercent = quote.changePercent * 0.01; // Store as percentage (e.g., 5.25 for 5.25%)
 
-    // Calculate market cap if we have price
-    if (quote.price && stock.historicalMetrics?.[0]?.shares) {
-      metrics.marketCap = quote.price * stock.historicalMetrics[0].shares;
+    // Get most recent data for calculations
+    const mostRecentFuture = stock.futureMetrics?.[0];
+    const mostRecentHistorical = stock.historicalMetrics?.[0]; // For shares count
+
+    // Calculate market cap if we have price and historical shares
+    if (quote.price && mostRecentHistorical?.shares) {
+      metrics.marketCap = quote.price * mostRecentHistorical.shares;
     }
 
-    // Calculate P/S Ratio
-    if (metrics.marketCap && stock.revenue?.current) {
-      metrics.psRatio = metrics.marketCap / stock.revenue.current;
-    }
+    // Use future metrics for ratios if available
+    if (metrics.marketCap && mostRecentFuture) {
+      // Calculate P/S Ratio using future revenue
+      metrics.psRatio = metrics.marketCap / mostRecentFuture.revenue;
 
-    // Calculate P/E Ratio
-    if (metrics.marketCap && stock.netIncome?.current) {
-      metrics.peRatio = metrics.marketCap / stock.netIncome.current;
-    }
+      // Calculate P/E Ratio using future net income
+      metrics.peRatio = metrics.marketCap / mostRecentFuture.netIncome;
 
-    // Calculate FCF Yield as percentage
-    if (metrics.marketCap && stock.fcf?.current) {
-      metrics.fcfYield = (stock.fcf.current / metrics.marketCap); // Store as percentage
+      // Calculate FCF Yield as percentage using future FCF
+      metrics.fcfYield = (mostRecentFuture.fcf / metrics.marketCap); // Store as percentage
     }
 
     // Calculate Upside as percentage
     if (stock.intrinsicValue && quote.price) {
       metrics.upside = ((stock.intrinsicValue - quote.price) / quote.price); // Store as percentage
+    }
+
+    // Include growth metrics from future projections if available
+    const lastFutureMetric = stock.futureMetrics?.[stock.futureMetrics.length - 1];
+
+    if (mostRecentFuture && lastFutureMetric && mostRecentHistorical) {
+      // Calculate projected growth rates from historical to end of projection
+      metrics.projectedRevenueGrowth = (lastFutureMetric.revenue - mostRecentHistorical.revenue) / mostRecentHistorical.revenue;
+      metrics.projectedNetIncomeGrowth = (lastFutureMetric.netIncome - mostRecentHistorical.netIncome) / mostRecentHistorical.netIncome;
+      metrics.projectedFcfGrowth = (lastFutureMetric.fcf - mostRecentHistorical.fcf) / mostRecentHistorical.fcf;
     }
 
     console.log(`Calculated metrics for ${stock.symbol}:`, {
@@ -134,7 +173,12 @@ class StockDataFetcher {
       psRatio: metrics.psRatio?.toFixed(2) || 'N/A',
       peRatio: metrics.peRatio?.toFixed(2) || 'N/A',
       fcfYield: metrics.fcfYield ? `${metrics.fcfYield.toFixed(2)}%` : 'N/A',
-      upside: metrics.upside ? `${metrics.upside.toFixed(2)}%` : 'N/A'
+      upside: metrics.upside ? `${metrics.upside.toFixed(2)}%` : 'N/A',
+      projectedGrowth: {
+        revenue: metrics.projectedRevenueGrowth ? `${(metrics.projectedRevenueGrowth * 100).toFixed(2)}%` : 'N/A',
+        netIncome: metrics.projectedNetIncomeGrowth ? `${(metrics.projectedNetIncomeGrowth * 100).toFixed(2)}%` : 'N/A',
+        fcf: metrics.projectedFcfGrowth ? `${(metrics.projectedFcfGrowth * 100).toFixed(2)}%` : 'N/A',
+      }
     });
 
     return metrics;

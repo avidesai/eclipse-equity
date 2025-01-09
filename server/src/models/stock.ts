@@ -2,6 +2,18 @@
 
 import mongoose, { Schema, Document } from 'mongoose';
 
+// Update the interfaces to include futureMetrics
+interface MetricData {
+  year: number;
+  revenue: number;
+  netIncome: number;
+  fcf: number;
+}
+
+interface HistoricalMetricData extends MetricData {
+  shares: number;
+}
+
 interface IStock extends Document {
   symbol: string;
   name: string;
@@ -39,15 +51,22 @@ interface IStock extends Document {
   terminalValue?: number;
   intrinsicValue?: number;
   upside?: number;
-  historicalMetrics?: Array<{
-    year: number;
-    revenue: number;
-    netIncome: number;
-    fcf: number;
-    shares: number;
-  }>;
-  dcfModelUrl?: string; // URL to the DCF model file
+  historicalMetrics?: HistoricalMetricData[];
+  futureMetrics?: MetricData[]; // Add futureMetrics
+  dcfModelUrl?: string;
 }
+
+const MetricSchema = {
+  year: { type: Number },
+  revenue: { type: Number },
+  netIncome: { type: Number },
+  fcf: { type: Number },
+};
+
+const HistoricalMetricSchema = {
+  ...MetricSchema,
+  shares: { type: Number },
+};
 
 const StockSchema: Schema = new Schema({
   symbol: { type: String, required: true },
@@ -92,18 +111,9 @@ const StockSchema: Schema = new Schema({
   terminalValue: { type: Number },
   intrinsicValue: { type: Number },
   upside: { type: Number },
-  historicalMetrics: {
-    type: [
-      {
-        year: { type: Number },
-        revenue: { type: Number },
-        netIncome: { type: Number },
-        fcf: { type: Number },
-        shares: { type: Number },
-      },
-    ],
-  },
-  dcfModelUrl: { type: String }, // S3 URL
+  historicalMetrics: { type: [HistoricalMetricSchema] },
+  futureMetrics: { type: [MetricSchema] }, // Add futureMetrics schema
+  dcfModelUrl: { type: String },
 });
 
 export default mongoose.model<IStock>('Stock', StockSchema);
