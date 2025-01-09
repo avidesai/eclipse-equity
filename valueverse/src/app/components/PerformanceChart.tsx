@@ -40,19 +40,19 @@ export default function PerformanceChart({ data }: PerformanceChartProps) {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 
-                      rounded-lg p-2 shadow-sm max-w-[200px] sm:max-w-none">
-          <p className="text-zinc-600 dark:text-zinc-300 font-medium mb-1.5 text-sm">{label}</p>
+                      rounded-lg p-3 sm:p-3 shadow-sm">
+          <p className="text-zinc-600 dark:text-zinc-300 font-medium mb-2 text-xs sm:text-sm">{label}</p>
           {payload.map((entry, index) => (
-            <div key={index} className="flex items-center gap-1.5 text-xs sm:text-sm mb-0.5 last:mb-0">
-              <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-sm ${
+            <div key={index} className="flex items-center gap-2">
+              <div className={`w-2 h-2 rounded-sm ${
                 entry.dataKey === 'revenue' ? 'bg-black dark:bg-zinc-300' :
                 entry.dataKey === 'netIncome' ? 'bg-green-500' : 'bg-blue-500'
               }`} />
-              <span className="text-zinc-600 dark:text-zinc-400 capitalize">
+              <span className="text-zinc-600 dark:text-zinc-400 capitalize text-xs sm:text-sm">
                 {entry.dataKey === 'fcf' ? 'Free Cash Flow' : 
                  entry.dataKey === 'netIncome' ? 'Net Income' : 'Revenue'}:
               </span>
-              <span className="text-zinc-900 dark:text-white font-medium">
+              <span className="text-zinc-900 dark:text-white font-medium text-xs sm:text-sm">
                 {formatValue(entry.value)}
               </span>
             </div>
@@ -85,7 +85,7 @@ export default function PerformanceChart({ data }: PerformanceChartProps) {
               tick={{ 
                 fill: 'rgb(113 113 122)', 
                 className: 'dark:fill-zinc-500',
-                fontSize: 11,
+                fontSize: window.innerWidth < 640 ? 11 : 13,
                 fontWeight: 500 
               }}
             />
@@ -96,7 +96,7 @@ export default function PerformanceChart({ data }: PerformanceChartProps) {
               tick={{ 
                 fill: 'rgb(113 113 122)', 
                 className: 'dark:fill-zinc-500',
-                fontSize: 11,
+                fontSize: window.innerWidth < 640 ? 11 : 13,
                 fontWeight: 500 
               }}
               width={60}
@@ -126,7 +126,7 @@ export default function PerformanceChart({ data }: PerformanceChartProps) {
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-4 mb-8 sm:mb-14 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400">
+      <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-4 mb-8 sm:mb-14 text-sm text-zinc-600 dark:text-zinc-400">
         <div className="flex items-center gap-1.5">
           <div className="w-2.5 h-2.5 bg-black dark:bg-zinc-300 rounded-sm"/> 
           Revenue

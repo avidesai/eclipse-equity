@@ -21,7 +21,7 @@ interface MetricSectionProps {
 }
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <h3 className="text-base font-semibold text-zinc-700 dark:text-zinc-200 mb-5 text-center">
+  <h3 className="text-lg font-semibold text-zinc-700 dark:text-zinc-200 mb-5 text-center">
     {children}
   </h3>
 );
@@ -77,7 +77,7 @@ export default function StockDetail({ stock }: { stock: Stock }) {
       <div className="mb-6 sm:mb-8">
         <SectionTitle>{title}</SectionTitle>
         <div className="relative">
-          <div className={`grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 ${shouldBlur ? 'filter blur-sm select-none' : ''}`}>
+          <div className={`grid grid-cols-3 gap-2 sm:gap-4 ${shouldBlur ? 'filter blur-sm select-none' : ''}`}>
             {children}
           </div>
           {shouldBlur && (
@@ -165,9 +165,9 @@ export default function StockDetail({ stock }: { stock: Stock }) {
       <div>
         <SectionTitle>Historical Performance</SectionTitle>
         <div className="overflow-x-auto -mx-4 sm:mx-0">
-          <table className="w-full text-sm">
+          <table className="w-full text-base">
             <thead>
-              <tr className="text-zinc-600 dark:text-zinc-300 text-xs sm:text-sm">
+              <tr className="text-zinc-600 dark:text-zinc-300 text-sm sm:text-base">
                 <th className="text-left pb-2 pl-4 sm:pl-0">Year</th>
                 <th className="text-right pb-2">Revenue</th>
                 <th className="text-right pb-2">Net Income</th>
@@ -191,12 +191,12 @@ export default function StockDetail({ stock }: { stock: Stock }) {
 
                   return (
                     <tr key={metric.year} className="border-t border-zinc-200 dark:border-zinc-700">
-                      <td className="py-2 text-zinc-900 dark:text-white pl-4 sm:pl-0 text-xs sm:text-sm">
+                      <td className="py-2 text-zinc-900 dark:text-white pl-4 sm:pl-0 text-sm sm:text-base">
                         {metric.year}
                       </td>
                       <td className="text-right">
                         <div className="flex items-center justify-end gap-1 sm:gap-2">
-                          <span className="hidden sm:inline">
+                          <span className="hidden sm:inline text-sm sm:text-base">
                             {formatNumber(metric.revenue)}
                           </span>
                           {prevYear && (
@@ -212,7 +212,7 @@ export default function StockDetail({ stock }: { stock: Stock }) {
                       </td>
                       <td className="text-right">
                         <div className="flex items-center justify-end gap-1 sm:gap-2">
-                          <span className="hidden sm:inline">
+                          <span className="hidden sm:inline text-sm sm:text-base">
                             {formatNumber(metric.netIncome)}
                           </span>
                           {prevYear && (
@@ -228,7 +228,7 @@ export default function StockDetail({ stock }: { stock: Stock }) {
                       </td>
                       <td className="text-right pr-4 sm:pr-0">
                         <div className="flex items-center justify-end gap-1 sm:gap-2">
-                          <span className="hidden sm:inline">
+                          <span className="hidden sm:inline text-sm sm:text-base">
                             {formatNumber(metric.fcf)}
                           </span>
                           {prevYear && (
@@ -256,9 +256,9 @@ export default function StockDetail({ stock }: { stock: Stock }) {
         <div className="relative">
           <div className={`${!hasPremiumAccess ? 'filter blur-sm select-none' : ''}`}>
             <div className="overflow-x-auto -mx-4 sm:mx-0">
-              <table className="w-full text-sm">
+              <table className="w-full text-base">
                 <thead>
-                  <tr className="text-zinc-600 dark:text-zinc-300 text-xs sm:text-sm">
+                  <tr className="text-zinc-600 dark:text-zinc-300 text-sm sm:text-base">
                     <th className="text-left pb-2 pl-4 sm:pl-0">Year</th>
                     <th className="text-right pb-2">Revenue</th>
                     <th className="text-right pb-2">Net Income</th>
@@ -298,12 +298,12 @@ export default function StockDetail({ stock }: { stock: Stock }) {
 
                       return (
                         <tr key={metric.year} className="border-t border-zinc-200 dark:border-zinc-700">
-                          <td className="py-2 text-zinc-900 dark:text-white pl-4 sm:pl-0 text-xs sm:text-sm">
+                          <td className="py-2 text-zinc-900 dark:text-white pl-4 sm:pl-0 text-sm sm:text-base">
                             {metric.year}
                           </td>
                           <td className="text-right">
                             <div className="flex items-center justify-end gap-1 sm:gap-2">
-                              <span className="hidden sm:inline">
+                              <span className="hidden sm:inline text-sm sm:text-base">
                                 {formatNumber(metric.revenue)}
                               </span>
                               {previousMetrics && (
@@ -319,7 +319,7 @@ export default function StockDetail({ stock }: { stock: Stock }) {
                           </td>
                           <td className="text-right">
                             <div className="flex items-center justify-end gap-1 sm:gap-2">
-                              <span className="hidden sm:inline">
+                              <span className="hidden sm:inline text-sm sm:text-base">
                                 {formatNumber(metric.netIncome)}
                               </span>
                               {previousMetrics && (
@@ -335,7 +335,7 @@ export default function StockDetail({ stock }: { stock: Stock }) {
                           </td>
                           <td className="text-right pr-4 sm:pr-0">
                             <div className="flex items-center justify-end gap-1 sm:gap-2">
-                              <span className="hidden sm:inline">
+                              <span className="hidden sm:inline text-sm sm:text-base">
                                 {formatNumber(metric.fcf)}
                               </span>
                               {previousMetrics && (
