@@ -22,21 +22,32 @@ export default function ModelsPage() {
       try {
         const data = await getStockData();
         setStocks(data);
-        setSelectedStock(data[0] || null); // Set the first stock as selected by default
+        setSelectedStock(data[0] || null);
       } catch {
         setError('Failed to load stock data');
       } finally {
         setLoading(false);
       }
     };
-
     fetchStocks();
   }, []);
+
+  // Function to handle stock selection and scroll behavior
+  const handleStockSelect = (stock: Stock) => {
+    setSelectedStock(stock);
+    // On mobile, scroll to the details section when a stock is selected
+    if (window.innerWidth < 1024) {
+      const detailSection = document.getElementById('stock-detail-section');
+      if (detailSection) {
+        detailSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900">
       <Navigation />
-      <main className="container mx-auto px-6 pt-24 pb-12">
+      <main className="container mx-auto px-4 sm:px-6 pt-24 pb-12">
         {loading ? (
           <p className="text-center text-zinc-500">Loading...</p>
         ) : error ? (
@@ -44,16 +55,16 @@ export default function ModelsPage() {
         ) : (
           <>
             <SearchBar onSearch={setSearchQuery} />
-            <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <div className="lg:h-[calc(100vh-12rem)] lg:overflow-y-auto lg:pr-2 py-4 scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent">
+            <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
+              <div className="lg:col-span-5 lg:h-[calc(100vh-12rem)] lg:overflow-y-auto lg:pr-2 py-4 scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent">
                 <StockList
-                  onSelectStock={setSelectedStock}
+                  onSelectStock={handleStockSelect}
                   selectedStock={selectedStock}
                   stocks={stocks}
                   searchQuery={searchQuery}
                 />
               </div>
-              <div className="lg:h-[calc(100vh-12rem)] lg:overflow-y-auto lg:pl-2 py-4 scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent">
+              <div id="stock-detail-section" className="lg:col-span-7 lg:h-[calc(100vh-12rem)] lg:overflow-y-auto lg:pl-2 py-4 scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent">
                 {selectedStock && <StockDetail stock={selectedStock} />}
               </div>
             </div>
