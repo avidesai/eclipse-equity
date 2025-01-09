@@ -8,7 +8,6 @@ interface PerformanceChartProps {
   data: HistoricalMetric[];
 }
 
-// Define the type for tooltip payload
 interface CustomTooltipPayload {
   value: number;
   dataKey: 'revenue' | 'netIncome' | 'fcf';
@@ -16,7 +15,6 @@ interface CustomTooltipPayload {
   payload: HistoricalMetric;
 }
 
-// Define props type for custom tooltip
 interface CustomTooltipProps extends TooltipProps<number, string> {
   active?: boolean;
   payload?: CustomTooltipPayload[];
@@ -42,11 +40,11 @@ export default function PerformanceChart({ data }: PerformanceChartProps) {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 
-                      rounded-lg p-3 shadow-sm">
-          <p className="text-zinc-600 dark:text-zinc-300 font-medium mb-2">{label}</p>
+                      rounded-lg p-2 shadow-sm max-w-[200px] sm:max-w-none">
+          <p className="text-zinc-600 dark:text-zinc-300 font-medium mb-1.5 text-sm">{label}</p>
           {payload.map((entry, index) => (
-            <div key={index} className="flex items-center gap-2 text-sm">
-              <div className={`w-2 h-2 rounded-sm ${
+            <div key={index} className="flex items-center gap-1.5 text-xs sm:text-sm mb-0.5 last:mb-0">
+              <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-sm ${
                 entry.dataKey === 'revenue' ? 'bg-black dark:bg-zinc-300' :
                 entry.dataKey === 'netIncome' ? 'bg-green-500' : 'bg-blue-500'
               }`} />
@@ -67,27 +65,41 @@ export default function PerformanceChart({ data }: PerformanceChartProps) {
 
   return (
     <div className="w-full">
-      <div className="h-64">
+      <div className="h-52 sm:h-64">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={sortedData}
-            margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
+            margin={{ 
+              top: 5, 
+              right: 5, 
+              left: 0, 
+              bottom: 5 
+            }}
             barGap={0}
-            barSize={20}
+            barSize={16}
           >
             <XAxis
               dataKey="year"
               tickLine={false}
               axisLine={false}
-              tick={{ fill: 'rgb(113 113 122)', className: 'dark:fill-zinc-500' }}
-              style={{ fontSize: '13px', fontWeight: 500 }}
+              tick={{ 
+                fill: 'rgb(113 113 122)', 
+                className: 'dark:fill-zinc-500',
+                fontSize: 11,
+                fontWeight: 500 
+              }}
             />
             <YAxis
               tickFormatter={formatValue}
               tickLine={false}
               axisLine={false}
-              tick={{ fill: 'rgb(113 113 122)', className: 'dark:fill-zinc-500' }}
-              style={{ fontSize: '13px', fontWeight: 500 }}
+              tick={{ 
+                fill: 'rgb(113 113 122)', 
+                className: 'dark:fill-zinc-500',
+                fontSize: 11,
+                fontWeight: 500 
+              }}
+              width={60}
             />
             <Tooltip
               content={<CustomTooltip />}
@@ -114,17 +126,17 @@ export default function PerformanceChart({ data }: PerformanceChartProps) {
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <div className="flex justify-center gap-6 mt-6 mb-14 text-sm text-zinc-600 dark:text-zinc-400">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-black dark:bg-zinc-300 rounded-sm"/> 
+      <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-4 mb-8 sm:mb-14 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400">
+        <div className="flex items-center gap-1.5">
+          <div className="w-2.5 h-2.5 bg-black dark:bg-zinc-300 rounded-sm"/> 
           Revenue
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-green-500 rounded-sm"/> 
+        <div className="flex items-center gap-1.5">
+          <div className="w-2.5 h-2.5 bg-green-500 rounded-sm"/> 
           Net Income
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-blue-500 rounded-sm"/> 
+        <div className="flex items-center gap-1.5">
+          <div className="w-2.5 h-2.5 bg-blue-500 rounded-sm"/> 
           Free Cash Flow
         </div>
       </div>
