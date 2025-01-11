@@ -12,6 +12,7 @@ interface MetricProps {
   isPercentage?: boolean;
   colorCode?: boolean;
   prefix?: string;
+  mobileLabel?: string;
 }
 
 interface MetricSectionProps {
@@ -53,9 +54,12 @@ export default function StockDetail({ stock }: { stock: Stock }) {
     return formatNumber(value);
   };
 
-  const Metric = ({ label, value, isPercentage = false, colorCode = false, prefix = '' }: MetricProps) => (
+  const Metric = ({ label, value, isPercentage = false, colorCode = false, prefix = '', mobileLabel }: MetricProps) => (
     <div className="text-center">
-      <p className="text-sm text-zinc-600 dark:text-zinc-400">{label}</p>
+      <p className="text-sm text-zinc-600 dark:text-zinc-400">
+        <span className="hidden sm:inline">{label}</span>
+        <span className="sm:hidden">{mobileLabel || label}</span>
+      </p>
       <p className={`font-medium ${
         colorCode && value !== 0 
           ? value > 0 
@@ -150,13 +154,13 @@ export default function StockDetail({ stock }: { stock: Stock }) {
       {/* Margins */}
       <MetricSection title="Margins">
         <Metric label="Gross Margin" value={stock.grossMargin * 100} isPercentage />
-        <Metric label="Net Income Margin" value={stock.netMargin * 100} isPercentage />
+        <Metric label="Net Income Margin" mobileLabel="Net Margin" value={stock.netMargin * 100} isPercentage />
         <Metric label="FCF Margin" value={stock.fcfMargin * 100} isPercentage />
       </MetricSection>
 
       {/* Balance Sheet */}
       <MetricSection title="Balance Sheet">
-        <Metric label="Cash & Securities" value={stock.cash} />
+        <Metric label="Cash & Securities" mobileLabel="Cash" value={stock.cash} />
         <Metric label="Total Debt" value={stock.debt} />
         <Metric label="Net Cash" value={stock.netCash} colorCode />
       </MetricSection>
