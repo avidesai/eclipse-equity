@@ -1,6 +1,4 @@
 // src/app/account/page.tsx
-
-// src/app/account/page.tsx
 'use client';
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -25,6 +23,7 @@ function AccountContent() {
   const { user, loading, isAuthenticated } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
   const [statusMessage, setStatusMessage] = useState<{
     type: 'success' | 'error' | null;
     message: string;
@@ -148,7 +147,16 @@ function AccountContent() {
 
             <AccountSection icon={Shield} title="Security">
               <div className="space-y-4">
-                <ChangePasswordForm />
+                <button
+                  onClick={() => setIsChangePasswordOpen(true)}
+                  className="px-4 py-2 text-sm border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-lg hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 transition-all duration-200"
+                >
+                  Change Password
+                </button>
+                <ChangePasswordForm 
+                  isOpen={isChangePasswordOpen}
+                  onClose={() => setIsChangePasswordOpen(false)}
+                />
               </div>
             </AccountSection>
 
