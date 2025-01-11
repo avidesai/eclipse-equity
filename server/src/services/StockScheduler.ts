@@ -6,7 +6,8 @@ import StockDataFetcher from '../scripts/StockDataFetcher';
 
 class StockScheduler {
   private static instance: StockScheduler;
-  private task: cron.ScheduledTask | null = null;
+  private tasks: cron.ScheduledTask[] = [];
+  private isUpdating: boolean = false;
 
   private constructor() {}
 
@@ -17,48 +18,112 @@ class StockScheduler {
     return StockScheduler.instance;
   }
 
-  private async updateStocks(): Promise<void> {
-    try {
-      console.log('✅ Starting stock update...');
-      const stocks = await Stock.find();
-      const fetcher = StockDataFetcher.getInstance();
-
-      for (const stock of stocks) {
-        console.log(`🔄 Updating ${stock.symbol}...`);
-        await fetcher.updateStockData(stock);
-      }
-      console.log('✅ All stocks updated successfully');
-    } catch (error) {
-      console.error('❌ Error updating stocks:', error);
-    }
-  }
-
-  public startScheduler(): void {
-    // Schedule updates every 30 minutes during market hours (9:30 AM to 4:00 PM EST, Monday-Friday)
-    this.task = cron.schedule('*/30 9-16 * * 1-5', async () => {
-      const now = new Date();
-      const nyTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
-      const hour = nyTime.getHours();
-      const minute = nyTime.getMinutes();
-
-      // Only run between 9:30 AM and 4:00 PM ET
-      if ((hour === 9 && minute >= 30) || (hour > 9 && hour < 16) || (hour === 16 && minute === 0)) {
-        console.log(`⏰ Starting scheduled stock update at ${nyTime.toLocaleString()}...`);
-        await this.updateStocks();
-      }
-    }, {
-      timezone: 'America/New_York'
-    });
-
-    // Initial update when server starts during market hours
-    const now = new Date();
-    const nyTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+  private isMarketOpen(nyTime: Date): boolean {
     const hour = nyTime.getHours();
     const minute = nyTime.getMinutes();
     const dayOfWeek = nyTime.getDay();
 
-    if (dayOfWeek >= 1 && dayOfWeek <= 5 && // Monday-Friday
-        ((hour === 9 && minute >= 30) || (hour > 9 && hour < 16) || (hour === 16 && minute === 0))) {
+    // Check if it's a weekday (Monday = 1, Friday = 5)
+    if (dayOfWeek < 1 || dayOfWeek > 5) return false;
+
+    // Check if it's during market hours (9:30 AM - 4:00 PM ET)
+    return (
+      (hour === 9 && minute >= 30) ||
+      (hour > 9 && hour < 16) ||
+      (hour === 16 && minute === 0)
+    );
+  }
+
+  private async updateStocks(): Promise<void> {
+    if (this.isUpdating) {
+      console.log('🔄 Update already in progress, skipping...');
+      return;
+    }
+
+    try {
+      this.isUpdating = true;
+      const now = new Date();
+      const nyTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+
+      if (!this.isMarketOpen(nyTime)) {
+        console.log('📅 Market is closed, skipping update');
+        return;
+      }
+
+      console.log('✅ Starting stock update...');
+      const stocks = await Stock.find();
+      const fetcher = StockDataFetcher.getInstance();
+
+      // Use Promise.all with a chunk size to avoid overwhelming the API
+      const chunkSize = 5;
+      for (let i = 0; i < stocks.length; i += chunkSize) {
+        const chunk = stocks.slice(i, i + chunkSize);
+        await Promise.all(
+          chunk.map(async (stock) => {
+            console.log(`🔄 Updating ${stock.symbol}...`);
+            try {
+              await fetcher.updateStockData(stock);
+            } catch (error) {
+              console.error(`❌ Error updating ${stock.symbol}:`, error);
+            }
+          })
+        );
+      }
+
+      console.log('✅ All stocks updated successfully');
+    } catch (error) {
+      console.error('❌ Error updating stocks:', error);
+    } finally {
+      this.isUpdating = false;
+    }
+  }
+
+  public startScheduler(): void {
+    // Pre-market update at 9:15 AM ET
+    this.tasks.push(
+      cron.schedule('15 9 * * 1-5', async () => {
+        console.log('🌅 Running pre-market update...');
+        await this.updateStocks();
+      }, {
+        timezone: 'America/New_York'
+      })
+    );
+
+    // Market open update at 9:31 AM ET
+    this.tasks.push(
+      cron.schedule('31 9 * * 1-5', async () => {
+        console.log('🔔 Running market open update...');
+        await this.updateStocks();
+      }, {
+        timezone: 'America/New_York'
+      })
+    );
+
+    // Regular updates every 15 minutes during market hours
+    this.tasks.push(
+      cron.schedule('*/15 10-15 * * 1-5', async () => {
+        console.log('⏰ Running scheduled market hours update...');
+        await this.updateStocks();
+      }, {
+        timezone: 'America/New_York'
+      })
+    );
+
+    // Market close update at 4:01 PM ET
+    this.tasks.push(
+      cron.schedule('1 16 * * 1-5', async () => {
+        console.log('🔔 Running market close update...');
+        await this.updateStocks();
+      }, {
+        timezone: 'America/New_York'
+      })
+    );
+
+    // Initial update if server starts during market hours
+    const now = new Date();
+    const nyTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+    
+    if (this.isMarketOpen(nyTime)) {
       console.log('🚀 Running initial market hours update...');
       this.updateStocks();
     }
@@ -67,11 +132,11 @@ class StockScheduler {
   }
 
   public stopScheduler(): void {
-    if (this.task) {
-      this.task.stop();
-      this.task = null;
-      console.log('⏹️ Stock scheduler stopped');
-    }
+    this.tasks.forEach(task => {
+      task.stop();
+    });
+    this.tasks = [];
+    console.log('⏹️ Stock scheduler stopped');
   }
 }
 
