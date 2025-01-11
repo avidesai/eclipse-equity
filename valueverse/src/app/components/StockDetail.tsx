@@ -167,7 +167,7 @@ export default function StockDetail({ stock }: { stock: Stock }) {
 
       {/* Historical Performance */}
       <div>
-        <SectionTitle>Historical Performance</SectionTitle>
+        <SectionTitle>Historical Growth</SectionTitle>
         <div className="overflow-x-auto -mx-4 sm:mx-0">
           <table className="w-full text-base">
             <thead>
@@ -256,7 +256,7 @@ export default function StockDetail({ stock }: { stock: Stock }) {
 
       {/* Future Performance */}
       <div className="mb-6 sm:mb-8">
-        <SectionTitle>Future Performance (Projected)</SectionTitle>
+        <SectionTitle>Future Growth (Estimates)</SectionTitle>
         <div className="relative">
           <div className={`${!hasPremiumAccess ? 'filter blur-sm select-none' : ''}`}>
             <div className="overflow-x-auto -mx-4 sm:mx-0">
