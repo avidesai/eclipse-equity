@@ -100,7 +100,7 @@ class StockDataFetcher {
   
       const quote = data['Global Quote'];
       
-      const changePercent = parseFloat(quote['10. change percent'].replace('%', ''));
+      const changePercent = parseFloat(quote['10. change percent'].replace('%', '')) / 100;
       
       return {
         symbol: quote['01. symbol'],
