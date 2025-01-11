@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const ALPHA_VANTAGE_API_KEY = process.env.ALPHA_VANTAGE_API_KEY!;
-const TIMEOUT_MS = 10000; // 10-second timeout for API calls
+const TIMEOUT_MS = 10000;
 
 interface AlphaVantageQuote {
   symbol: string;
@@ -29,10 +29,25 @@ interface HistoricalMetricData extends MetricData {
   shares: number;
 }
 
+interface GlobalQuoteResponse {
+  'Global Quote': {
+    '01. symbol': string;
+    '02. open': string;
+    '03. high': string;
+    '04. low': string;
+    '05. price': string;
+    '06. volume': string;
+    '07. latest trading day': string;
+    '08. previous close': string;
+    '09. change': string;
+    '10. change percent': string;
+  };
+}
+
 class StockDataFetcher {
   private static instance: StockDataFetcher;
   private lastRequestTime: number = 0;
-  private readonly minRequestInterval: number = 12100; // 12.1 seconds between requests
+  private readonly minRequestInterval: number = 12100;
 
   private constructor() {}
 
@@ -73,39 +88,26 @@ class StockDataFetcher {
 
   async fetchQuote(symbol: string): Promise<AlphaVantageQuote | null> {
     try {
-      // Use TIME_SERIES_INTRADAY for real-time quotes
-      const url = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${symbol}&interval=5min&apikey=${ALPHA_VANTAGE_API_KEY}`;
-      const data = await this.fetchWithTimeout<any>(url);
+      const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${ALPHA_VANTAGE_API_KEY}`;
+      const data = await this.fetchWithTimeout<GlobalQuoteResponse>(url);
       
       console.log(`Raw API response for ${symbol}:`, JSON.stringify(data, null, 2));
   
-      if (data['Note'] || data['Information']) {
-        console.warn(`API message: ${data['Note'] || data['Information']}`);
+      if (!data['Global Quote'] || Object.keys(data['Global Quote']).length === 0) {
+        console.warn(`No quote data found for ${symbol}`);
         return null;
       }
   
-      const timeSeries = data['Time Series (5min)'];
-      if (!timeSeries || Object.keys(timeSeries).length === 0) {
-        console.warn(`No intraday data found for ${symbol}`);
-        return null;
-      }
-  
-      // Get the most recent quote
-      const latestTimestamp = Object.keys(timeSeries)[0];
-      const latestQuote = timeSeries[latestTimestamp];
-  
-      // Get previous close for change calculation
-      const previousClose = parseFloat(latestQuote['4. close']); // Using previous interval's close
-      const currentPrice = parseFloat(latestQuote['1. open']); // Using current interval's open
-      const change = currentPrice - previousClose;
-      const changePercent = (change / previousClose) * 100;
-  
+      const quote = data['Global Quote'];
+      
+      const changePercent = parseFloat(quote['10. change percent'].replace('%', ''));
+      
       return {
-        symbol,
-        price: currentPrice,
-        change,
-        changePercent,
-        volume: parseInt(latestQuote['5. volume'], 10),
+        symbol: quote['01. symbol'],
+        price: parseFloat(quote['05. price']),
+        change: parseFloat(quote['09. change']),
+        changePercent: changePercent,
+        volume: parseInt(quote['06. volume'])
       };
     } catch (error) {
       console.error(`Error fetching quote for ${symbol}:`, error);
@@ -124,56 +126,44 @@ class StockDataFetcher {
   }, quote: AlphaVantageQuote): Record<string, number> {
     const metrics: Record<string, number> = {};
 
-    // Basic metrics from quote
     metrics.price = quote.price;
     metrics.change = quote.change;
-    metrics.changePercent = quote.changePercent * 0.01; // Store as percentage (e.g., 5.25 for 5.25%)
+    metrics.changePercent = quote.changePercent;
 
-    // Get most recent data for calculations
     const mostRecentFuture = stock.futureMetrics?.[0];
-    const mostRecentHistorical = stock.historicalMetrics?.[0]; // For shares count
+    const mostRecentHistorical = stock.historicalMetrics?.[0];
 
-    // Calculate market cap if we have price and historical shares
     if (quote.price && mostRecentHistorical?.shares) {
       metrics.marketCap = quote.price * mostRecentHistorical.shares;
     }
 
-    // Use future metrics for ratios if available
     if (metrics.marketCap && mostRecentFuture) {
-      // Calculate P/S Ratio using future revenue
       metrics.psRatio = metrics.marketCap / mostRecentFuture.revenue;
-
-      // Calculate P/E Ratio using future net income
       metrics.peRatio = metrics.marketCap / mostRecentFuture.netIncome;
-
-      // Calculate FCF Yield as percentage using future FCF
-      metrics.fcfYield = (mostRecentFuture.fcf / metrics.marketCap); // Store as percentage
+      metrics.fcfYield = (mostRecentFuture.fcf / metrics.marketCap);
     }
 
-    // Calculate Upside as percentage
     if (stock.intrinsicValue && quote.price) {
-      metrics.upside = ((stock.intrinsicValue - quote.price) / quote.price); // Store as percentage
+      metrics.upside = ((stock.intrinsicValue - quote.price) / quote.price);
     }
 
-    // Include growth metrics from future projections if available
     const lastFutureMetric = stock.futureMetrics?.[stock.futureMetrics.length - 1];
 
     if (mostRecentFuture && lastFutureMetric && mostRecentHistorical) {
-      // Calculate projected growth rates from historical to end of projection
       metrics.projectedRevenueGrowth = (lastFutureMetric.revenue - mostRecentHistorical.revenue) / mostRecentHistorical.revenue;
       metrics.projectedNetIncomeGrowth = (lastFutureMetric.netIncome - mostRecentHistorical.netIncome) / mostRecentHistorical.netIncome;
       metrics.projectedFcfGrowth = (lastFutureMetric.fcf - mostRecentHistorical.fcf) / mostRecentHistorical.fcf;
     }
 
     console.log(`Calculated metrics for ${stock.symbol}:`, {
-      price: metrics.price,
-      change: metrics.change,
-      changePercent: `${metrics.changePercent}%`,
+      price: `$${metrics.price.toFixed(2)}`,
+      change: `$${metrics.change.toFixed(2)}`,
+      changePercent: `${metrics.changePercent.toFixed(2)}%`,
       marketCap: metrics.marketCap ? `$${(metrics.marketCap / 1e9).toFixed(2)}B` : 'N/A',
       psRatio: metrics.psRatio?.toFixed(2) || 'N/A',
       peRatio: metrics.peRatio?.toFixed(2) || 'N/A',
-      fcfYield: metrics.fcfYield ? `${metrics.fcfYield.toFixed(2)}%` : 'N/A',
-      upside: metrics.upside ? `${metrics.upside.toFixed(2)}%` : 'N/A',
+      fcfYield: metrics.fcfYield ? `${(metrics.fcfYield * 100).toFixed(2)}%` : 'N/A',
+      upside: metrics.upside ? `${(metrics.upside * 100).toFixed(2)}%` : 'N/A',
       projectedGrowth: {
         revenue: metrics.projectedRevenueGrowth ? `${(metrics.projectedRevenueGrowth * 100).toFixed(2)}%` : 'N/A',
         netIncome: metrics.projectedNetIncomeGrowth ? `${(metrics.projectedNetIncomeGrowth * 100).toFixed(2)}%` : 'N/A',
@@ -186,7 +176,6 @@ class StockDataFetcher {
 
   async updateStockData(stock: any): Promise<void> {
     try {
-      // Log the API key being used (but mask most of it)
       const maskedKey = ALPHA_VANTAGE_API_KEY.substring(0, 4) + '...' + ALPHA_VANTAGE_API_KEY.substring(ALPHA_VANTAGE_API_KEY.length - 4);
       console.log(`Using API key: ${maskedKey}`);
 
