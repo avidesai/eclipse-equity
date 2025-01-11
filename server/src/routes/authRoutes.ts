@@ -148,6 +148,55 @@ const getCurrentUser: RequestHandler = async (req: Request, res: Response): Prom
   }
 };
 
+// Change password
+router.post(
+  '/change-password',
+  authMiddleware,
+  [
+    body('currentPassword')
+      .notEmpty()
+      .withMessage('Current password is required'),
+    body('newPassword')
+      .isLength({ min: 6 })
+      .withMessage('New password must be at least 6 characters'),
+  ],
+  async (req: Request, res: Response): Promise<void> => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+      return;
+    }
+
+    const { currentPassword, newPassword } = req.body;
+    const userId = req.user?.id;
+
+    try {
+      const user = await User.findById(userId);
+      if (!user) {
+        res.status(404).json({ message: 'User not found' });
+        return;
+      }
+
+      // Verify current password
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!isMatch) {
+        res.status(400).json({ message: 'Current password is incorrect' });
+        return;
+      }
+
+      // Hash new password and update
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      user.password = hashedPassword;
+      await user.save();
+
+      res.json({ message: 'Password updated successfully' });
+    } catch (error) {
+      console.error('Change password error:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  }
+);
+
 router.get('/me', authMiddleware, getCurrentUser);
 
 export { router as authRoutes };

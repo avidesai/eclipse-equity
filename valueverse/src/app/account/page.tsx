@@ -1,11 +1,13 @@
 // src/app/account/page.tsx
 
+// src/app/account/page.tsx
 'use client';
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../contexts/AuthContext';
 import Navigation from '../components/Navigation';
 import PremiumButton from '../components/PremiumButton';
+import ChangePasswordForm from '../components/ChangePasswordForm';
 import { UserCircle, CreditCard, Shield, Trash2 } from 'lucide-react';
 
 interface AccountSectionProps {
@@ -146,9 +148,7 @@ function AccountContent() {
 
             <AccountSection icon={Shield} title="Security">
               <div className="space-y-4">
-                <button className="px-4 py-2 text-sm border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-lg hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 transition-all duration-200">
-                  Change Password
-                </button>
+                <ChangePasswordForm />
               </div>
             </AccountSection>
 
