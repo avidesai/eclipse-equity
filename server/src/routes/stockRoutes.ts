@@ -2,12 +2,12 @@
 
 import express, { Request, Response, Router } from 'express';
 import Stock from '../models/stock';
+import StockScheduler from '../services/StockScheduler';
 import AWS from 'aws-sdk';
 import path from 'path';
 import dotenv from 'dotenv';
 
 dotenv.config();
-
 const router: Router = express.Router();
 
 // Initialize AWS S3
@@ -54,7 +54,6 @@ router.get('/static/:symbol', (async (req: Request, res: Response) => {
 // Add a new stock (to MongoDB)
 router.post('/', (async (req: Request<{}, {}, StockRequest>, res: Response) => {
   const { symbol, name, price, dcfModelUrl } = req.body;
-
   const stock = new Stock({ symbol, name, price, dcfModelUrl });
   try {
     const savedStock = await stock.save();
@@ -65,10 +64,21 @@ router.post('/', (async (req: Request<{}, {}, StockRequest>, res: Response) => {
   }
 }) as express.RequestHandler);
 
+// Force update all stocks
+router.post('/force-update', (async (_req: Request, res: Response) => {
+  try {
+    const scheduler = StockScheduler.getInstance();
+    await scheduler.updateStocks(true);
+    res.json({ message: 'Stock update completed successfully' });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'An unknown error occurred';
+    res.status(500).json({ message });
+  }
+}) as express.RequestHandler);
+
 // Get S3 URL for a model
 router.get('/model-url/:symbol', (async (req: Request, res: Response) => {
   const { symbol } = req.params;
-
   try {
     const stock = await Stock.findOne({ symbol });
     if (!stock || !stock.dcfModelUrl) {
@@ -84,18 +94,15 @@ router.get('/model-url/:symbol', (async (req: Request, res: Response) => {
 // Download model file from S3
 router.get('/download-model/:symbol', (async (req: Request, res: Response) => {
   const { symbol } = req.params;
-
   try {
     const stock = await Stock.findOne({ symbol });
     if (!stock || !stock.dcfModelUrl) {
       return res.status(404).json({ message: 'Model file not found for the specified stock symbol.' });
     }
-
     const params = {
       Bucket: process.env.S3_BUCKET_NAME!,
       Key: `models/${symbol}.xlsx`,
     };
-
     // Get the object from S3 and stream it to the client
     s3.getObject(params)
       .createReadStream()

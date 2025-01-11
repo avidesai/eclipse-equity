@@ -34,7 +34,7 @@ class StockScheduler {
     );
   }
 
-  private async updateStocks(): Promise<void> {
+  public async updateStocks(forceUpdate: boolean = false): Promise<void> {
     if (this.isUpdating) {
       console.log('🔄 Update already in progress, skipping...');
       return;
@@ -45,12 +45,12 @@ class StockScheduler {
       const now = new Date();
       const nyTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
 
-      if (!this.isMarketOpen(nyTime)) {
+      if (!forceUpdate && !this.isMarketOpen(nyTime)) {
         console.log('📅 Market is closed, skipping update');
         return;
       }
 
-      console.log('✅ Starting stock update...');
+      console.log(`✅ Starting stock update... ${forceUpdate ? '(Forced Update)' : ''}`);
       const stocks = await Stock.find();
       const fetcher = StockDataFetcher.getInstance();
 
@@ -79,6 +79,10 @@ class StockScheduler {
   }
 
   public startScheduler(): void {
+    // Run an initial update when the server starts, regardless of market hours
+    console.log('🚀 Running initial server start update...');
+    this.updateStocks(true);
+
     // Pre-market update at 9:15 AM ET
     this.tasks.push(
       cron.schedule('15 9 * * 1-5', async () => {
@@ -109,24 +113,17 @@ class StockScheduler {
       })
     );
 
-    // Market close update at 4:01 PM ET
-    this.tasks.push(
-      cron.schedule('1 16 * * 1-5', async () => {
-        console.log('🔔 Running market close update...');
-        await this.updateStocks();
-      }, {
-        timezone: 'America/New_York'
-      })
-    );
-
-    // Initial update if server starts during market hours
-    const now = new Date();
-    const nyTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
-    
-    if (this.isMarketOpen(nyTime)) {
-      console.log('🚀 Running initial market hours update...');
-      this.updateStocks();
-    }
+    // Market close updates at 4:01 PM and 4:15 PM ET
+    ['1 16 * * 1-5', '15 16 * * 1-5'].forEach(schedule => {
+      this.tasks.push(
+        cron.schedule(schedule, async () => {
+          console.log('🔔 Running market close update...');
+          await this.updateStocks(true);
+        }, {
+          timezone: 'America/New_York'
+        })
+      );
+    });
 
     console.log('🚀 Stock scheduler initialized');
   }
