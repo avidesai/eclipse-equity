@@ -22,20 +22,19 @@ export default function KeywordFilter({
   const keywords = useMemo(() => {
     const uniqueKeywords = new Map<string, string>();
     stocks.forEach(stock => {
-      if (stock.keywords?.[0]) { // Only take the first keyword (industry) from each stock
-        const keyword = stock.keywords[0];
+      stock.keywords?.forEach(keyword => {
         if (!uniqueKeywords.has(keyword.text)) {
           uniqueKeywords.set(keyword.text, keyword.emoji);
         }
-      }
+      });
     });
     return Array.from(uniqueKeywords.entries())
-      .slice(0, 8)
       .map(([text, emoji]) => ({ text, emoji }));
   }, [stocks]);
 
   const handleScroll = () => {
     if (!scrollContainerRef.current) return;
+    
     const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
     setShowLeftShadow(scrollLeft > 0);
     setShowRightShadow(scrollLeft < scrollWidth - clientWidth - 10);
@@ -45,6 +44,7 @@ export default function KeywordFilter({
     const container = scrollContainerRef.current;
     if (container) {
       container.addEventListener('scroll', handleScroll);
+      // Initial check
       handleScroll();
     }
     return () => {
@@ -54,18 +54,8 @@ export default function KeywordFilter({
     };
   }, []);
 
-  const handleKeywordClick = (keyword: { text: string; emoji: string }) => {
-    if (selectedKeywords.some(k => k.text === keyword.text)) {
-      // If clicking the already selected keyword, deselect it
-      onKeywordSelect({ text: '', emoji: '' }); // Clear selection
-    } else {
-      // Select only this keyword
-      onKeywordSelect(keyword);
-    }
-  };
-
   return (
-    <div className="relative max-w-3xl mx-auto mt-4 h-10 hidden sm:block">
+    <div className="relative max-w-3xl mx-auto mt-4 h-10">
       {/* Left Shadow Gradient */}
       <div className={`absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-zinc-50 to-transparent dark:from-zinc-900 pointer-events-none z-10 transition-opacity duration-200 ${
         showLeftShadow ? 'opacity-100' : 'opacity-0'
@@ -87,7 +77,7 @@ export default function KeywordFilter({
             return (
               <motion.button
                 key={keyword.text}
-                onClick={() => handleKeywordClick(keyword)}
+                onClick={() => onKeywordSelect(keyword)}
                 className={`inline-flex items-center px-3 h-8 rounded-full text-sm transition-all
                   ${isSelected 
                     ? 'bg-black text-white dark:bg-white dark:text-black shadow-md' 
