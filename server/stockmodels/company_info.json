@@ -14,7 +14,7 @@
       "logo": "🏡",
       "keywords": [
         {"text": "Technology", "emoji": "💻"},
-        {"text": "Travel Platform", "emoji": "✈️"}
+        {"text": "Travel", "emoji": "✈️"}
       ]
     },
     "AMZN.xlsx": {
@@ -41,7 +41,7 @@
       "logo": "🔬",
       "keywords": [
         {"text": "Technology", "emoji": "💻"},
-        {"text": "Semiconductor Equipment", "emoji": "🔧"}
+        {"text": "Semiconductors", "emoji": "🔧"}
       ]
     },
     "BRK.B.xlsx": {
@@ -49,7 +49,7 @@
       "name": "Berkshire Hathaway Inc.",
       "logo": "💰",
       "keywords": [
-        {"text": "Financial", "emoji": "💰"},
+        {"text": "Financials", "emoji": "💰"},
         {"text": "Conglomerate", "emoji": "🏢"}
       ]
     },
@@ -67,7 +67,7 @@
       "name": "Fair Isaac Corporation",
       "logo": "📊",
       "keywords": [
-        {"text": "Financial", "emoji": "💰"},
+        {"text": "Financials", "emoji": "💰"},
         {"text": "Analytics", "emoji": "📊"}
       ]
     },
@@ -112,7 +112,7 @@
       "name": "Mastercard Incorporated",
       "logo": "💳",
       "keywords": [
-        {"text": "Financial", "emoji": "💰"},
+        {"text": "Financials", "emoji": "💰"},
         {"text": "Payments", "emoji": "💳"}
       ]
     },
@@ -130,7 +130,7 @@
       "name": "Moody's Corporation",
       "logo": "📈",
       "keywords": [
-        {"text": "Financial", "emoji": "💰"},
+        {"text": "Financials", "emoji": "💰"},
         {"text": "Ratings", "emoji": "📊"}
       ]
     },
@@ -158,6 +158,7 @@
       "logo": "🎮",
       "keywords": [
         {"text": "Technology", "emoji": "💻"},
+        {"text": "Semiconductors", "emoji": "🔧"},
         {"text": "Magnificent Seven", "emoji": "👑"}
       ]
     },
@@ -184,7 +185,7 @@
       "name": "S&P Global Inc.",
       "logo": "📊",
       "keywords": [
-        {"text": "Financial", "emoji": "💰"},
+        {"text": "Financials", "emoji": "💰"},
         {"text": "Ratings", "emoji": "📊"}
       ]
     },
