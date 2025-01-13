@@ -1,18 +1,19 @@
 // src/app/components/KeywordFilter.tsx
 
+// src/app/components/KeywordFilter.tsx
 import React, { useMemo, useRef, useEffect, useState } from 'react';
 import { Stock } from '../types/stock';
 import { motion } from 'framer-motion';
 
 interface KeywordFilterProps {
   stocks: Stock[];
-  selectedKeywords: Array<{ text: string; emoji: string }>;
+  selectedKeyword: { text: string; emoji: string } | null;
   onKeywordSelect: (keyword: { text: string; emoji: string }) => void;
 }
 
 export default function KeywordFilter({
   stocks,
-  selectedKeywords,
+  selectedKeyword,
   onKeywordSelect
 }: KeywordFilterProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -28,13 +29,15 @@ export default function KeywordFilter({
         }
       });
     });
+    
+    // Convert to array and limit to 8 keywords
     return Array.from(uniqueKeywords.entries())
-      .map(([text, emoji]) => ({ text, emoji }));
+      .map(([text, emoji]) => ({ text, emoji }))
+      .slice(0, 8);
   }, [stocks]);
 
   const handleScroll = () => {
     if (!scrollContainerRef.current) return;
-    
     const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
     setShowLeftShadow(scrollLeft > 0);
     setShowRightShadow(scrollLeft < scrollWidth - clientWidth - 10);
@@ -60,27 +63,27 @@ export default function KeywordFilter({
       <div className={`absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-zinc-50 to-transparent dark:from-zinc-900 pointer-events-none z-10 transition-opacity duration-200 ${
         showLeftShadow ? 'opacity-100' : 'opacity-0'
       }`} />
-
+      
       {/* Right Shadow Gradient */}
       <div className={`absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-zinc-50 to-transparent dark:from-zinc-900 pointer-events-none z-10 transition-opacity duration-200 ${
         showRightShadow ? 'opacity-100' : 'opacity-0'
       }`} />
-
+      
       {/* Scrollable Container */}
-      <div 
+      <div
         ref={scrollContainerRef}
         className="overflow-x-auto whitespace-nowrap hide-scrollbar"
       >
         <div className="inline-flex gap-2 px-2 pb-4">
           {keywords.map((keyword) => {
-            const isSelected = selectedKeywords.some(k => k.text === keyword.text);
+            const isSelected = selectedKeyword?.text === keyword.text;
             return (
               <motion.button
                 key={keyword.text}
                 onClick={() => onKeywordSelect(keyword)}
                 className={`inline-flex items-center px-3 h-8 rounded-full text-sm transition-all
-                  ${isSelected 
-                    ? 'bg-black text-white dark:bg-white dark:text-black shadow-md' 
+                  ${isSelected
+                    ? 'bg-black text-white dark:bg-white dark:text-black shadow-md'
                     : 'bg-white text-zinc-600 border-2 border-zinc-200 hover:border-zinc-300 dark:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-700 dark:hover:border-zinc-600'
                   }`}
                 whileHover={{ scale: 1.05 }}
@@ -93,7 +96,7 @@ export default function KeywordFilter({
           })}
         </div>
       </div>
-
+      
       {/* Custom CSS for hiding scrollbar */}
       <style jsx global>{`
         .hide-scrollbar::-webkit-scrollbar {

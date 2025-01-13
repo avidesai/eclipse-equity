@@ -1,5 +1,6 @@
 // src/app/models/page.tsx
 
+// src/app/models/page.tsx
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -15,7 +16,7 @@ export default function ModelsPage() {
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedKeywords, setSelectedKeywords] = useState<Array<{ text: string; emoji: string }>>([]);
+  const [selectedKeyword, setSelectedKeyword] = useState<{ text: string; emoji: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -36,21 +37,15 @@ export default function ModelsPage() {
   }, []);
 
   const handleKeywordSelect = (keyword: { text: string; emoji: string }) => {
-    setSelectedKeywords(prev => {
-      const exists = prev.some(k => k.text === keyword.text);
-      if (exists) {
-        return prev.filter(k => k.text !== keyword.text);
-      }
-      return [...prev, keyword];
-    });
+    setSelectedKeyword(prevKeyword => 
+      prevKeyword?.text === keyword.text ? null : keyword
+    );
   };
 
   const filteredStocks = useMemo(() => {
     return stocks.filter(stock => {
-      const passesKeywordFilter = selectedKeywords.length === 0 || 
-        selectedKeywords.every(keyword => 
-          stock.keywords?.some(k => k.text === keyword.text)
-        );
+      const passesKeywordFilter = !selectedKeyword || 
+        stock.keywords?.some(k => k.text === selectedKeyword.text);
 
       if (!passesKeywordFilter) return false;
 
@@ -61,7 +56,7 @@ export default function ModelsPage() {
         stock.name.toLowerCase().includes(query)
       );
     });
-  }, [stocks, selectedKeywords, searchQuery]);
+  }, [stocks, selectedKeyword, searchQuery]);
 
   const handleStockSelect = (stock: Stock) => {
     setSelectedStock(stock);
@@ -93,7 +88,7 @@ export default function ModelsPage() {
               <SearchBar onSearch={setSearchQuery} />
               <KeywordFilter
                 stocks={stocks}
-                selectedKeywords={selectedKeywords}
+                selectedKeyword={selectedKeyword}
                 onKeywordSelect={handleKeywordSelect}
               />
             </div>
