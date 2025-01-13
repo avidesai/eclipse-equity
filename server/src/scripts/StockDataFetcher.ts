@@ -123,8 +123,12 @@ class StockDataFetcher {
     netIncome?: { current: number };
     fcf?: { current: number };
     intrinsicValue?: number;
-  }, quote: AlphaVantageQuote): Record<string, number> {
-    const metrics: Record<string, number> = {};
+    keywords?: Array<{ text: string; emoji: string; }>;
+  }, quote: AlphaVantageQuote): Record<string, any> {
+    // Initialize metrics with non-numeric fields to preserve them during update
+    const metrics: Record<string, any> = {
+      keywords: stock.keywords // Preserve keywords during update
+    };
 
     metrics.price = quote.price;
     metrics.change = quote.change;
