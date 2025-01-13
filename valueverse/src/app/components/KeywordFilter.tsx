@@ -22,13 +22,13 @@ export default function KeywordFilter({
   const keywords = useMemo(() => {
     const uniqueKeywords = new Map<string, string>();
     stocks.forEach(stock => {
-      stock.keywords?.forEach(keyword => {
+      if (stock.keywords?.[0]) { // Only take the first keyword (industry) from each stock
+        const keyword = stock.keywords[0];
         if (!uniqueKeywords.has(keyword.text)) {
           uniqueKeywords.set(keyword.text, keyword.emoji);
         }
-      });
+      }
     });
-    // Take only the first 8 entries
     return Array.from(uniqueKeywords.entries())
       .slice(0, 8)
       .map(([text, emoji]) => ({ text, emoji }));
@@ -54,6 +54,16 @@ export default function KeywordFilter({
     };
   }, []);
 
+  const handleKeywordClick = (keyword: { text: string; emoji: string }) => {
+    if (selectedKeywords.some(k => k.text === keyword.text)) {
+      // If clicking the already selected keyword, deselect it
+      onKeywordSelect({ text: '', emoji: '' }); // Clear selection
+    } else {
+      // Select only this keyword
+      onKeywordSelect(keyword);
+    }
+  };
+
   return (
     <div className="relative max-w-3xl mx-auto mt-4 h-10 hidden sm:block">
       {/* Left Shadow Gradient */}
@@ -77,7 +87,7 @@ export default function KeywordFilter({
             return (
               <motion.button
                 key={keyword.text}
-                onClick={() => onKeywordSelect(keyword)}
+                onClick={() => handleKeywordClick(keyword)}
                 className={`inline-flex items-center px-3 h-8 rounded-full text-sm transition-all
                   ${isSelected 
                     ? 'bg-black text-white dark:bg-white dark:text-black shadow-md' 
