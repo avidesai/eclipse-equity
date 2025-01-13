@@ -1,6 +1,6 @@
 // src/app/components/PerformanceChart.tsx
 
-'use client';
+import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, TooltipProps } from 'recharts';
 import { HistoricalMetric } from '../types/stock';
 
@@ -22,7 +22,22 @@ interface CustomTooltipProps extends TooltipProps<number, string> {
 }
 
 export default function PerformanceChart({ data }: PerformanceChartProps) {
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
   const sortedData = [...data].sort((a, b) => a.year - b.year);
+  
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Responsive calculations
+  const isMobile = windowWidth < 640;
+  const barSize = isMobile ? 16 : 20;
+  const fontSize = isMobile ? 11 : 13;
+  const margins = isMobile 
+    ? { top: 5, right: 5, left: 0, bottom: 5 }
+    : { top: 5, right: 20, left: 10, bottom: 5 };
   
   const formatValue = (value: number) => {
     const absValue = Math.abs(value);
@@ -69,14 +84,9 @@ export default function PerformanceChart({ data }: PerformanceChartProps) {
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={sortedData}
-            margin={{ 
-              top: 5, 
-              right: 5, 
-              left: 0, 
-              bottom: 5 
-            }}
+            margin={margins}
             barGap={0}
-            barSize={16}
+            barSize={barSize}
           >
             <XAxis
               dataKey="year"
@@ -85,7 +95,7 @@ export default function PerformanceChart({ data }: PerformanceChartProps) {
               tick={{ 
                 fill: 'rgb(113 113 122)', 
                 className: 'dark:fill-zinc-500',
-                fontSize: window.innerWidth < 640 ? 11 : 13,
+                fontSize,
                 fontWeight: 500 
               }}
             />
@@ -96,10 +106,10 @@ export default function PerformanceChart({ data }: PerformanceChartProps) {
               tick={{ 
                 fill: 'rgb(113 113 122)', 
                 className: 'dark:fill-zinc-500',
-                fontSize: window.innerWidth < 640 ? 11 : 13,
+                fontSize,
                 fontWeight: 500 
               }}
-              width={60}
+              width={isMobile ? 60 : 70}
             />
             <Tooltip
               content={<CustomTooltip />}
