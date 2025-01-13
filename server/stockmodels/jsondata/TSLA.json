@@ -2,6 +2,16 @@
   "symbol": "TSLA",
   "name": "Tesla, Inc.",
   "logo": "\ud83d\ude97",
+  "keywords": [
+    {
+      "text": "Consumer",
+      "emoji": "\ud83d\udecd\ufe0f"
+    },
+    {
+      "text": "Magnificent Seven",
+      "emoji": "\ud83d\udc51"
+    }
+  ],
   "price": 410.44,
   "change": 0.082156,
   "changePercent": 0.082156,

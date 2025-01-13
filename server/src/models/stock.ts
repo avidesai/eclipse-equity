@@ -54,6 +54,10 @@ interface IStock extends Document {
   historicalMetrics?: HistoricalMetricData[];
   futureMetrics?: MetricData[]; // Add futureMetrics
   dcfModelUrl?: string;
+  keywords: Array<{
+    text: string;
+    emoji: string;
+  }>;
 }
 
 const MetricSchema = {
@@ -114,6 +118,10 @@ const StockSchema: Schema = new Schema({
   historicalMetrics: { type: [HistoricalMetricSchema] },
   futureMetrics: { type: [MetricSchema] }, // Add futureMetrics schema
   dcfModelUrl: { type: String },
+  keywords: [{
+    text: { type: String, required: true },
+    emoji: { type: String, required: true }
+  }],
 });
 
 export default mongoose.model<IStock>('Stock', StockSchema);

@@ -2,6 +2,16 @@
   "symbol": "UNH",
   "name": "UnitedHealth Group Incorporated",
   "logo": "\ud83c\udfe5",
+  "keywords": [
+    {
+      "text": "Healthcare",
+      "emoji": "\u2695\ufe0f"
+    },
+    {
+      "text": "Insurance",
+      "emoji": "\ud83d\udccb"
+    }
+  ],
   "price": 513,
   "change": 0.016828,
   "changePercent": 0.016828,

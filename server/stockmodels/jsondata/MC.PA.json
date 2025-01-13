@@ -2,6 +2,16 @@
   "symbol": "MC.PA",
   "name": "LVMH Mo\u00ebt Hennessy Louis Vuitton",
   "logo": "\ud83d\udc5c",
+  "keywords": [
+    {
+      "text": "Consumer",
+      "emoji": "\ud83d\udecd\ufe0f"
+    },
+    {
+      "text": "Luxury Goods",
+      "emoji": "\u2728"
+    }
+  ],
   "price": 611.3,
   "change": -0.037929,
   "changePercent": -0.037929,

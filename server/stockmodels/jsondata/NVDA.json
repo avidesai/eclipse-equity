@@ -2,6 +2,16 @@
   "symbol": "NVDA",
   "name": "NVIDIA Corporation",
   "logo": "\ud83c\udfae",
+  "keywords": [
+    {
+      "text": "Technology",
+      "emoji": "\ud83d\udcbb"
+    },
+    {
+      "text": "Magnificent Seven",
+      "emoji": "\ud83d\udc51"
+    }
+  ],
   "price": 144.47,
   "change": 0.044538,
   "changePercent": 0.044538,

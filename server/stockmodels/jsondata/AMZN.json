@@ -2,6 +2,16 @@
   "symbol": "AMZN",
   "name": "Amazon.com, Inc.",
   "logo": "\ud83d\udce6",
+  "keywords": [
+    {
+      "text": "Technology",
+      "emoji": "\ud83d\udcbb"
+    },
+    {
+      "text": "Magnificent Seven",
+      "emoji": "\ud83d\udc51"
+    }
+  ],
   "price": 224.19,
   "change": 0.018027,
   "changePercent": 0.018027,

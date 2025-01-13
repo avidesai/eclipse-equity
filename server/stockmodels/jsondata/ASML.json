@@ -2,6 +2,16 @@
   "symbol": "ASML",
   "name": "ASML Holding N.V.",
   "logo": "\ud83d\udd2c",
+  "keywords": [
+    {
+      "text": "Technology",
+      "emoji": "\ud83d\udcbb"
+    },
+    {
+      "text": "Semiconductor Equipment",
+      "emoji": "\ud83d\udd27"
+    }
+  ],
   "price": 714.36,
   "change": 0.019902,
   "changePercent": 0.019902,

@@ -2,6 +2,16 @@
   "symbol": "MA",
   "name": "Mastercard Incorporated",
   "logo": "\ud83d\udcb3",
+  "keywords": [
+    {
+      "text": "Financial",
+      "emoji": "\ud83d\udcb0"
+    },
+    {
+      "text": "Payments",
+      "emoji": "\ud83d\udcb3"
+    }
+  ],
   "price": 521.36,
   "change": -0.001991,
   "changePercent": -0.001991,

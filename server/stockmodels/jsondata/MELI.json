@@ -2,6 +2,16 @@
   "symbol": "MELI",
   "name": "MercadoLibre, Inc.",
   "logo": "\ud83d\uded2",
+  "keywords": [
+    {
+      "text": "Technology",
+      "emoji": "\ud83d\udcbb"
+    },
+    {
+      "text": "E-commerce",
+      "emoji": "\ud83d\uded2"
+    }
+  ],
   "price": 1834.17,
   "change": 0.03919,
   "changePercent": 0.03919,

@@ -25,6 +25,10 @@ interface StockRequest {
   name: string;
   price: number;
   dcfModelUrl: string;
+  keywords: Array<{
+    text: string;
+    emoji: string;
+  }>;
 }
 
 // Get all stocks from MongoDB
@@ -53,8 +57,8 @@ router.get('/static/:symbol', (async (req: Request, res: Response) => {
 
 // Add a new stock (to MongoDB)
 router.post('/', (async (req: Request<{}, {}, StockRequest>, res: Response) => {
-  const { symbol, name, price, dcfModelUrl } = req.body;
-  const stock = new Stock({ symbol, name, price, dcfModelUrl });
+  const { symbol, name, price, dcfModelUrl, keywords} = req.body;
+  const stock = new Stock({ symbol, name, price, dcfModelUrl, keywords});
   try {
     const savedStock = await stock.save();
     res.status(201).json(savedStock);

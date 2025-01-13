@@ -2,6 +2,16 @@
   "symbol": "MCO",
   "name": "Moody's Corporation",
   "logo": "\ud83d\udcc8",
+  "keywords": [
+    {
+      "text": "Financial",
+      "emoji": "\ud83d\udcb0"
+    },
+    {
+      "text": "Ratings",
+      "emoji": "\ud83d\udcca"
+    }
+  ],
   "price": 479.15,
   "change": 0.013345000000000001,
   "changePercent": 0.013345000000000001,

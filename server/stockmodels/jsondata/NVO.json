@@ -2,6 +2,16 @@
   "symbol": "NVO",
   "name": "Novo Nordisk A/S",
   "logo": "\ud83d\udc89",
+  "keywords": [
+    {
+      "text": "Healthcare",
+      "emoji": "\u2695\ufe0f"
+    },
+    {
+      "text": "Pharmaceuticals",
+      "emoji": "\ud83d\udc8a"
+    }
+  ],
   "price": 87.65,
   "change": 0.001485,
   "changePercent": 0.001485,

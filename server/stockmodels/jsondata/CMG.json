@@ -2,6 +2,16 @@
   "symbol": "CMG",
   "name": "Chipotle Mexican Grill, Inc.",
   "logo": "\ud83c\udf2f",
+  "keywords": [
+    {
+      "text": "Consumer",
+      "emoji": "\ud83d\udecd\ufe0f"
+    },
+    {
+      "text": "Restaurants",
+      "emoji": "\ud83c\udf7d\ufe0f"
+    }
+  ],
   "price": 59.7,
   "change": -0.003172,
   "changePercent": -0.003172,

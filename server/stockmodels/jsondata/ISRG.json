@@ -2,6 +2,16 @@
   "symbol": "ISRG",
   "name": "Intuitive Surgical, Inc.",
   "logo": "\ud83d\udd2a",
+  "keywords": [
+    {
+      "text": "Healthcare",
+      "emoji": "\u2695\ufe0f"
+    },
+    {
+      "text": "Medical Devices",
+      "emoji": "\ud83e\udd16"
+    }
+  ],
   "price": 535.295,
   "change": 0.021497000000000002,
   "changePercent": 0.021497000000000002,

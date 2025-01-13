@@ -2,6 +2,16 @@
   "symbol": "BRK.B",
   "name": "Berkshire Hathaway Inc.",
   "logo": "\ud83d\udcb0",
+  "keywords": [
+    {
+      "text": "Financial",
+      "emoji": "\ud83d\udcb0"
+    },
+    {
+      "text": "Conglomerate",
+      "emoji": "\ud83c\udfe2"
+    }
+  ],
   "price": 453.56,
   "change": 0.005453,
   "changePercent": 0.005453,

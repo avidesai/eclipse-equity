@@ -2,6 +2,16 @@
   "symbol": "ABNB",
   "name": "Airbnb, Inc.",
   "logo": "\ud83c\udfe1",
+  "keywords": [
+    {
+      "text": "Technology",
+      "emoji": "\ud83d\udcbb"
+    },
+    {
+      "text": "Travel Platform",
+      "emoji": "\u2708\ufe0f"
+    }
+  ],
   "price": 135.71,
   "change": 0.032172,
   "changePercent": 0.032172,

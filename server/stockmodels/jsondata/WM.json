@@ -2,6 +2,16 @@
   "symbol": "WM",
   "name": "Waste Management, Inc.",
   "logo": "\ud83d\uddd1\ufe0f",
+  "keywords": [
+    {
+      "text": "Industrial",
+      "emoji": "\ud83c\udfed"
+    },
+    {
+      "text": "Environmental",
+      "emoji": "\u267b\ufe0f"
+    }
+  ],
   "price": 201.6,
   "change": 0.005286,
   "changePercent": 0.005286,

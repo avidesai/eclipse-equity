@@ -2,6 +2,16 @@
   "symbol": "TSM",
   "name": "Taiwan Semiconductor Manufacturing Company",
   "logo": "\ud83d\udd27",
+  "keywords": [
+    {
+      "text": "Technology",
+      "emoji": "\ud83d\udcbb"
+    },
+    {
+      "text": "Semiconductors",
+      "emoji": "\ud83d\udd27"
+    }
+  ],
   "price": 206.33,
   "change": -0.004967,
   "changePercent": -0.004967,

@@ -1,27 +1,227 @@
 {
-    "ABBV.xlsx": {"symbol": "ABBV", "name": "AbbVie Inc.", "logo": "💊"},
-    "ABNB.xlsx": {"symbol": "ABNB", "name": "Airbnb, Inc.", "logo": "🏡"},
-    "AMZN.xlsx": {"symbol": "AMZN", "name": "Amazon.com, Inc.", "logo": "📦"},
-    "ARM.xlsx": {"symbol": "ARM", "name": "Arm Holdings plc", "logo": "💻"},
-    "ASML.xlsx": {"symbol": "ASML", "name": "ASML Holding N.V.", "logo": "🔬"},
-    "BRK.B.xlsx": {"symbol": "BRK.B", "name": "Berkshire Hathaway Inc.", "logo": "💰"},
-    "CMG.xlsx": {"symbol": "CMG", "name": "Chipotle Mexican Grill, Inc.", "logo": "🌯"},
-    "FICO.xlsx": {"symbol": "FICO", "name": "Fair Isaac Corporation", "logo": "📊"},
-    "GOOGL.xlsx": {"symbol": "GOOGL", "name": "Alphabet Inc.", "logo": "🔍"},
-    "ISRG.xlsx": {"symbol": "ISRG", "name": "Intuitive Surgical, Inc.", "logo": "🔪"},
-    "LLY.xlsx": {"symbol": "LLY", "name": "Eli Lilly and Company", "logo": "💉"},
-    "LMT.xlsx": {"symbol": "LMT", "name": "Lockheed Martin Corporation", "logo": "🚀"},
-    "MA.xlsx": {"symbol": "MA", "name": "Mastercard Incorporated", "logo": "💳"},
-    "MC.PA.xlsx": {"symbol": "MC.PA", "name": "LVMH Moët Hennessy Louis Vuitton", "logo": "👜"},
-    "MCO.xlsx": {"symbol": "MCO", "name": "Moody's Corporation", "logo": "📈"},
-    "MELI.xlsx": {"symbol": "MELI", "name": "MercadoLibre, Inc.", "logo": "🛒"},
-    "MSFT.xlsx": {"symbol": "MSFT", "name": "Microsoft Corporation", "logo": "🪟"},
-    "NVDA.xlsx": {"symbol": "NVDA", "name": "NVIDIA Corporation", "logo": "🎮"},
-    "NVO.xlsx": {"symbol": "NVO", "name": "Novo Nordisk A/S", "logo": "💉"},
-    "ODFL.xlsx": {"symbol": "ODFL", "name": "Old Dominion Freight Line, Inc.", "logo": "🚛"},
-    "SPGI.xlsx": {"symbol": "SPGI", "name": "S&P Global Inc.", "logo": "📊"},
-    "TSLA.xlsx": {"symbol": "TSLA", "name": "Tesla, Inc.", "logo": "🚗"},
-    "TSM.xlsx": {"symbol": "TSM", "name": "Taiwan Semiconductor Manufacturing Company", "logo": "🔧"},
-    "UNH.xlsx": {"symbol": "UNH", "name": "UnitedHealth Group Incorporated", "logo": "🏥"},
-    "WM.xlsx": {"symbol": "WM", "name": "Waste Management, Inc.", "logo": "🗑️"}
-}
+    "ABBV.xlsx": {
+      "symbol": "ABBV",
+      "name": "AbbVie Inc.",
+      "logo": "💊",
+      "keywords": [
+        {"text": "Healthcare", "emoji": "⚕️"},
+        {"text": "Immunology", "emoji": "🧬"}
+      ]
+    },
+    "ABNB.xlsx": {
+      "symbol": "ABNB",
+      "name": "Airbnb, Inc.",
+      "logo": "🏡",
+      "keywords": [
+        {"text": "Technology", "emoji": "💻"},
+        {"text": "Travel Platform", "emoji": "✈️"}
+      ]
+    },
+    "AMZN.xlsx": {
+      "symbol": "AMZN",
+      "name": "Amazon.com, Inc.",
+      "logo": "📦",
+      "keywords": [
+        {"text": "Technology", "emoji": "💻"},
+        {"text": "Magnificent Seven", "emoji": "👑"}
+      ]
+    },
+    "ARM.xlsx": {
+      "symbol": "ARM",
+      "name": "Arm Holdings plc",
+      "logo": "💻",
+      "keywords": [
+        {"text": "Technology", "emoji": "💻"},
+        {"text": "Semiconductors", "emoji": "🔧"}
+      ]
+    },
+    "ASML.xlsx": {
+      "symbol": "ASML",
+      "name": "ASML Holding N.V.",
+      "logo": "🔬",
+      "keywords": [
+        {"text": "Technology", "emoji": "💻"},
+        {"text": "Semiconductor Equipment", "emoji": "🔧"}
+      ]
+    },
+    "BRK.B.xlsx": {
+      "symbol": "BRK.B",
+      "name": "Berkshire Hathaway Inc.",
+      "logo": "💰",
+      "keywords": [
+        {"text": "Financial", "emoji": "💰"},
+        {"text": "Conglomerate", "emoji": "🏢"}
+      ]
+    },
+    "CMG.xlsx": {
+      "symbol": "CMG",
+      "name": "Chipotle Mexican Grill, Inc.",
+      "logo": "🌯",
+      "keywords": [
+        {"text": "Consumer", "emoji": "🛍️"},
+        {"text": "Restaurants", "emoji": "🍽️"}
+      ]
+    },
+    "FICO.xlsx": {
+      "symbol": "FICO",
+      "name": "Fair Isaac Corporation",
+      "logo": "📊",
+      "keywords": [
+        {"text": "Financial", "emoji": "💰"},
+        {"text": "Analytics", "emoji": "📊"}
+      ]
+    },
+    "GOOGL.xlsx": {
+      "symbol": "GOOGL",
+      "name": "Alphabet Inc.",
+      "logo": "🔍",
+      "keywords": [
+        {"text": "Technology", "emoji": "💻"},
+        {"text": "Magnificent Seven", "emoji": "👑"}
+      ]
+    },
+    "ISRG.xlsx": {
+      "symbol": "ISRG",
+      "name": "Intuitive Surgical, Inc.",
+      "logo": "🔪",
+      "keywords": [
+        {"text": "Healthcare", "emoji": "⚕️"},
+        {"text": "Medical Devices", "emoji": "🤖"}
+      ]
+    },
+    "LLY.xlsx": {
+      "symbol": "LLY",
+      "name": "Eli Lilly and Company",
+      "logo": "💉",
+      "keywords": [
+        {"text": "Healthcare", "emoji": "⚕️"},
+        {"text": "Pharmaceuticals", "emoji": "💊"}
+      ]
+    },
+    "LMT.xlsx": {
+      "symbol": "LMT",
+      "name": "Lockheed Martin Corporation",
+      "logo": "🚀",
+      "keywords": [
+        {"text": "Industrial", "emoji": "🏭"},
+        {"text": "Defense", "emoji": "🛡️"}
+      ]
+    },
+    "MA.xlsx": {
+      "symbol": "MA",
+      "name": "Mastercard Incorporated",
+      "logo": "💳",
+      "keywords": [
+        {"text": "Financial", "emoji": "💰"},
+        {"text": "Payments", "emoji": "💳"}
+      ]
+    },
+    "MC.PA.xlsx": {
+      "symbol": "MC.PA",
+      "name": "LVMH Moët Hennessy Louis Vuitton",
+      "logo": "👜",
+      "keywords": [
+        {"text": "Consumer", "emoji": "🛍️"},
+        {"text": "Luxury Goods", "emoji": "✨"}
+      ]
+    },
+    "MCO.xlsx": {
+      "symbol": "MCO",
+      "name": "Moody's Corporation",
+      "logo": "📈",
+      "keywords": [
+        {"text": "Financial", "emoji": "💰"},
+        {"text": "Ratings", "emoji": "📊"}
+      ]
+    },
+    "MELI.xlsx": {
+      "symbol": "MELI",
+      "name": "MercadoLibre, Inc.",
+      "logo": "🛒",
+      "keywords": [
+        {"text": "Technology", "emoji": "💻"},
+        {"text": "E-commerce", "emoji": "🛒"}
+      ]
+    },
+    "MSFT.xlsx": {
+      "symbol": "MSFT",
+      "name": "Microsoft Corporation",
+      "logo": "🪟",
+      "keywords": [
+        {"text": "Technology", "emoji": "💻"},
+        {"text": "Magnificent Seven", "emoji": "👑"}
+      ]
+    },
+    "NVDA.xlsx": {
+      "symbol": "NVDA",
+      "name": "NVIDIA Corporation",
+      "logo": "🎮",
+      "keywords": [
+        {"text": "Technology", "emoji": "💻"},
+        {"text": "Magnificent Seven", "emoji": "👑"}
+      ]
+    },
+    "NVO.xlsx": {
+      "symbol": "NVO",
+      "name": "Novo Nordisk A/S",
+      "logo": "💉",
+      "keywords": [
+        {"text": "Healthcare", "emoji": "⚕️"},
+        {"text": "Pharmaceuticals", "emoji": "💊"}
+      ]
+    },
+    "ODFL.xlsx": {
+      "symbol": "ODFL",
+      "name": "Old Dominion Freight Line, Inc.",
+      "logo": "🚛",
+      "keywords": [
+        {"text": "Industrial", "emoji": "🏭"},
+        {"text": "Transportation", "emoji": "🚛"}
+      ]
+    },
+    "SPGI.xlsx": {
+      "symbol": "SPGI",
+      "name": "S&P Global Inc.",
+      "logo": "📊",
+      "keywords": [
+        {"text": "Financial", "emoji": "💰"},
+        {"text": "Ratings", "emoji": "📊"}
+      ]
+    },
+    "TSLA.xlsx": {
+      "symbol": "TSLA",
+      "name": "Tesla, Inc.",
+      "logo": "🚗",
+      "keywords": [
+        {"text": "Consumer", "emoji": "🛍️"},
+        {"text": "Magnificent Seven", "emoji": "👑"}
+      ]
+    },
+    "TSM.xlsx": {
+      "symbol": "TSM",
+      "name": "Taiwan Semiconductor Manufacturing Company",
+      "logo": "🔧",
+      "keywords": [
+        {"text": "Technology", "emoji": "💻"},
+        {"text": "Semiconductors", "emoji": "🔧"}
+      ]
+    },
+    "UNH.xlsx": {
+      "symbol": "UNH",
+      "name": "UnitedHealth Group Incorporated",
+      "logo": "🏥",
+      "keywords": [
+        {"text": "Healthcare", "emoji": "⚕️"},
+        {"text": "Insurance", "emoji": "📋"}
+      ]
+    },
+    "WM.xlsx": {
+      "symbol": "WM",
+      "name": "Waste Management, Inc.",
+      "logo": "🗑️",
+      "keywords": [
+        {"text": "Industrial", "emoji": "🏭"},
+        {"text": "Environmental", "emoji": "♻️"}
+      ]
+    }
+  }

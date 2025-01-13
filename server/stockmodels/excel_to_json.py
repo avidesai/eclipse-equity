@@ -1,3 +1,5 @@
+# /stockmodels/excel_to_json.py
+
 import os
 import pandas as pd
 import json
@@ -28,6 +30,10 @@ for filename in os.listdir(models_dir):
             "symbol": company_info.get(filename, {}).get("symbol", "N/A"),  # Fallback to "N/A"
             "name": company_info.get(filename, {}).get("name", "Unknown Company"),  # Fallback to "Unknown Company"
             "logo": company_info.get(filename, {}).get("logo", "❓"),  # Fallback to "❓"
+             "keywords": company_info.get(filename, {}).get("keywords", [
+                {"text": "Unknown", "emoji": "❓"},
+                {"text": "Unknown", "emoji": "❓"}
+            ]),
             "price": df.iloc[2, 0],
             "change": df.iloc[3, 0],
             "changePercent": df.iloc[3, 0],

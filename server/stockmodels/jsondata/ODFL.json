@@ -2,6 +2,16 @@
   "symbol": "ODFL",
   "name": "Old Dominion Freight Line, Inc.",
   "logo": "\ud83d\ude9b",
+  "keywords": [
+    {
+      "text": "Industrial",
+      "emoji": "\ud83c\udfed"
+    },
+    {
+      "text": "Transportation",
+      "emoji": "\ud83d\ude9b"
+    }
+  ],
   "price": 180.91,
   "change": 0.029477000000000003,
   "changePercent": 0.029477000000000003,

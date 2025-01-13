@@ -2,6 +2,16 @@
   "symbol": "LMT",
   "name": "Lockheed Martin Corporation",
   "logo": "\ud83d\ude80",
+  "keywords": [
+    {
+      "text": "Industrial",
+      "emoji": "\ud83c\udfed"
+    },
+    {
+      "text": "Defense",
+      "emoji": "\ud83d\udee1\ufe0f"
+    }
+  ],
   "price": 481.82,
   "change": -0.0008917,
   "changePercent": -0.0008917,

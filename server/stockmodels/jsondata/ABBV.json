@@ -2,6 +2,16 @@
   "symbol": "ABBV",
   "name": "AbbVie Inc.",
   "logo": "\ud83d\udc8a",
+  "keywords": [
+    {
+      "text": "Healthcare",
+      "emoji": "\u2695\ufe0f"
+    },
+    {
+      "text": "Immunology",
+      "emoji": "\ud83e\uddec"
+    }
+  ],
   "price": 181.22,
   "change": 0.00992,
   "changePercent": 0.00992,

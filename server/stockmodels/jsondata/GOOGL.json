@@ -2,6 +2,16 @@
   "symbol": "GOOGL",
   "name": "Alphabet Inc.",
   "logo": "\ud83d\udd0d",
+  "keywords": [
+    {
+      "text": "Technology",
+      "emoji": "\ud83d\udcbb"
+    },
+    {
+      "text": "Magnificent Seven",
+      "emoji": "\ud83d\udc51"
+    }
+  ],
   "price": 191.79,
   "change": 0.012458,
   "changePercent": 0.012458,
