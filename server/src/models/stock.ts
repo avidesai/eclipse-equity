@@ -2,7 +2,6 @@
 
 import mongoose, { Schema, Document } from 'mongoose';
 
-// Update the interfaces to include futureMetrics
 interface MetricData {
   year: number;
   revenue: number;

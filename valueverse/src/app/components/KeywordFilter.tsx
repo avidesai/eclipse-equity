@@ -1,6 +1,5 @@
 // src/app/components/KeywordFilter.tsx
 
-// src/app/components/KeywordFilter.tsx
 import React, { useMemo, useRef, useEffect, useState } from 'react';
 import { Stock } from '../types/stock';
 import { motion } from 'framer-motion';
@@ -21,19 +20,37 @@ export default function KeywordFilter({
   const [showRightShadow, setShowRightShadow] = useState(true);
 
   const keywords = useMemo(() => {
-    const uniqueKeywords = new Map<string, string>();
+    // Create a map to count keyword occurrences
+    const keywordCounts = new Map<string, { count: number; emoji: string }>();
+    
+    // Count occurrences of each keyword
     stocks.forEach(stock => {
       stock.keywords?.forEach(keyword => {
-        if (!uniqueKeywords.has(keyword.text)) {
-          uniqueKeywords.set(keyword.text, keyword.emoji);
+        const existing = keywordCounts.get(keyword.text);
+        if (existing) {
+          existing.count++;
+        } else {
+          keywordCounts.set(keyword.text, { count: 1, emoji: keyword.emoji });
         }
       });
     });
-    
-    // Convert to array and limit to 8 keywords
-    return Array.from(uniqueKeywords.entries())
-      .map(([text, emoji]) => ({ text, emoji }))
-      .slice(0, 8);
+
+    // Convert to array and sort by count
+    const sortedKeywords = Array.from(keywordCounts.entries())
+      .map(([text, { count, emoji }]) => ({
+        text,
+        emoji,
+        count
+      }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 7) // Limit to 7 keywords to make room for "All"
+      .map(({ text, emoji }) => ({ text, emoji }));
+
+    // Add "All" category at the beginning
+    return [
+      { text: 'All', emoji: '🌎' },
+      ...sortedKeywords
+    ];
   }, [stocks]);
 
   const handleScroll = () => {
@@ -76,7 +93,10 @@ export default function KeywordFilter({
       >
         <div className="inline-flex gap-2 px-2 pb-4">
           {keywords.map((keyword) => {
-            const isSelected = selectedKeyword?.text === keyword.text;
+            const isSelected = selectedKeyword 
+              ? selectedKeyword.text === keyword.text 
+              : keyword.text === 'All';
+              
             return (
               <motion.button
                 key={keyword.text}
