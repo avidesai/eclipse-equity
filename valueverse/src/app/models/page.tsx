@@ -1,6 +1,5 @@
 // src/app/models/page.tsx
 
-// src/app/models/page.tsx
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -36,10 +35,21 @@ export default function ModelsPage() {
     fetchStocks();
   }, []);
 
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    if (query) {
+      setSelectedKeyword(null);
+    }
+  };
+
   const handleKeywordSelect = (keyword: { text: string; emoji: string }) => {
-    setSelectedKeyword(prevKeyword => 
-      prevKeyword?.text === keyword.text ? null : keyword
-    );
+    if (keyword.text === 'All') {
+      setSelectedKeyword(null);
+    } else {
+      setSelectedKeyword(prevKeyword => 
+        prevKeyword?.text === keyword.text ? null : keyword
+      );
+    }
   };
 
   const filteredStocks = useMemo(() => {
@@ -85,7 +95,7 @@ export default function ModelsPage() {
         ) : (
           <>
             <div className="space-y-4">
-              <SearchBar onSearch={setSearchQuery} />
+              <SearchBar onSearch={handleSearch} />
               <KeywordFilter
                 stocks={stocks}
                 selectedKeyword={selectedKeyword}
