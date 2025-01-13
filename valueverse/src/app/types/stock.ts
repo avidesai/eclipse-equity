@@ -61,4 +61,10 @@ export interface Stock {
 
   // Future Data
   futureMetrics: MetricData[];
+
+  // Keywords
+  keywords: Array<{
+    text: string;
+    emoji: string;
+  }>;
 }
