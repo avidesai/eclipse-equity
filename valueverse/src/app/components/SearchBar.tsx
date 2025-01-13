@@ -14,7 +14,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
           type="text"
           placeholder="Search companies..."
           onChange={(e) => onSearch(e.target.value)}
-          className="w-full px-4 py-3 pl-12 rounded-lg bg-white
+          className="w-full px-4 py-2.5 pl-12 rounded-lg bg-white
             border-2 border-zinc-200
             focus:border-black focus:outline-none
             dark:bg-zinc-800 dark:border-zinc-700

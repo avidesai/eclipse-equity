@@ -82,14 +82,14 @@ export default function ModelsPage() {
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900">
       <Navigation />
-      <main className="container mx-auto px-4 sm:px-6 pt-24 pb-12">
+      <main className="container mx-auto px-4 sm:px-6 lg:pt-20 pt-24 pb-12">
         {loading ? (
           <p className="text-center text-zinc-500">Loading...</p>
         ) : error ? (
           <p className="text-center text-red-500">{error}</p>
         ) : (
           <>
-            <div className="space-y-4">
+            <div className="space-y-3">
               <SearchBar onSearch={setSearchQuery} />
               <KeywordFilter
                 stocks={stocks}
@@ -97,9 +97,9 @@ export default function ModelsPage() {
                 onKeywordSelect={handleKeywordSelect}
               />
             </div>
-
-            <div className="mt-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
-              <div className="h-[400px] lg:h-[calc(100vh-12rem)] lg:col-span-5 overflow-y-auto lg:pr-2 py-4 
+  
+            <div className="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-6">
+              <div className="h-[400px] lg:h-[calc(100vh-11rem)] lg:col-span-5 overflow-y-auto lg:pr-2 py-2 
                            scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-700 
                            scrollbar-track-transparent">
                 <StockList
@@ -109,9 +109,9 @@ export default function ModelsPage() {
                   searchQuery={searchQuery}
                 />
               </div>
-
+  
               <div id="stock-detail-section" 
-                   className="lg:col-span-7 lg:h-[calc(100vh-12rem)] lg:overflow-y-auto lg:pl-2 py-4 
+                   className="lg:col-span-7 lg:h-[calc(100vh-11rem)] lg:overflow-y-auto lg:pl-2 py-2 
                             scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-700 
                             scrollbar-track-transparent">
                 {selectedStock && <StockDetail stock={selectedStock} />}
