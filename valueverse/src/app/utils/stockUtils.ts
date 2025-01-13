@@ -1,4 +1,5 @@
 // src/app/utils/stockUtils.ts
+
 import { Stock } from '../types/stock';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';

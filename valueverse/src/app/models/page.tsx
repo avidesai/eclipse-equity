@@ -12,7 +12,6 @@ import KeywordFilter from '../components/KeywordFilter';
 import { getStockData } from '../utils/stockUtils';
 
 export default function ModelsPage() {
-  // State management
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -20,7 +19,6 @@ export default function ModelsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch stock data on component mount
   useEffect(() => {
     const fetchStocks = async () => {
       setLoading(true);
@@ -37,7 +35,6 @@ export default function ModelsPage() {
     fetchStocks();
   }, []);
 
-  // Handle keyword selection/deselection
   const handleKeywordSelect = (keyword: { text: string; emoji: string }) => {
     setSelectedKeywords(prev => {
       const exists = prev.some(k => k.text === keyword.text);
@@ -48,10 +45,8 @@ export default function ModelsPage() {
     });
   };
 
-  // Filter stocks based on keywords and search query
   const filteredStocks = useMemo(() => {
     return stocks.filter(stock => {
-      // First apply keyword filters
       const passesKeywordFilter = selectedKeywords.length === 0 || 
         selectedKeywords.every(keyword => 
           stock.keywords?.some(k => k.text === keyword.text)
@@ -59,7 +54,6 @@ export default function ModelsPage() {
 
       if (!passesKeywordFilter) return false;
 
-      // Then apply search query
       if (!searchQuery) return true;
       const query = searchQuery.toLowerCase();
       return (
@@ -69,7 +63,6 @@ export default function ModelsPage() {
     });
   }, [stocks, selectedKeywords, searchQuery]);
 
-  // Handle stock selection and scroll on mobile
   const handleStockSelect = (stock: Stock) => {
     setSelectedStock(stock);
     if (window.innerWidth < 1024) {
@@ -96,8 +89,7 @@ export default function ModelsPage() {
           <p className="text-center text-red-500">{error}</p>
         ) : (
           <>
-            {/* Search and Filter Section */}
-            <div className="space-y-6">
+            <div className="space-y-4">
               <SearchBar onSearch={setSearchQuery} />
               <KeywordFilter
                 stocks={stocks}
@@ -106,9 +98,7 @@ export default function ModelsPage() {
               />
             </div>
 
-            {/* Main Content Grid */}
-            <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
-              {/* Stock List */}
+            <div className="mt-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
               <div className="h-[400px] lg:h-[calc(100vh-12rem)] lg:col-span-5 overflow-y-auto lg:pr-2 py-4 
                            scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-700 
                            scrollbar-track-transparent">
@@ -120,7 +110,6 @@ export default function ModelsPage() {
                 />
               </div>
 
-              {/* Stock Details */}
               <div id="stock-detail-section" 
                    className="lg:col-span-7 lg:h-[calc(100vh-12rem)] lg:overflow-y-auto lg:pl-2 py-4 
                             scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-700 

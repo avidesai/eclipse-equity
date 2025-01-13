@@ -3,7 +3,7 @@
 import os
 import pandas as pd
 import json
-# Get the directory of the script and build paths
+
 script_dir = os.path.dirname(__file__)
 models_dir = os.path.join(script_dir, "models")
 output_dir = os.path.join(script_dir, "jsondata")
