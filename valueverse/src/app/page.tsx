@@ -42,7 +42,7 @@ export default function HomePage() {
           <div className="container mx-auto px-6 pt-36 pb-24 relative">
             <div className="max-w-3xl ml-0 md:ml-8 lg:ml-12 animate-fadeIn">
               <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-white">
-                Financial Models for Investors
+                Analyze Stocks Like a Pro
               </h1>
                 <p className="text-lg md:text-xl text-zinc-200 mb-8 leading-relaxed max-w-3xl">
                 Supercharge your investment research with our stock valuation models.
