@@ -9,6 +9,8 @@ export interface IUser extends Document {
   password: string;
   googleId?: string;
   isPremium: boolean;
+  resetPasswordToken?: string;
+  resetPasswordExpires?: Date;
 }
 
 const userSchema: Schema = new Schema({
@@ -18,6 +20,8 @@ const userSchema: Schema = new Schema({
   password: { type: String, required: true },
   googleId: { type: String },
   isPremium: { type: Boolean, default: false },
+  resetPasswordToken: String,
+  resetPasswordExpires: Date
 });
 
 export default mongoose.model<IUser>('User', userSchema);
