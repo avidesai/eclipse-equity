@@ -53,10 +53,10 @@ export default function ResetPasswordPage({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
-
+  
     setLoading(true);
     setMessage(null);
-
+  
     try {
       await api.post(`/auth/reset-password/${params.token}`, {
         password: formData.password
@@ -66,24 +66,31 @@ export default function ResetPasswordPage({
         type: 'success',
         text: 'Password has been reset successfully. Redirecting to login...'
       });
-
+  
       // Clear form
       setFormData({
         password: '',
         confirmPassword: ''
       });
-
+  
       // Redirect to login after 2 seconds
       setTimeout(() => {
         router.push('/auth');
       }, 2000);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Password reset error:', err);
-      const error = err as AxiosError<ApiErrorResponse>;
-      setMessage({
-        type: 'error',
-        text: error.response?.data?.message || 'Invalid or expired reset link. Please try again.'
-      });
+      if (err instanceof AxiosError) {
+        const error = err as AxiosError<ApiErrorResponse>;
+        setMessage({
+          type: 'error',
+          text: error.response?.data?.message || 'Invalid or expired reset link. Please try again.'
+        });
+      } else {
+        setMessage({
+          type: 'error',
+          text: 'Invalid or expired reset link. Please try again.'
+        });
+      }
     } finally {
       setLoading(false);
     }

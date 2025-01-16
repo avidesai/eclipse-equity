@@ -22,7 +22,7 @@ export default function ForgotPasswordPage() {
     e.preventDefault();
     setLoading(true);
     setMessage(null);
-
+  
     try {
       await api.post('/auth/forgot-password', { email });
       setMessage({
@@ -31,13 +31,20 @@ export default function ForgotPasswordPage() {
       });
       // Clear the form
       setEmail('');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Password reset request error:', err);
-      const error = err as AxiosError<ApiErrorResponse>;
-      setMessage({
-        type: 'error',
-        text: error.response?.data?.message || 'An error occurred. Please try again.'
-      });
+      if (err instanceof AxiosError) {
+        const error = err as AxiosError<ApiErrorResponse>;
+        setMessage({
+          type: 'error',
+          text: error.response?.data?.message || 'An error occurred. Please try again.'
+        });
+      } else {
+        setMessage({
+          type: 'error',
+          text: 'An error occurred. Please try again.'
+        });
+      }
     } finally {
       setLoading(false);
     }
