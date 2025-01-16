@@ -24,7 +24,7 @@ export default function ForgotPasswordPage() {
       });
       // Clear the form
       setEmail('');
-    } catch (error) {
+    } catch (_error) {
       setMessage({
         type: 'error',
         text: 'An error occurred. Please try again.'

@@ -71,7 +71,7 @@ export default function ResetPasswordPage({
       setTimeout(() => {
         router.push('/auth');
       }, 2000);
-    } catch (error) {
+    } catch (_error) {
       setMessage({
         type: 'error',
         text: 'Invalid or expired reset link. Please try again.'
