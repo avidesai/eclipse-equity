@@ -1,9 +1,16 @@
 // src/app/forgot-password/page.tsx
+
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Navigation from '../components/Navigation';
 import api from '../utils/api';
+import { AxiosError } from 'axios';
+
+interface ApiErrorResponse {
+  message?: string;
+  errors?: Array<{ msg: string }>;
+}
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -24,10 +31,12 @@ export default function ForgotPasswordPage() {
       });
       // Clear the form
       setEmail('');
-    } catch (_error) {
+    } catch (err: any) {
+      console.error('Password reset request error:', err);
+      const error = err as AxiosError<ApiErrorResponse>;
       setMessage({
         type: 'error',
-        text: 'An error occurred. Please try again.'
+        text: error.response?.data?.message || 'An error occurred. Please try again.'
       });
     } finally {
       setLoading(false);

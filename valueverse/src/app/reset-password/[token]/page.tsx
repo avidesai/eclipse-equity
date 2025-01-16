@@ -5,6 +5,12 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Navigation from '../../components/Navigation';
 import api from '../../utils/api';
+import { AxiosError } from 'axios';
+
+interface ApiErrorResponse {
+  message?: string;
+  errors?: Array<{ msg: string }>;
+}
 
 interface FormData {
   password: string;
@@ -71,10 +77,12 @@ export default function ResetPasswordPage({
       setTimeout(() => {
         router.push('/auth');
       }, 2000);
-    } catch (_error) {
+    } catch (err: any) {
+      console.error('Password reset error:', err);
+      const error = err as AxiosError<ApiErrorResponse>;
       setMessage({
         type: 'error',
-        text: 'Invalid or expired reset link. Please try again.'
+        text: error.response?.data?.message || 'Invalid or expired reset link. Please try again.'
       });
     } finally {
       setLoading(false);
