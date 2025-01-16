@@ -7,11 +7,6 @@ import Navigation from '../../components/Navigation';
 import api from '../../utils/api';
 import { AxiosError } from 'axios';
 
-interface ApiErrorResponse {
-  message?: string;
-  errors?: Array<{ msg: string }>;
-}
-
 interface FormData {
   password: string;
   confirmPassword: string;
