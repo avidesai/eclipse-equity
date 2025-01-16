@@ -21,12 +21,10 @@ interface PageProps {
   params: {
     token: string;
   };
-  searchParams: { [key: string]: string | string[] | undefined };
 }
 
 export default function ResetPasswordPage({
-  params,
-  searchParams
+  params
 }: PageProps) {
   const [formData, setFormData] = useState<FormData>({
     password: '',
