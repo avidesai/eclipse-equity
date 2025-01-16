@@ -8,20 +8,20 @@ import { FeatureCardProps } from './types';
 
 const features: FeatureCardProps[] = [
   {
-    title: "Exclusive Access",
-    description: "Sign up to unlock our growing database of financial models.",
-    icon: "🔐"
+    title: "Smart Investment Insights",
+    description: "Make informed decisions with real-time data, financial metrics, and future growth projections, all at your fingertips.",
+    icon: "📈",
   },
   {
-    title: "Interactive Financial Models",
-    description: "Access discounted cash flow models with real-time data and analyst forecasts.",
-    icon: "📊"
+    title: "Customizable Financial Models",
+    description: "Download, customize, and analyze pre-built valuation models tailored to your investment strategies.",
+    icon: "🛠️",
   },
   {
-    title: "Seamless Downloads",
-    description: "Easily download models for offline customization. Compatible with Excel and Google Sheets.",
-    icon: "⬇️"
-  }
+    title: "Effortless Research Access",
+    description: "Save time with a centralized platform for professional-grade financial models and market data, designed for every investor.",
+    icon: "🚀",
+  },
 ];
 
 export default function HomePage() {
