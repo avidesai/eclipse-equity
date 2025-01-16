@@ -1,6 +1,7 @@
 // /src/app/reset-password/[token]/page.tsx
 
 'use client';
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Navigation from '../../components/Navigation';
@@ -17,13 +18,14 @@ interface FormData {
   confirmPassword: string;
 }
 
-type Props = {
+interface PageProps {
   params: {
     token: string;
   };
+  searchParams: { [key: string]: string | string[] | undefined };
 }
 
-export default function ResetPasswordPage({ params }: Props) {
+export default function ResetPasswordPage({ params }: PageProps) {
   const [formData, setFormData] = useState<FormData>({
     password: '',
     confirmPassword: ''
