@@ -17,15 +17,13 @@ interface FormData {
   confirmPassword: string;
 }
 
-type ResetPasswordPageProps = {
+type Props = {
   params: {
     token: string;
   };
 }
 
-export default async function ResetPasswordPage({
-  params
-}: ResetPasswordPageProps) {
+export default function ResetPasswordPage({ params }: Props) {
   const [formData, setFormData] = useState<FormData>({
     password: '',
     confirmPassword: ''
