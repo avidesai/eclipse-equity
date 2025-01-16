@@ -1,7 +1,9 @@
 // src/app/components/AuthForm.tsx
+
 'use client';
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../utils/api';
 import { AxiosError } from 'axios';
@@ -218,6 +220,17 @@ export default function AuthForm() {
             />
             {errors.password && (
               <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+            )}
+            {isLogin && (
+              <div className="mt-2 text-right">
+                <Link 
+                  href="/forgot-password"
+                  className="text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 
+                    dark:hover:text-zinc-100 transition-colors"
+                >
+                  Forgot Password?
+                </Link>
+              </div>
             )}
           </div>
 

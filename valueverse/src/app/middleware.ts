@@ -4,8 +4,12 @@ import type { NextRequest } from 'next/server';
 
 // Define protected routes that require authentication
 const protectedRoutes = ['/account'];
+
 // Define authentication routes (login/signup)
 const authRoutes = ['/auth'];
+
+// Define password reset routes
+const passwordRoutes = ['/forgot-password', '/reset-password/:path*'];
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('token');
@@ -23,9 +27,19 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/', request.url));
   }
 
+  // If user is authenticated and trying to access password reset pages
+  if (passwordRoutes.some(route => pathname.startsWith(route)) && token) {
+    return NextResponse.redirect(new URL('/', request.url));
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [...protectedRoutes, ...authRoutes]
+  matcher: [
+    ...protectedRoutes,
+    ...authRoutes,
+    '/forgot-password',
+    '/reset-password/:path*'
+  ]
 };
