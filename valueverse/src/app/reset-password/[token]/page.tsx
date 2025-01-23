@@ -8,12 +8,10 @@ interface PageProps {
   params: {
     token: string;
   };
-  searchParams: { [key: string]: string | string[] | undefined };
 }
 
 export default function ResetPasswordPage({
   params,
-  searchParams,
 }: PageProps) {
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900">
