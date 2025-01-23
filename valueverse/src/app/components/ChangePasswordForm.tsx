@@ -134,26 +134,23 @@ export default function ChangePasswordForm({ isOpen, onClose }: ChangePasswordFo
       {/* Modal */}
       <div className="flex min-h-full items-center justify-center p-4">
         <div 
-          className="relative w-full max-w-md rounded-lg bg-white dark:bg-zinc-800 p-6 shadow-xl"
+          className="relative w-full max-w-md rounded-lg bg-white dark:bg-zinc-800 p-8 shadow-lg animate-fadeIn"
           onClick={e => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="mb-4">
-            <h2 className="text-xl font-semibold dark:text-white">Change Password</h2>
-            <p className="text-sm text-zinc-600 dark:text-zinc-400">
-              Enter your current password and choose a new one.
-            </p>
-          </div>
+          <h2 className="text-2xl font-bold text-center mb-6 dark:text-white">
+            Change Password
+          </h2>
           
           <form onSubmit={handleSubmit} className="space-y-4">
             {success && (
-              <div className="p-3 rounded bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400 text-sm">
+              <div className="mb-4 p-3 rounded bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400 text-sm">
                 Password updated successfully!
               </div>
             )}
             
             {errors.submit && (
-              <div className="p-3 rounded bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm">
+              <div className="mb-4 p-3 rounded bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm">
                 {errors.submit}
               </div>
             )}
@@ -206,11 +203,11 @@ export default function ChangePasswordForm({ isOpen, onClose }: ChangePasswordFo
               )}
             </div>
 
-            <div className="flex justify-end gap-3 pt-2">
+            <div className="flex gap-3 pt-2">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 text-sm border border-zinc-200 dark:border-zinc-700 
+                className="flex-1 py-2 border border-zinc-200 dark:border-zinc-700 
                   text-zinc-700 dark:text-zinc-300 rounded-lg hover:border-zinc-300 
                   dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 
                   transition-all duration-200"
@@ -220,9 +217,9 @@ export default function ChangePasswordForm({ isOpen, onClose }: ChangePasswordFo
               <button
                 type="submit"
                 disabled={loading}
-                className={`px-4 py-2 bg-black dark:bg-white text-white dark:text-black 
+                className={`flex-1 py-2 bg-black dark:bg-white text-white dark:text-black 
                   rounded-lg transition-all duration-200
-                  ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-zinc-800 dark:hover:bg-zinc-100'}`}
+                  ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95'}`}
               >
                 {loading ? (
                   <span className="flex items-center justify-center">

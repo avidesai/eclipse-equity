@@ -91,74 +91,76 @@ function ResetPasswordContent() {
   }
 
   return (
-    <div className="w-full max-w-md mx-auto p-8 bg-white dark:bg-zinc-800 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold text-center mb-6 dark:text-white">
-        Reset Your Password
-      </h2>
-      
-      {message && (
-        <div className={`mb-4 p-3 rounded ${
-          message.type === 'success'
-            ? 'bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400'
-            : 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400'
-        } text-sm`}>
-          {message.text}
+    <div className="w-full min-h-[calc(100vh-64px)] bg-zinc-50 dark:bg-zinc-900 px-4 py-12">
+      <div className="w-full max-w-md mx-auto p-8 bg-white dark:bg-zinc-800 rounded-lg shadow-lg animate-fadeIn">
+        <h2 className="text-2xl font-bold text-center mb-6 dark:text-white">
+          Reset Your Password
+        </h2>
+        
+        {message && (
+          <div className={`mb-4 p-3 rounded ${
+            message.type === 'success'
+              ? 'bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400'
+              : 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400'
+          } text-sm`}>
+            {message.text}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="New Password"
+              className={`w-full px-4 py-2 border rounded-lg bg-zinc-100 dark:bg-zinc-700 
+                text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-zinc-500 
+                ${errors.password ? 'border-red-500' : 'border-zinc-300'}`}
+            />
+            {errors.password && (
+              <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+            )}
+          </div>
+
+          <div>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              placeholder="Confirm New Password"
+              className={`w-full px-4 py-2 border rounded-lg bg-zinc-100 dark:bg-zinc-700 
+                text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-zinc-500 
+                ${errors.confirmPassword ? 'border-red-500' : 'border-zinc-300'}`}
+            />
+            {errors.confirmPassword && (
+              <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>
+            )}
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full py-2 bg-black dark:bg-white text-white dark:text-black rounded-lg 
+              transition-all duration-200 ${
+              loading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95'
+            }`}
+          >
+            {loading ? 'Resetting...' : 'Reset Password'}
+          </button>
+        </form>
+
+        <div className="text-center mt-6">
+          <button
+            onClick={() => router.push('/auth')}
+            className="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 
+              dark:hover:text-zinc-100 transition-colors"
+          >
+            Back to Sign In
+          </button>
         </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="New Password"
-            className={`w-full px-4 py-2 border rounded-lg bg-zinc-100 dark:bg-zinc-700 
-              text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-zinc-500 
-              ${errors.password ? 'border-red-500' : 'border-zinc-300'}`}
-          />
-          {errors.password && (
-            <p className="mt-1 text-sm text-red-500">{errors.password}</p>
-          )}
-        </div>
-
-        <div>
-          <input
-            type="password"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            placeholder="Confirm New Password"
-            className={`w-full px-4 py-2 border rounded-lg bg-zinc-100 dark:bg-zinc-700 
-              text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-zinc-500 
-              ${errors.confirmPassword ? 'border-red-500' : 'border-zinc-300'}`}
-          />
-          {errors.confirmPassword && (
-            <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>
-          )}
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className={`w-full py-2 bg-black dark:bg-white text-white dark:text-black rounded-lg 
-            transition-all duration-200 ${
-            loading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95'
-          }`}
-        >
-          {loading ? 'Resetting...' : 'Reset Password'}
-        </button>
-      </form>
-
-      <div className="text-center mt-6">
-        <button
-          onClick={() => router.push('/auth')}
-          className="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 
-            dark:hover:text-zinc-100 transition-colors"
-        >
-          Back to Sign In
-        </button>
       </div>
     </div>
   );
@@ -168,9 +170,9 @@ export default function ResetPasswordPage() {
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900">
       <Navigation />
-      <div className="w-full min-h-[calc(100vh-64px)] px-4 py-12">
+      <div className="pt-16">
         <Suspense fallback={
-          <div className="w-full flex items-center justify-center">
+          <div className="w-full h-[calc(100vh-64px)] bg-zinc-50 dark:bg-zinc-900 flex items-center justify-center">
             <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-black dark:border-white"></div>
           </div>
         }>
