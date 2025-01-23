@@ -137,9 +137,6 @@ function AccountContent() {
                 {!user.isPremium && (
                   <div className="flex flex-col sm:flex-row gap-3">
                     <PremiumButton />
-                    <button className="px-4 py-2 border-2 border-black dark:border-white text-black dark:text-white rounded-lg font-medium hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all duration-200">
-                      Compare Plans
-                    </button>
                   </div>
                 )}
               </div>

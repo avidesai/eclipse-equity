@@ -177,8 +177,8 @@ router.post(
       user.resetPasswordExpires = new Date(Date.now() + 3600000); // Token expires in 1 hour
       await user.save();
 
-      // Create reset URL
-      const resetUrl = `${environment.CLIENT_URL}/reset-password/${resetToken}`;
+      // Create reset URL (updated to use query parameter)
+      const resetUrl = `${environment.CLIENT_URL}/reset-password?token=${resetToken}`;
 
       // Send email
       const mailOptions = {
@@ -222,7 +222,7 @@ router.post(
   }
 );
 
-// Reset password with token
+// Reset password with token (updated to maintain compatibility with new URL format)
 router.post(
   '/reset-password/:token',
   [

@@ -1,4 +1,5 @@
 // src/middleware.ts
+
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
@@ -9,7 +10,7 @@ const protectedRoutes = ['/account'];
 const authRoutes = ['/auth'];
 
 // Define password reset routes
-const passwordRoutes = ['/forgot-password', '/reset-password/:path*'];
+const passwordRoutes = ['/forgot-password', '/reset-password'];
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('token');
@@ -28,18 +29,19 @@ export function middleware(request: NextRequest) {
   }
 
   // If user is authenticated and trying to access password reset pages
-  if (passwordRoutes.some(route => pathname.startsWith(route)) && token) {
+  if (passwordRoutes.includes(pathname) && token) {
     return NextResponse.redirect(new URL('/', request.url));
   }
 
   return NextResponse.next();
 }
 
+// Configure the paths that middleware will run on
 export const config = {
   matcher: [
     ...protectedRoutes,
     ...authRoutes,
     '/forgot-password',
-    '/reset-password/:path*'
+    '/reset-password'
   ]
 };
