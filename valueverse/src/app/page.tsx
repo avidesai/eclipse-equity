@@ -9,19 +9,19 @@ import { FeatureCardProps } from './types';
 
 const features: FeatureCardProps[] = [
   {
-    title: "Smart Investment Insights",
+    title: "Smarter Investment Decisions",
     description: "Make informed decisions with real-time data, financial metrics, and future growth projections.",
     icon: "📈",
   },
   {
-    title: "Customizable Financial Models",
-    description: "Download, customize, and analyze pre-built stock valuation models.",
-    icon: "🛠️",
+    title: "Customizable Financial Models", 
+    description: "Download, customize, and analyze pre-built stock valuation models.", 
+    icon: "📊",
   },
   {
-    title: "Effortless Research Access",
-    description: "Save time with an all-in-one platform for professional-grade financial models and market data.",
-    icon: "🚀",
+    title: "Professional Research Platform",
+    description: "Access professional-grade financial models and market data in one powerful platform.",
+    icon: "🔍",
   },
 ];
 
