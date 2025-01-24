@@ -56,7 +56,7 @@ export default function HomePage() {
                             transition-all duration-300 hover:translate-y-[-2px] active:translate-y-0
                             group shadow-lg hover:shadow-xl"
                 >
-                  Get Started
+                  <span className="font-semibold">Get Started</span>
                   <ArrowRight className="ml-2 w-4 h-4 transform transition-transform 
                                        group-hover:translate-x-1" />
                 </Link>
@@ -67,7 +67,7 @@ export default function HomePage() {
                             transition-all duration-300 hover:translate-y-[-2px] active:translate-y-0
                             shadow-lg hover:shadow-xl"
                 >
-                  View Models
+                  <span className="font-semibold">View Models</span>
                 </Link>
               </div>
             </div>
@@ -120,7 +120,7 @@ export default function HomePage() {
                             transition-all duration-300 hover:translate-y-[-2px] 
                             active:translate-y-0 shadow-lg hover:shadow-xl"
                 >
-                  Create Free Account
+                  <span className="font-semibold">Create Free Account</span>
                 </Link>
               </div>
             </div>
