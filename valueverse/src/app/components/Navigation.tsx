@@ -32,14 +32,20 @@ export default function Navigation() {
 
   const isHomePage = pathname === '/';
 
+  // Get background style based on all conditions
+  const getNavBackground = () => {
+    if (isHomePage && !isScrolled) {
+      return isMobileMenuOpen 
+        ? 'bg-black/90 backdrop-blur-lg' 
+        : 'bg-transparent';
+    }
+    return isScrolled 
+      ? 'bg-white/90 dark:bg-black/90 backdrop-blur-lg shadow-lg' 
+      : 'bg-white dark:bg-black';
+  };
+
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-500 ${
-      isScrolled 
-        ? 'bg-white/90 dark:bg-black/90 backdrop-blur-lg shadow-lg' 
-        : isHomePage 
-          ? 'bg-transparent' 
-          : 'bg-white dark:bg-black'
-    }`}>
+    <nav className={`fixed w-full z-50 transition-all duration-500 ${getNavBackground()}`}>
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           <Link
@@ -159,10 +165,10 @@ export default function Navigation() {
       {/* Mobile Menu */}
       <div className={`md:hidden transition-all duration-300 ease-in-out ${
         isMobileMenuOpen
-          ? 'max-h-64 opacity-100'
+          ? 'max-h-96 opacity-100'
           : 'max-h-0 opacity-0 pointer-events-none'
       }`}>
-        <div className={`container mx-auto px-6 pb-4 space-y-4 ${
+        <div className={`container mx-auto px-6 py-6 space-y-6 ${
           isHomePage && !isScrolled
             ? 'bg-black/90 backdrop-blur-lg'
             : 'bg-white dark:bg-black border-t border-zinc-100 dark:border-zinc-800'
@@ -171,12 +177,12 @@ export default function Navigation() {
             <Link
               key={link.href}
               href={link.href}
-              className={`block py-2 transition-colors ${
+              className={`block py-3 text-lg font-medium transition-colors ${
                 isHomePage && !isScrolled
                   ? 'text-white hover:text-white/90'
                   : 'text-zinc-800 dark:text-zinc-200 hover:text-black dark:hover:text-white'
               } ${
-                isActiveLink(link.href) ? 'font-medium' : ''
+                isActiveLink(link.href) ? 'font-semibold' : ''
               }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
@@ -186,7 +192,7 @@ export default function Navigation() {
 
           {/* Mobile Premium Button */}
           {isAuthenticated && !user?.isPremium && (
-            <div className="block">
+            <div className="block py-2">
               <PremiumButton />
             </div>
           )}
@@ -198,8 +204,8 @@ export default function Navigation() {
                 logout();
                 setIsMobileMenuOpen(false);
               }}
-              className={`block w-full text-center px-4 py-2 rounded-lg 
-                         transition-all duration-300 ${
+              className={`block w-full text-center px-4 py-3 rounded-lg 
+                         text-lg font-medium transition-all duration-300 ${
                 isHomePage && !isScrolled
                   ? 'bg-white text-zinc-900 hover:bg-zinc-100'
                   : 'bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-100'
@@ -210,15 +216,15 @@ export default function Navigation() {
           ) : (
             <Link
               href="/auth"
-              className={`block w-full text-center px-4 py-2 rounded-lg 
-                         transition-all duration-300 ${
+              className={`block w-full text-center px-4 py-3 rounded-lg 
+                         text-lg font-medium transition-all duration-300 ${
                 isHomePage && !isScrolled
                   ? 'bg-white text-zinc-900 hover:bg-zinc-100'
                   : 'bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-100'
               }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
-                Sign In
+              Sign In
             </Link>
           )}
         </div>
