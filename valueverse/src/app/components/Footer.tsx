@@ -19,7 +19,6 @@ export default function Footer() {
             <div className="h-6 w-px bg-zinc-200 dark:bg-zinc-700" />
             <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
               <Mail className="w-4 h-4" />
-              <span>Need help? Email us at </span>
               <a 
                 href="mailto:support@valueverse.pro"
                 className="text-zinc-900 dark:text-white hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors duration-200"
