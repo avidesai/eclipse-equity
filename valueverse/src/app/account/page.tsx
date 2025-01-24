@@ -4,9 +4,10 @@ import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../contexts/AuthContext';
 import Navigation from '../components/Navigation';
+import Footer from '../components/Footer';
 import PremiumButton from '../components/PremiumButton';
 import ChangePasswordForm from '../components/ChangePasswordForm';
-import { UserCircle, CreditCard, Shield, Trash2 } from 'lucide-react';
+import { UserCircle, CreditCard, Shield } from 'lucide-react';
 
 interface AccountSectionProps {
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
@@ -61,11 +62,12 @@ function AccountContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900">
+      <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900 flex flex-col">
         <Navigation />
-        <div className="w-full h-[calc(100vh-64px)] flex items-center justify-center">
+        <div className="flex-grow flex items-center justify-center">
           <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-black dark:border-white"></div>
         </div>
+        <Footer />
       </div>
     );
   }
@@ -92,9 +94,9 @@ function AccountContent() {
   );
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900">
+    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900 flex flex-col">
       <Navigation />
-      <main className="container max-w-4xl mx-auto px-4 pt-24 pb-12">
+      <main className="flex-grow container max-w-4xl mx-auto px-4 pt-24 pb-12">
         <div className="space-y-8">
           <div>
             <h1 className="text-3xl font-bold dark:text-white">Account Settings</h1>
@@ -156,18 +158,10 @@ function AccountContent() {
                 />
               </div>
             </AccountSection>
-
-            <div className="h-px bg-zinc-200 dark:bg-zinc-700 my-2" />
-
-            <div className="flex justify-end">
-              <button className="group flex items-center gap-2 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors duration-200">
-                <Trash2 className="w-4 h-4" />
-                <span>Delete Account</span>
-              </button>
-            </div>
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }
@@ -176,11 +170,12 @@ export default function AccountPage() {
   return (
     <Suspense 
       fallback={
-        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900">
+        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900 flex flex-col">
           <Navigation />
-          <div className="w-full h-[calc(100vh-64px)] flex items-center justify-center">
+          <div className="flex-grow flex items-center justify-center">
             <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-black dark:border-white"></div>
           </div>
+          <Footer />
         </div>
       }
     >

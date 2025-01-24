@@ -3,32 +3,33 @@
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import Navigation from './components/Navigation';
+import Footer from './components/Footer';
 import FeatureCard from './components/FeatureCard';
 import { FeatureCardProps } from './types';
 
 const features: FeatureCardProps[] = [
   {
     title: "Smart Investment Insights",
-    description: "Make informed decisions with real-time data, financial metrics, and future growth projections, all at your fingertips.",
+    description: "Make informed decisions with real-time data, financial metrics, and future growth projections.",
     icon: "📈",
   },
   {
     title: "Customizable Financial Models",
-    description: "Download, customize, and analyze pre-built valuation models tailored to your investment strategies.",
+    description: "Download, customize, and analyze pre-built stock valuation models.",
     icon: "🛠️",
   },
   {
     title: "Effortless Research Access",
-    description: "Save time with a centralized platform for professional-grade financial models and market data, designed for every investor.",
+    description: "Save time with an all-in-one platform for professional-grade financial models and market data.",
     icon: "🚀",
   },
 ];
 
 export default function HomePage() {
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Navigation />
-      <main className="min-h-screen">
+      <main className="flex-grow">
         {/* Hero Section */}
         <div className="relative overflow-hidden bg-gradient-to-br from-zinc-800 via-zinc-700 to-zinc-600
                        dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-800">
@@ -44,9 +45,9 @@ export default function HomePage() {
               <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-white">
                 Analyze Stocks Like a Pro
               </h1>
-                <p className="text-lg md:text-xl text-zinc-200 mb-8 leading-relaxed max-w-3xl">
+              <p className="text-lg md:text-xl text-zinc-200 mb-8 leading-relaxed max-w-3xl">
                 Supercharge your investment research with our stock valuation models.
-                </p>
+              </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/auth"
@@ -126,6 +127,7 @@ export default function HomePage() {
           </div>
         </div>
       </main>
-    </>
+      <Footer />
+    </div>
   );
 }
