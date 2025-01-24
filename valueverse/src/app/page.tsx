@@ -10,7 +10,7 @@ import { FeatureCardProps } from './types';
 const features: FeatureCardProps[] = [
   {
     title: "Smarter Investment Decisions",
-    description: "Make informed decisions with real-time data, financial metrics, and future growth projections.",
+    description: "Make informed decisions with real-time data, financial metrics, and analyst growth projections.",
     icon: "📈",
   },
   {
